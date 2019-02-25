@@ -1,4 +1,5 @@
-let newMap;
+let restaurant;
+var newMap;
 
 /**
  * Initialize map as soon as the page is loaded.
@@ -90,7 +91,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
  */
 fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
   const hours = document.getElementById('restaurant-hours');
-  operatingHours.forEach((key) => {
+  for (let key in operatingHours) {
     const row = document.createElement('tr');
 
     const day = document.createElement('td');
@@ -102,7 +103,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
     row.appendChild(time);
 
     hours.appendChild(row);
-  });
+  }
 };
 
 /**
