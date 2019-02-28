@@ -2,10 +2,11 @@
 .filter-options {
     align-items: center;
     background: #3397DB;
-    height: 50px;
+    height: 4em;
     width: 100%;
 }
 
+/*
 .filter-options h2 {
     color: white;
     font-size: 1rem;
@@ -13,6 +14,7 @@
     line-height: 1;
     margin: 0 20px;
 }
+*/
 
 .filter-options select {
     background: white;
@@ -20,9 +22,14 @@
     font: 11pt Arial,sans-serif;
     height: 35px;
     letter-spacing: 0;
-    margin: 10px;
-    padding: 0 10px;
-    width: 100%;
+    margin: 10px 0px 10px 10px;
+    padding: 0;
+    width: calc(50% - 20px);
+    display: inline-block;
+}
+
+.filter-options select:last-of-type {
+    margin-right: 10px;
 }
 
 
