@@ -1,64 +1,7 @@
 header {
-    position: fixed;
     top: 0;
     width: 100%;
     z-index: 1000;
-}
-
-footer {
-    bottom: 0;
-    position: absolute;
-    width: 100%;
-}
-
-.map-container {
-    background: blue none repeat scroll 0 0;
-    height: 87%;
-    position: fixed;
-    right: 0;
-    top: 80px;
-    width: 100%;
-}
-
-.map {
-    background: #ccc;
-    height: 100%;
-    width: 100%;
-}
-
-
-/* Breadcrumb */
-.breadcrumb {
-    background: #eee;
-    font-size: 17px;
-    list-style: none;
-    margin: 0;
-    padding: 10px 40px 16px;
-    width: 100%;
-}
-
-/* Display list items side by side */
-.breadcrumb li {
-    display: inline;
-}
-
-/* Add a slash symbol (/) before/behind each list item */
-.breadcrumb li+li:before {
-    color: black;
-    content: "/\00a0";
-    padding: 8px;
-}
-
-/* Add a color to all links inside the list */
-.breadcrumb li a {
-    color: #0275d8;
-    text-decoration: none;
-}
-
-/* Add a color on mouse-over */
-.breadcrumb li a:hover {
-    color: #01447e;
-    text-decoration: underline;
 }
 
 
@@ -66,7 +9,8 @@ footer {
 .restaurant-container {
     border-bottom: 1px solid #d9d9d9;
     border-top: 1px solid #fff;
-    padding: 140px 40px 30px;
+/*    padding: 140px 40px 30px; */
+    padding: 0;
     width: 100%;
 }
 
@@ -110,7 +54,7 @@ footer {
 .reviews-container {
     border-bottom: 1px solid #d9d9d9;
     border-top: 1px solid #fff;
-    padding: 30px 40px 80px;
+    padding: 0;
     width: 100%;
 }
 
@@ -125,18 +69,19 @@ footer {
 .reviews-list {
     margin: 0;
     padding: 0;
+    text-align: center;
 }
 
 .reviews-list li {
     background: #fff;
     border: 2px solid #f3f3f3;
-    display: block;
+    display: inline-block;
     list-style: none;
-    margin: 0 0 30px;
+    margin: 0 0 15px;
     overflow: hidden;
-    padding: 0 20px 20px;
+    padding: 0 20px 0;
     position: relative;
-    width: 100%;
+    width: calc(100% - 80px);
 }
 
 .reviews-list li p {
