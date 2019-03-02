@@ -20,16 +20,6 @@
           <a href="/">Restaurant Reviews</a>
         </h1>
       </nav>
-      <ul id="breadcrumb" class="breadcrumb" >
-        <li>
-          Home
-        </li>
-      </ul>
-    </header>
-    <main>
-      <section class="map-container">
-        <div id="map" class="map"></div>
-      </section>
       <section>
         <div class="filter-options">
           <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
@@ -40,8 +30,13 @@
           </select>
         </div>
       </section>
+    </header>
+    <main>
+      <section class="map-container">
+        <div id="map" class="map"></div>
+      </section>
       <section class="filter-results">
-        <h2>Filter Results</h2>
+        <h2>FILTER RESULTS</h2>
         <ul id="restaurants-list" class="restaurants-list"></ul>
       </section>
     </main>

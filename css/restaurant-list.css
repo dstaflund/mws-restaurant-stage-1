@@ -1,9 +1,12 @@
 /* Restaurant Filtering */
 .filter-options {
     align-items: center;
-    background: #3397DB;
+    background: #eee;
     height: 4em;
     width: 100%;
+    -webkit-box-shadow:0px 2px 2px #888;
+    -moz-box-shadow:0px 2px 2px #888;
+    box-shadow:0px 2px 2px #888;
 }
 
 .filter-options select {
@@ -24,12 +27,18 @@
 
 
 /* Restaurant list header */
+.filter-results {
+    border-bottom: 1px solid #d9d9d9;
+    border-top: 1px solid #fff;
+    padding: 0 20px;
+    width: calc(100% - 40px);
+}
+
 .filter-results h2 {
-    color: black;
-    font-size: 1rem;
-    font-weight: normal;
-    line-height: 1;
-    margin: 15px;
+    color: #f58500;
+    font-weight: 300;
+    margin: 15px 0 0;
+    font: 20pt/1.1 Arial,sans-serif;
 }
 
 
@@ -43,14 +52,17 @@
 }
 
 .restaurants-list li {
+/*    background: #fff; */
+/*    border: 2px solid #ccc; */
     background: #fff;
-    border: 2px solid #ccc;
     font-family: Arial,sans-serif;
-    margin: 0;
+    margin: 15px 0 30px;
     min-height: 380px;
     padding: 0;
     text-align: left;
     width: 100%;
+    border-top-left-radius: 25px;
+    border-bottom-right-radius: 25px;
 }
 
 .restaurants-list .restaurant-img {
@@ -61,6 +73,8 @@
     max-width: 100%;
     min-height: 248px;
     min-width: 100%;
+    border-top-left-radius: 25px;
+    border-bottom-right-radius: 25px;
 }
 
 .restaurants-list li h1 {
@@ -68,24 +82,25 @@
     font: 14pt/1.3 Arial, sans-serif;
     font-weight: 200;
     letter-spacing: 0;
-    margin: 20px 0 10px 30px;
+    margin: 20px 0 10px 20px;
     text-transform: uppercase;
 }
 
 .restaurants-list p {
     font-size: 11pt;
-    margin: 0 0 0 30px;
+    margin: 0 0 0 20px;
 }
 
 .restaurants-list li a {
-    background: orange;
-    border-bottom: 3px solid #eee;
+    background: #f58500;
+/*    border-bottom: 3px solid #eee; */
     color: #fff;
     display: inline-block;
     font-size: 10pt;
-    margin: 15px 0 15px 30px;
+    margin: 15px 0 15px 20px;
     padding: 8px 30px 10px;
     text-align: center;
     text-decoration: none;
     text-transform: uppercase;
+    border-radius: 3px;
 }
