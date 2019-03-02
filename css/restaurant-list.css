@@ -13,7 +13,7 @@
     background: white;
     border: 1px solid #fff;
     font: 11pt Arial,sans-serif;
-    height: 35px;
+    height: 2.3em;
     letter-spacing: 0;
     margin: 10px 0px 10px 10px;
     padding: 0;
@@ -96,9 +96,9 @@
 /*    border-bottom: 3px solid #eee; */
     color: #fff;
     display: inline-block;
-    font-size: 10pt;
-    margin: 15px 0 15px 20px;
-    padding: 8px 30px 10px;
+    font-size: 1.7em;
+    margin: 15px 20px;
+    padding: 10px 30px;
     text-align: center;
     text-decoration: none;
     text-transform: uppercase;
