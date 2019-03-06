@@ -4,13 +4,13 @@ header {
     z-index: 1000;
 }
 
-
 /* Restaurant details */
 .restaurant-container {
     border-bottom: 1px solid #d9d9d9;
     border-top: 1px solid #fff;
     padding: 0 20px 20px;
-    width: calc(100% - 40px);
+/*    width: calc(100% - 40px); */
+    width: 320px;
 }
 
 .restaurant-name {
@@ -64,13 +64,21 @@ header {
     font-size: 24pt;
     font-weight: 300;
 /*    letter-spacing: -1px; */
-    margin: 15px 0 0;
+    margin: 20px 0 0;
 }
 
 .reviews-list {
     margin: 0;
     padding: 0;
     text-align: center;
+
+    width: 100% !important;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.reviews-list li:last-of-type {
+    margin: 10px 10px 20px 0;
 }
 
 .reviews-list li {
@@ -78,10 +86,11 @@ header {
     border: 2px solid #f3f3f3;
     display: inline-block;
     list-style: none;
-    margin: 10px 0 10px;
+    margin: 10px 10px 20px 0;
     overflow: hidden;
     padding: 0;
     position: relative;
+    width: 320px;
 /*    width: calc(100% - 10px); */
     border-top-left-radius: 25px;
     border-bottom-right-radius: 25px;
