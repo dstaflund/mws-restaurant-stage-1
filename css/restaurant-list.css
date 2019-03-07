@@ -75,7 +75,7 @@
     background: #ccc;
     display: block;
     max-width: 100%;
-    min-height: 248px;
+/*    min-height: 248px; */
     min-width: 100%;
     border-top-left-radius: 25px;
     border-bottom-right-radius: 25px;
