@@ -6,6 +6,19 @@ header {
 
 @media screen and (min-width: 720px) {
 
+    .map-container {
+        width: calc(100% - 360px);
+        float: right;
+    }
+
+    .map {
+        height: 575px;
+    }
+
+    .restaurant-container {
+        width: 320px;
+        float: left;
+    }
 
     .reviews-list li {
         width: calc((100% - 60px) / 2);
