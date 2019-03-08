@@ -150,13 +150,17 @@ class DBHelper {
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
-    return (`/img/${restaurant.photographs[0].name}`);
+    return (`/img/${restaurant.photographs.images[0].name}`);
   }
 
   static srcSetForRestaurant(restaurant) {
-    return restaurant.photographs
+    return restaurant.photographs.images
         .map(photo => `/img/${photo.name} ${photo.width}w`)
         .reduce((previous, current) => `${previous}, ${current}`);
+  }
+
+  static imageDescriptionForRestaurant(restaurant) {
+    return restaurant.photographs.description;
   }
 
   /**
