@@ -88,11 +88,29 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   fillReviewsHTML();
 };
 
+function createHeaderRowHTML() {
+  const r = document.createElement('tr');
+  r.className = 'header-row';
+
+  const d = document.createElement('th');
+  d.innerHTML = 'Day';
+  d.scope = 'col';
+  r.appendChild(d);
+
+  const t = document.createElement('th');
+  t.innerHTML = 'Hours of Operation';
+  t.scope = 'col';
+  r.appendChild(t);
+  return r;
+}
+
 /**
  * Create restaurant operating hours HTML table and add it to the webpage.
  */
 fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
   const hours = document.getElementById('restaurant-hours');
+  hours.appendChild(createHeaderRowHTML());
+
   for (let key in operatingHours) {
     const row = document.createElement('tr');
 

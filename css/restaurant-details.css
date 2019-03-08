@@ -4,6 +4,17 @@ header {
     z-index: 1000;
 }
 
+.header-row {
+    visibility: collapse;
+}
+
+caption {
+    visibility: hidden;
+    margin: 0;
+    padding: 0;
+    height: 0;
+}
+
 @media screen and (min-width: 720px) {
 
     .map-container {
