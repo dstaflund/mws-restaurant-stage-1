@@ -3,6 +3,7 @@ let restaurants,
   cuisines;
 var newMap;
 var markers = [];
+var loaded = false;
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
@@ -105,8 +106,21 @@ updateRestaurants = () => {
     if (error) { // Got an error!
       console.error(error);
     } else {
-      resetRestaurants(restaurants);
-      fillRestaurantsHTML();
+      if (restaurants && restaurants.length > 0) {
+        resetRestaurants(restaurants);
+        fillRestaurantsHTML();
+        document.getElementById('restaurants-list').style.display = 'flex';
+        document.getElementById('no-matches-message').style.display = 'none';
+
+        if (loaded) {
+          document.getElementById('filter-results-header').focus();
+        } else {
+          loaded = true;
+        }
+      } else {
+        document.getElementById('restaurants-list').style.display = 'none';
+        document.getElementById('no-matches-message').style.display = 'block';
+      }
     }
   })
 };
