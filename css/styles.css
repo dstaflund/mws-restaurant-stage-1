@@ -115,19 +115,18 @@ video {
 
 
 /* Navigation */
-nav {
+header h1 {
   background: #252831;
   height: 80px;
   text-align:center;
   width: 100%;
 }
 
-nav h1 {
+header h1 {
   margin: auto;
 }
 
-nav h1 a,
-nav h1 span{
+header h1 span{
   color: #fff;
   font-size: 14pt;
   font-weight: 200;
