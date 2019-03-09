@@ -6,6 +6,18 @@ body {
   position: relative;
 }
 
+#skip-link {
+  position: absolute;
+  left: -2999px !important;
+  padding: 10px;
+  background-color: orange;
+  color: white;
+}
+
+#skip-link:focus {
+  left: 0 !important;
+}
+
 footer {
   display: block;
   background: #444;
@@ -52,7 +64,8 @@ h1 {
   display: table;
 }
 
-h1 a {
+h1 a,
+h1 span{
   height: 100%;
   display: table-cell;
   vertical-align: middle;
@@ -70,8 +83,8 @@ h6 {
 header {
   display: block;
   width: 100%;
-  position: fixed;
-  z-index: 20000;
+/*  position: fixed;
+  z-index: 20000; */
 }
 
 article,
@@ -113,7 +126,8 @@ nav h1 {
   margin: auto;
 }
 
-nav h1 a {
+nav h1 a,
+nav h1 span{
   color: #fff;
   font-size: 14pt;
   font-weight: 200;
