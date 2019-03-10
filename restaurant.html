@@ -14,9 +14,9 @@
     <title>Restaurant Info</title>
   </head>
   <body>
-    <header>
+    <header role="banner">
       <h1><span>Restaurant Reviews</span></h1>
-      <nav>
+      <nav role="navigation">
         <ul id="breadcrumb" class="breadcrumb" aria-label="Breadcrumb">
           <li>
             <a href="/" accesskey="h">Home</a>
@@ -24,12 +24,12 @@
         </ul>
       </nav>
     </header>
-    <main>
-      <section class="map-container">
-        <h2 class="map-header">Restaurant Map</h2>
+    <main role="main">
+      <section role="region" class="map-container" aria-labelledby="restaurant-map-header">
+        <h2 id="restaurant-map-header" class="map-header">Restaurant Map</h2>
         <div id="map" class="map"></div>
       </section>
-      <section class="restaurant-container">
+      <section role="region" class="restaurant-container" aria-label="Restaurant Address and Hours of Operation">
         <h2 id="restaurant-name" class="restaurant-name"></h2>
         <img id="restaurant-img" class="restaurant-img" alt="Restaurant image">
         <p id="restaurant-cuisine" class="restaurant-cuisine"></p>
@@ -38,11 +38,11 @@
           <caption >Restaurant Hours</caption>
         </table>
       </section>
-      <section id="reviews-container" class="reviews-container">
+      <section id="reviews-container" role="region" class="reviews-container" aria-label="Restaurant Reviews">
         <ul id="reviews-list" class="reviews-list"></ul>
       </section>
     </main>
-    <footer>
+    <footer role="contentinfo">
       Copyright (c) 2017 <strong>Restaurant Reviews</strong> All Rights Reserved.
     </footer>
     <script

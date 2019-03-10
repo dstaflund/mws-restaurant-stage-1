@@ -14,22 +14,21 @@
     <title>Restaurant Reviews</title>
   </head>
   <body>
-    <nav>
+    <nav role="navigation">
       <a id="skip-link" href="#neighborhoods-select">Skip to Restaurant Filter</a>
     </nav>
-    <header>
+    <header role="banner">
       <h1><span>Restaurant Reviews</span></h1>
     </header>
-    <main>
-      <section class="map-container">
-        <h2 class="map-header">Restaurant Map</h2>
+    <main role="main">
+      <section role="region" class="map-container" aria-labelledby="map-header">
+        <h2 id="map-header" class="map-header">Restaurant Map</h2>
         <div id="map" class="map"></div>
       </section>
-      <section id="restaurants-filter">
-        <div id="filter-options" class="filter-options">
+      <section id="restaurants-filter" role="region" aria-label="Restaurants Filter">
+        <div id="filter-options" role="search" class="filter-options">
           <select
             id="neighborhoods-select"
-            accesskey="n"
             name="neighborhoods"
             aria-label="Neighborhoods"
             aria-describedby="neighborhood-select-desc"
@@ -41,7 +40,6 @@
           </div>
           <select
             id="cuisines-select"
-            accesskey="c"
             name="cuisines"
             aria-label="Cuisines"
             aria-describedby="cuisine-select-desc"
@@ -52,14 +50,14 @@
             Use this control to list restaurants by cuisine
           </div>
         </div>
-      </section>
-      <section class="filter-results" aria-label="Matching Restaurants">
+      </section>filter-results-header
+      <section role="region" class="filter-results" aria-labelledby="filter-results-header">
         <h2 id="filter-results-header" tabindex="-1">Matching Restaurants</h2>
         <ul id="restaurants-list" class="restaurants-list"></ul>
         <div id="no-matches-message">There are no matching restaurants</div>
       </section>
     </main>
-    <footer>
+    <footer role="contentinfo">
       Copyright (c) 2017 <strong>Restaurant Reviews</strong> All Rights Reserved.
     </footer>
     <script
