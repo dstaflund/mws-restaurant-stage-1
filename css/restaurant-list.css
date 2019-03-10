@@ -23,6 +23,18 @@
     padding: 0;
     width: calc(50% - 20px);
     display: inline-block;
+
+    /* Following two lines adapted from https://codepen.io/sdthornton/pen/wBZdXq */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+}
+
+.filter-options select:hover,
+.filter-options select:focus {
+    outline-color: #f58500;
+
+    /* Following line adapted from https://codepen.io/sdthornton/pen/wBZdXq */
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
 .filter-options select:last-of-type {
@@ -108,6 +120,18 @@
     text-decoration: none;
     text-transform: uppercase;
     border-radius: 3px;
+
+    /* Following two lines adapted from https://codepen.io/sdthornton/pen/wBZdXq */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+}
+
+.restaurants-list li a:hover,
+.restaurants-list li a:focus {
+    outline: 0;
+
+    /* Following line adapted from https://codepen.io/sdthornton/pen/wBZdXq */
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
 
