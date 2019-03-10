@@ -14,14 +14,14 @@
     <title>Restaurant Reviews</title>
   </head>
   <body>
-    <nav role="navigation">
+    <nav aria-hidden="true">
       <a id="skip-link" href="#neighborhoods-select">Skip to Restaurant Filter</a>
     </nav>
     <header role="banner">
       <h1><span>Restaurant Reviews</span></h1>
     </header>
     <main role="main">
-      <section role="region" class="map-container" aria-labelledby="map-header">
+      <section class="map-container" aria-hidden="true">
         <h2 id="map-header" class="map-header">Restaurant Map</h2>
         <div id="map" class="map"></div>
       </section>
@@ -50,7 +50,7 @@
             Use this control to list restaurants by cuisine
           </div>
         </div>
-      </section>filter-results-header
+      </section>
       <section role="region" class="filter-results" aria-labelledby="filter-results-header">
         <h2 id="filter-results-header" tabindex="-1">Matching Restaurants</h2>
         <ul id="restaurants-list" class="restaurants-list"></ul>
