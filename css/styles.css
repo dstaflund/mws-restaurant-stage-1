@@ -6,6 +6,11 @@ body {
   position: relative;
 }
 
+.map-header {
+  position: absolute;
+  left: -2000px;
+}
+
 #skip-link {
   position: absolute;
   left: -2999px !important;

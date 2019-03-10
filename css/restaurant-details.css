@@ -151,6 +151,7 @@ caption {
     display: inline;
     float: left;
     font-size: 2em;
+    text-transform: capitalize !important;
 }
 
 .review-date {
