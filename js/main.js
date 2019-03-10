@@ -3,7 +3,6 @@ let restaurants,
   cuisines;
 var newMap;
 var markers = [];
-var loaded = false;
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
@@ -95,6 +94,7 @@ initMap = () => {
 updateRestaurants = () => {
   const cSelect = document.getElementById('cuisines-select');
   const nSelect = document.getElementById('neighborhoods-select');
+  const lmSelect = document.getElementById('live-message');
 
   const cIndex = cSelect.selectedIndex;
   const nIndex = nSelect.selectedIndex;
@@ -110,20 +110,53 @@ updateRestaurants = () => {
         resetRestaurants(restaurants);
         fillRestaurantsHTML();
         document.getElementById('restaurants-list').style.display = 'flex';
-        document.getElementById('no-matches-message').style.display = 'none';
-
-        if (loaded) {
-          document.getElementById('filter-results-header').focus();
-        } else {
-          loaded = true;
-        }
-      } else {
-        document.getElementById('restaurants-list').style.display = 'none';
-        document.getElementById('no-matches-message').style.display = 'block';
       }
     }
-  })
+
+    lmSelect.innerHTML = getLiveMessage(neighborhood, cuisine, ! restaurants ? 0 : restaurants.length);
+  });
 };
+
+function getLiveMessage(neighborhood, cuisine, resultCount){
+  console.log(neighborhood);
+  console.log(cuisine);
+  console.log(resultCount);
+
+  var msg;
+
+  switch(resultCount) {
+    case 0:
+      msg = 'No restaurants found ';
+      break;
+
+    case 1:
+      msg = '1 restaurant found ';
+      break;
+
+    default:
+      msg = resultCount + ' restaurants found ';
+  }
+
+  switch(cuisine) {
+    case 'all':
+      msg += '';
+      break;
+
+    default:
+      msg += cuisine === 'Pizza' ? 'serving pizza ' : 'serving ' + cuisine + ' cuisine ';
+  }
+
+  switch(neighborhood){
+    case 'all':
+      msg += '';
+      break;
+
+    default:
+      msg += 'in ' + neighborhood;
+  }
+
+  return msg;
+}
 
 /**
  * Clear current restaurants, their HTML and remove their map markers.
