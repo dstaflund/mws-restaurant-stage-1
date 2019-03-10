@@ -202,3 +202,5 @@ addMarkersToMap = (restaurants = self.restaurants) => {
   });
 };
 
+document.getElementById('skip-link').focus();
+

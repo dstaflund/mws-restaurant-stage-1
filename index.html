@@ -15,7 +15,7 @@
   </head>
   <body>
     <nav>
-      <a id="skip-link" href="#restaurants-filter">Skip to Restaurant Filter</a>
+      <a id="skip-link" href="#neighborhoods-select">Skip to Restaurant Filter</a>
     </nav>
     <header>
       <h1><span>Restaurant Reviews</span></h1>
@@ -32,17 +32,25 @@
             accesskey="n"
             name="neighborhoods"
             aria-label="Neighborhoods"
+            aria-describedby="neighborhood-select-desc"
             onchange="updateRestaurants()">
             <option value="all">All Neighborhoods</option>
           </select>
+          <div id="neighborhood-select-desc" hidden>
+            Use this control to list restaurants by neighborhood
+          </div>
           <select
             id="cuisines-select"
             accesskey="c"
             name="cuisines"
             aria-label="Cuisines"
+            aria-describedby="cuisine-select-desc"
             onchange="updateRestaurants()">
             <option value="all">All Cuisines</option>
           </select>
+          <div id="cuisine-select-desc" hidden>
+            Use this control to list restaurants by cuisine
+          </div>
         </div>
       </section>
       <section class="filter-results" aria-label="Matching Restaurants">
