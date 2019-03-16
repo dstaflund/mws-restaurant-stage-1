@@ -84,6 +84,11 @@
     width: 320px;
 }
 
+.restaurant-img {
+    width: 250px !important;
+    height: 188px !important;
+}
+
 .restaurants-list .restaurant-img {
     background: #ccc;
     display: block;
