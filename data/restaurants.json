@@ -6,13 +6,13 @@
     "photographs": {
       "description": "Diners inside Mission Chinese Food",
       "images": [
-        { "name": "1-250px.jpg", "width":  "250" },
-        { "name": "1-331px.jpg", "width":  "331" },
-        { "name": "1-375px.jpg", "width":  "375" },
-        { "name": "1-425px.jpg", "width":  "425" },
-        { "name": "1-500px.jpg", "width":  "500" },
-        { "name": "1-600px.jpg", "width":  "600" },
-        { "name": "1-750px.jpg", "width":  "750" }
+        { "name": "1-250px.jpg", "width":  "250", "density": "1" },
+        { "name": "1-331px.jpg", "width":  "331", "density": "1.324" },
+        { "name": "1-375px.jpg", "width":  "375", "density": "1.5" },
+        { "name": "1-425px.jpg", "width":  "425", "density": "1.7" },
+        { "name": "1-500px.jpg", "width":  "500", "density": "2" },
+        { "name": "1-600px.jpg", "width":  "600", "density": "2.4" },
+        { "name": "1-750px.jpg", "width":  "750", "density": "3" }
       ]
     },
     "address": "171 E Broadway, New York, NY 10002",

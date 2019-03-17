@@ -4,6 +4,7 @@ body {
   background: #fdfdfd;
   margin: 0;
   position: relative;
+  min-width: 360px;
 }
 
 .map-header {
@@ -137,6 +138,7 @@ header h1 span{
   font-weight: 200;
   letter-spacing: 10px;
   text-transform: uppercase;
+  padding: 0px 40px;
 }
 
 
@@ -179,11 +181,61 @@ header h1 span{
 }
 
 
-/* Map */
+/* Following snippet of code taken from
+ * https://developer.paciellogroup.com/blog/2012/05/html5-accessibility-chops-hidden-and-aria-hidden/
+ */
+.offscreen
+{
+  clip-path: inset(100%);
+  clip: rect(1px 1px 1px 1px); /* IE 6/7 */
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap; /* added line */
+  width: 1px;
+}
+
+
+/* #####################################################################################################################
+
+   Map height
+
+   #####################################################################################################################
+ */
 .map {
   background: #ccc;
-  height: 400px;
+  height: 120px;
   width: 100%;
   z-index: 10;
 }
+
+@media screen and (min-width: 360px) {
+
+  .map {
+    height: 200px;
+  }
+}
+
+@media screen and (min-width: 384px) {
+
+  .map {
+    height: 240px;
+  }
+}
+
+@media screen and (min-width: 412px) {
+
+  .map {
+    height: 260px;
+  }
+}
+
+@media screen and (min-width: 800px) {
+
+  .map {
+    height: 400px;
+  }
+}
+
 
