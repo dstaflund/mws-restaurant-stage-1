@@ -15,7 +15,7 @@ caption {
     height: 0;
 }
 
-@media screen and (min-width: 697px) {
+@media screen and (min-width: 717px) {
 
     .map-container {
         width: calc(100% - 360px);
@@ -23,12 +23,13 @@ caption {
     }
 
     .map {
-        height: 575px;
+        height: 550px;
     }
 
     .restaurant-container {
-        width: 320px;
+        width: 320px !important;
         float: left;
+        padding: 0 20px !important;
     }
 
     .reviews-list li {
@@ -47,14 +48,14 @@ caption {
 .restaurant-container {
     border-bottom: 1px solid #d9d9d9;
     border-top: 1px solid #fff;
-    padding: 20px calc((100% - 320px) / 2);
+    padding: 0 calc((100% - 320px) / 2) 20px;
 /*    width: calc(100% - 40px); */
     width: 320px;
 }
 
 .restaurant-name {
     color: #f18200;
-    font: 20pt/1.1 Arial,sans-serif;
+    font: 18pt/1.1 Arial,sans-serif;
     font-weight: 200;
     letter-spacing: 0;
     margin: 15px 0 15px;
@@ -103,7 +104,7 @@ caption {
     font-size: 24pt;
     font-weight: 300;
 /*    letter-spacing: -1px; */
-    margin: 20px 0 0;
+    margin: 0;
 }
 
 .reviews-list {
