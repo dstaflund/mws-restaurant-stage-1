@@ -138,7 +138,7 @@ header h1 span{
   font-weight: 200;
   letter-spacing: 10px;
   text-transform: uppercase;
-  padding: 0px 40px;
+  padding: 0 40px;
 }
 
 
@@ -150,9 +150,9 @@ header h1 span{
   margin: 0;
   padding: 15px 20px 15px 20px;
   width: calc(100% - 40px);
-  -webkit-box-shadow:0px 2px 2px #888;
-  -moz-box-shadow:0px 2px 2px #888;
-  box-shadow:0px 2px 2px #888;
+  -webkit-box-shadow: 0 2px 2px #888;
+  -moz-box-shadow: 0 2px 2px #888;
+  box-shadow: 0 2px 2px #888;
 }
 
 /* Display list items side by side */
@@ -187,7 +187,6 @@ header h1 span{
 .offscreen
 {
   clip-path: inset(100%);
-  clip: rect(1px 1px 1px 1px); /* IE 6/7 */
   clip: rect(1px, 1px, 1px, 1px);
   height: 1px;
   overflow: hidden;
@@ -235,7 +234,7 @@ header h1 span{
 
 @media screen and (orientation: portrait) and (min-width: 800px) {
   .map {
-    height: 400px;
+    height: 290px;
   }
 }
 

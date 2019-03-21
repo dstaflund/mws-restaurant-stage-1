@@ -118,10 +118,6 @@ updateRestaurants = () => {
 };
 
 function getLiveMessage(neighborhood, cuisine, resultCount){
-  console.log(neighborhood);
-  console.log(cuisine);
-  console.log(resultCount);
-
   var msg;
 
   switch(resultCount) {
