@@ -106,11 +106,8 @@ updateRestaurants = () => {
     if (error) { // Got an error!
       console.error(error);
     } else {
-      if (restaurants && restaurants.length > 0) {
-        resetRestaurants(restaurants);
-        fillRestaurantsHTML();
-        document.getElementById('restaurants-list').style.display = 'flex';
-      }
+      resetRestaurants(restaurants);
+      fillRestaurantsHTML();
     }
 
     lmSelect.innerHTML = getLiveMessage(neighborhood, cuisine, ! restaurants ? 0 : restaurants.length);
@@ -118,7 +115,7 @@ updateRestaurants = () => {
 };
 
 function getLiveMessage(neighborhood, cuisine, resultCount){
-  var msg;
+  let msg;
 
   switch(resultCount) {
     case 0:

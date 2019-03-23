@@ -31,6 +31,62 @@ self.addEventListener('install', event => {
     }
 );
 
+// navigator.serviceWorker.register('/sw.js')
+//     .then(reg => {
+//         reg.unregister();
+//         reg.update();
+//         reg.installing;
+//         reg.waiting;
+//         reg.active;
+// reg.installed
+// reg.activating
+// reg.activated
+// reg.redundant
+//
+//          reg.addEventListener('updatefound', () => {
+//              var sw = reg.installing;
+//              console.log(sw.state);
+//                 reg.installing.addEventListener('statechange', () => {
+//                     if (this.state == 'installed') {
+//                         // tjere's an update ready
+//                     }
+//                 });
+//          })'
+//
+//          navigator.serviceWorker.controller          // service worker that controls this page
+// if (! navigator.serviceWorker.controller) {
+//     // Page didn't load using service worker
+// }
+
+// if (reg.waiting) {
+//     // There's an update ready
+// }
+//
+// if (reg.installing) {
+//     // There's an update in progress
+//
+//         reg.installing.addEventListener('statechange', () => {
+//             if (this.state == 'installed') {
+//                 //there's an update ready
+//             }
+//         });
+// }
+//     });
+
+//self.skipWaiting();
+//
+// // from a page to a service worker
+// reg.installing.postMessage({foo: 'bar'});
+//
+// // in the service worker
+// self.addEventListener('message', event => {
+//     event.data;
+// })
+//
+// navigator.serviceWorker.addEventListener('controllerchange', () => {
+//     //navigator.serviceWorker.controller has changed
+// })
+
 self.addEventListener('activate', event => {
         const cacheWhitelist = [cacheName];
         event.waitUntil(
@@ -49,6 +105,19 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
         event.respondWith(
+//            new Response('Hello World!', {
+//              headers: { 'foo': 'bar' }
+//            });
+//
+//             fetch('/foo').then(response => {
+//
+//             }).then(data => {
+//                 return response.json();
+//             }).then(data => {
+//                 console.log(data);
+//             }).catch(err => {
+//                 console.log(err);
+//             })
             caches.match(event.request)
                 .then((response) => {
                     if (response) {
@@ -70,3 +139,5 @@ self.addEventListener('fetch', event => {
         );
     }
 );
+
+
