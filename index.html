@@ -25,8 +25,9 @@
         <h2 id="map-header" class="map-header">Restaurant Map</h2>
         <div id="map" class="map"></div>
       </section>
-      <section id="restaurants-filter" role="region" aria-label="Restaurants Filter">
-        <div id="filter-options" role="search" class="filter-options">
+      <section id="filter-options" role="search" class="filter-options" aria-label="Restaurants Filter">
+        <div id="neighborhoods-select-controls">
+          <label id="neighborhoods-select-label" for="neighborhoods-select">Neighborhood</label>
           <select
             id="neighborhoods-select"
             name="neighborhoods"
@@ -38,6 +39,9 @@
           <div id="neighborhood-select-desc" hidden>
             Use this control to list restaurants by neighborhood
           </div>
+        </div>
+        <div id="cuisines-select-controls">
+          <label id="cuisines-select-label" for="cuisines-select">Cuisine</label>
           <select
             id="cuisines-select"
             name="cuisines"
