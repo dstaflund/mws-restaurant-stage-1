@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 initMap = () => {
   fetchRestaurantFromURL((error, restaurant) => {
-    if (error) { // Got an error!
+    if (error) {
       console.error(error);
     } else {
       self.newMap = L.map('map', {
@@ -39,13 +39,13 @@ initMap = () => {
  * Get current restaurant from page URL.
  */
 fetchRestaurantFromURL = (callback) => {
-  if (self.restaurant) { // restaurant already fetched!
+  if (self.restaurant) {
     callback(null, self.restaurant);
     return;
   }
   const id = getParameterByName('id');
   let error;
-  if (!id) { // no id found in URL
+  if (!id) {
     error = 'No restaurant id in URL';
     callback(error, null);
   } else {
@@ -81,29 +81,11 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
 
-  // fill operating hours
   if (restaurant.operating_hours) {
     fillRestaurantHoursHTML();
   }
-  // fill reviews
   fillReviewsHTML();
 };
-
-function createHeaderRowHTML() {
-  const r = document.createElement('tr');
-  r.className = 'header-row';
-
-  const d = document.createElement('th');
-  d.innerHTML = 'Day';
-  d.scope = 'col';
-  r.appendChild(d);
-
-  const t = document.createElement('th');
-  t.innerHTML = 'Hours of Operation';
-  t.scope = 'col';
-  r.appendChild(t);
-  return r;
-}
 
 /**
  * Create restaurant operating hours HTML table and add it to the webpage.
@@ -126,6 +108,27 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
     hours.appendChild(row);
   }
 };
+
+/**
+ * Add header work to the Operating Hours table
+ *
+ * @returns {HTMLElement}  header
+ */
+function createHeaderRowHTML() {
+  const r = document.createElement('tr');
+  r.className = 'header-row';
+
+  const d = document.createElement('th');
+  d.innerHTML = 'Day';
+  d.scope = 'col';
+  r.appendChild(d);
+
+  const t = document.createElement('th');
+  t.innerHTML = 'Hours of Operation';
+  t.scope = 'col';
+  r.appendChild(t);
+  return r;
+}
 
 /**
  * Create all reviews HTML and add them to the webpage.
@@ -172,7 +175,7 @@ createReviewHTML = (review) => {
   li.appendChild(rating);
 
   const comments = document.createElement('div');
-  comments.className = 'review-content'
+  comments.className = 'review-content';
   comments.innerHTML = review.comments;
   li.appendChild(comments);
 

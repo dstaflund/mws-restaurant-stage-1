@@ -1,3 +1,6 @@
+/**
+ * Customize the general look and feel of various HTML elements
+ */
 body {
   color: #333;
   font: 10pt/1.5 Arial, Helvetica, sans-serif;
@@ -7,21 +10,9 @@ body {
   min-width: 360px;
 }
 
-.map-header {
-  position: absolute;
-  left: -2000px;
-}
-
-#skip-link {
-  position: absolute;
-  left: -2999px !important;
-  padding: 10px;
-  background-color: orange;
-  color: white;
-}
-
-#skip-link:focus {
-  left: 0 !important;
+header {
+  display: block;
+  width: 100%;
 }
 
 footer {
@@ -86,13 +77,6 @@ h6 {
   margin: 0 0 20px;
 }
 
-header {
-  display: block;
-  width: 100%;
-/*  position: fixed;
-  z-index: 20000; */
-}
-
 article,
 aside,
 canvas,
@@ -120,7 +104,9 @@ video {
 }
 
 
-/* Navigation */
+/**
+ * Define top-level header appearance
+ */
 header h1 {
   background: #252831;
   height: 80px;
@@ -132,7 +118,7 @@ header h1 {
   margin: auto;
 }
 
-header h1 span{
+header h1 span {
   color: #fff;
   font-size: 14pt;
   font-weight: 200;
@@ -142,47 +128,12 @@ header h1 span{
 }
 
 
-/* Breadcrumb */
-.breadcrumb {
-  background: #eee;
-  font-size: 1.5em;
-  list-style: none;
-  margin: 0;
-  padding: 15px 20px 15px 20px;
-  width: calc(100% - 40px);
-  -webkit-box-shadow: 0 2px 2px #888;
-  -moz-box-shadow: 0 2px 2px #888;
-  box-shadow: 0 2px 2px #888;
-}
-
-/* Display list items side by side */
-.breadcrumb li {
-  display: inline;
-  font: 1em Arial, Helvetica, sans-serif;
-}
-
-/* Add a slash symbol (/) before/behind each list item */
-.breadcrumb li+li:before {
-  color: black;
-  content: "/\00a0";
-  padding: 8px;
-}
-
-/* Add a color to all links inside the list */
-.breadcrumb li a {
-  color: #0275d8;
-  text-decoration: none;
-}
-
-/* Add a color on mouse-over */
-.breadcrumb li a:hover {
-  color: #01447e;
-  text-decoration: underline;
-}
-
-
-/* Following snippet of code taken from
- * https://developer.paciellogroup.com/blog/2012/05/html5-accessibility-chops-hidden-and-aria-hidden/
+/**
+ * Define class to hide elements off-screen yet still make them available to screen readers.
+ *
+ * The following snippet of code taken from
+ *
+ *     https://developer.paciellogroup.com/blog/2012/05/html5-accessibility-chops-hidden-and-aria-hidden/
  */
 .offscreen
 {
@@ -196,12 +147,14 @@ header h1 span{
 }
 
 
-/* #####################################################################################################################
-
-   Map height
-
-   #####################################################################################################################
+/**
+ * Adjust map height based on height, width, and orientation
  */
+.map-header {
+  position: absolute;
+  left: -2000px;
+}
+
 .map {
   background: #ccc;
   width: 100%;
@@ -266,17 +219,17 @@ header h1 span{
   .map {
     height: 290px;
   }
+}
 
-  @media screen and (orientation: landscape) and (min-height: 950px) {
-    .map {
-      height: 325px;
-    }
+@media screen and (orientation: landscape) and (min-height: 950px) {
+  .map {
+    height: 325px;
   }
+}
 
-  @media screen and (orientation: landscape) and (min-height: 1024px) {
-    .map {
-      height: 400px;
-    }
+@media screen and (orientation: landscape) and (min-height: 1024px) {
+  .map {
+    height: 400px;
   }
 }
 

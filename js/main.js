@@ -114,6 +114,14 @@ updateRestaurants = () => {
   });
 };
 
+/**
+ * Creates and returns a live message whenever the filters are modified
+ *
+ * @param neighborhood  neighbour selection
+ * @param cuisine       cuisine selection
+ * @param resultCount   number of restaurants matching on neighbourhood and cuisine
+ * @returns {string}    generated live message
+ */
 function getLiveMessage(neighborhood, cuisine, resultCount){
   let msg;
 
@@ -207,7 +215,7 @@ createRestaurantHTML = (restaurant) => {
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
-  more.setAttribute('aria-label', 'View details on ' + restaurant.name)
+  more.setAttribute('aria-label', 'View details on ' + restaurant.name);
   li.append(more);
 
   return li
@@ -228,5 +236,8 @@ addMarkersToMap = (restaurants = self.restaurants) => {
   });
 };
 
+/**
+ * Focus the skip link when the page is first loaded
+ */
 document.getElementById('skip-link').focus();
 

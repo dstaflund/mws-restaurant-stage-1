@@ -50,6 +50,44 @@ caption {
     }
 }
 
+
+/**
+ * Stylize the second page's breadcrumb
+ */
+.breadcrumb {
+    background: #eee;
+    font-size: 1.5em;
+    list-style: none;
+    margin: 0;
+    padding: 15px 20px 15px 20px;
+    width: calc(100% - 40px);
+    -webkit-box-shadow: 0 2px 2px #888;
+    -moz-box-shadow: 0 2px 2px #888;
+    box-shadow: 0 2px 2px #888;
+}
+
+.breadcrumb li {
+    display: inline;
+    font: 1em Arial, Helvetica, sans-serif;
+}
+
+.breadcrumb li+li:before {
+    color: black;
+    content: "/\00a0";
+    padding: 8px;
+}
+
+.breadcrumb li a {
+    color: #0275d8;
+    text-decoration: none;
+}
+
+.breadcrumb li a:hover {
+    color: #01447e;
+    text-decoration: underline;
+}
+
+
 /* Restaurant details */
 .restaurant-container {
     border-bottom: 1px solid #d9d9d9;

@@ -1,5 +1,10 @@
 // Adaptation of code found at https://developers.google.com/web/fundamentals/primers/service-workers/
-const cacheName = 'assignment-1-cache-v2';
+
+
+/** Name of cache */
+const cacheName = 'assignment-1-cache-v1';
+
+/** Files to cache during service worker installation. */
 const urlsToCache = [
     '/',
     '/css/restaurant-details.css',
@@ -25,6 +30,9 @@ const urlsToCache = [
     '/service-worker.js'
 ];
 
+/**
+ * Installs service worker and initially populates the cache
+ */
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(cacheName)
@@ -34,6 +42,9 @@ self.addEventListener('install', event => {
     );
 });
 
+/**
+ * Activates service worker and deletes old caches when necessary
+ */
 self.addEventListener('activate', event => {
     const cacheWhitelist = [ cacheName ];
     event.waitUntil(
@@ -49,6 +60,14 @@ self.addEventListener('activate', event => {
     );
 });
 
+/**
+ * Fetches and caches requests as follows:
+ *
+ * - Returns cached responses
+ * - Stores successfully fetched basic requests before returning response
+ * - Returns all of responses (i.e. CORS and opaque responses, application errors, etc.) without caching them
+ * - Logs errors to console before return response
+ */
 self.addEventListener('fetch', event => {
     event.respondWith(
         caches.match(event.request)
