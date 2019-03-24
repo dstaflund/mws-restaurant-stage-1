@@ -214,9 +214,11 @@
     background: #eee;
 /*    height: 4em; */
     width: 100%;
-    -webkit-box-shadow: 0 2px 2px #888;
+/*    -webkit-box-shadow: 0 2px 2px #888;
     -moz-box-shadow: 0 2px 2px #888;
-    box-shadow: 0 2px 2px #888;
+    box-shadow: 0 2px 2px #888; */
+    border-top: 2px solid #888;
+    border-bottom: 2px solid #888;
 }
 
 .filter-options select {
@@ -261,6 +263,8 @@
  */
 label {
     padding: 10px;
+    font-size: 1.2em;
+    font-weight: bolder;
 }
 .filter-options {
     display: flex;
