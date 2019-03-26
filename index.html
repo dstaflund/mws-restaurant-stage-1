@@ -17,15 +17,15 @@
     <nav aria-hidden="true">
       <a id="skip-link" href="#neighborhoods-select">Skip to Restaurant Filter</a>
     </nav>
-    <header role="banner">
+    <header role="banner" aria-label="Page Banner">
       <h1><span>Restaurant Reviews</span></h1>
     </header>
-    <main role="main">
+    <main role="main" aria-label="Search and Navigation">
       <section class="map-container" aria-hidden="true">
         <h2 id="map-header" class="map-header">Restaurant Map</h2>
         <div id="map" class="map"></div>
       </section>
-      <section id="filter-options" role="search" class="filter-options" aria-label="Restaurants Filter">
+      <section id="filter-options" role="search" class="filter-options" aria-label="Search Filter Filter">
         <div id="neighborhoods-select-controls">
           <label id="neighborhoods-select-label" for="neighborhoods-select">Neighborhood</label>
           <select
@@ -61,7 +61,7 @@
         <ul id="restaurants-list" class="restaurants-list"></ul>
       </section>
     </main>
-    <footer role="contentinfo">
+    <footer role="contentinfo" aria-label="Copyright Notice">
       Copyright (c) 2017 <strong>Restaurant Reviews</strong> All Rights Reserved.
     </footer>
     <script
