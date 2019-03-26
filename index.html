@@ -14,18 +14,18 @@
     <title>Restaurant Reviews</title>
   </head>
   <body>
-    <nav aria-hidden="true">
+    <nav>
       <a id="skip-link" href="#neighborhoods-select">Skip to Restaurant Filter</a>
     </nav>
-    <header role="banner" aria-label="Page Banner">
+    <header role="banner">
       <h1><span>Restaurant Reviews</span></h1>
     </header>
-    <main role="main" aria-label="Search and Navigation">
-      <section class="map-container" aria-hidden="true">
+    <main role="main">
+      <section class="map-container" aria-label="City Map">
         <h2 id="map-header" class="map-header">Restaurant Map</h2>
         <div id="map" class="map"></div>
       </section>
-      <section id="filter-options" role="search" class="filter-options" aria-label="Search Filter Filter">
+      <section id="filter-options" role="search" class="filter-options" aria-label="Restaurant Filter Filter">
         <div id="neighborhoods-select-controls">
           <label id="neighborhoods-select-label" for="neighborhoods-select">Neighborhood</label>
           <select
@@ -55,13 +55,13 @@
           </div>
         </div>
       </section>
-      <section role="region" class="filter-results" aria-labelledby="filter-results-header">
+      <section role="region" class="filter-results" aria-label="Matching Restaurants">
         <h2 id="filter-results-header" tabindex="-1">Matching Restaurants</h2>
         <div id="live-message" class="offscreen" aria-live="assertive">Initial message</div>
         <ul id="restaurants-list" class="restaurants-list"></ul>
       </section>
     </main>
-    <footer role="contentinfo" aria-label="Copyright Notice">
+    <footer role="contentinfo">
       Copyright (c) 2017 <strong>Restaurant Reviews</strong> All Rights Reserved.
     </footer>
     <script
