@@ -161,7 +161,7 @@ createReviewHTML = (review) => {
 
   const name = document.createElement('h3');
   name.className = 'review-name';
-  name.innerHTML = review.name;
+  name.innerHTML = review.name; + ' Review';
   container.appendChild(name);
 
   const date = document.createElement('div');
