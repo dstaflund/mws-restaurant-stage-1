@@ -135,8 +135,7 @@ header h1 span {
  *
  *     https://developer.paciellogroup.com/blog/2012/05/html5-accessibility-chops-hidden-and-aria-hidden/
  */
-.offscreen
-{
+.offscreen {
   clip-path: inset(100%);
   clip: rect(1px, 1px, 1px, 1px);
   height: 1px;
@@ -146,6 +145,10 @@ header h1 span {
   width: 1px;
 }
 
+.visible {
+  margin: 10px;
+  font-size: 1.5em;
+}
 
 /**
  * Adjust map height based on height, width, and orientation

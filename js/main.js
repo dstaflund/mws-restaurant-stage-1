@@ -103,7 +103,7 @@ updateRestaurants = () => {
   const neighborhood = nSelect[nIndex].value;
 
   DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
-    if (error) { // Got an error!
+    if (error) {
       console.error(error);
     } else {
       resetRestaurants(restaurants);
@@ -111,6 +111,7 @@ updateRestaurants = () => {
     }
 
     lmSelect.innerHTML = getLiveMessage(neighborhood, cuisine, ! restaurants ? 0 : restaurants.length);
+    lmSelect.className = restaurants.length ? 'offscreen' : 'visible';
   });
 };
 
