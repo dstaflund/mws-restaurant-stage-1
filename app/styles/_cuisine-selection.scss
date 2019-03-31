@@ -1,0 +1,38 @@
+#cuisines-select-controls {
+  display: flex;
+  flex-wrap: wrap;
+  width: 50%;
+}
+
+#cuisines-select-label {
+  width: calc(100% - 20px);
+}
+
+#cuisines-select {
+  flex: 1;
+  margin: 0 10px 10px;
+  width: calc(100% - 20px - 2px);
+}
+
+@media screen and (min-width: 600px) {
+  #cuisines-select-controls {
+    align-items: center;
+  }
+
+  #cuisines-select-label {
+    width: auto;
+  }
+
+  #cuisines-select {
+    margin: 10px;
+    max-width: 400px;
+    width: calc(50% - 20px - 2px);
+  }
+}
+
+@media screen and (min-width: 1100px) {
+  #cuisines-select-controls {
+    max-width: 600px;
+    padding: 0 calc((50% - 600px) / 2);
+  }
+}

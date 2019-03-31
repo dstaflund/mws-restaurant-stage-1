@@ -1,0 +1,40 @@
+/*  Individual Restaurant Review  */
+.review-name-date {
+  background-color: #333;
+  color: #fff;
+  margin: 0;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.review-name {
+  display: inline;
+  float: left;
+  font-size: 2em;
+  text-transform: capitalize !important;
+}
+
+.review-date {
+  color: lightgrey;
+  display: inline;
+  float: right;
+  font-size: 1.5em;
+}
+
+.review-rating {
+  background-color: #f58500;
+  border-radius: 3px;
+  color: #fff;
+  display: table;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 20px;
+  padding: 8px 20px 8px 20px;
+  text-transform: uppercase;
+}
+
+.review-content {
+  font-size: 1.5em;
+  line-height: 1.5em;
+  padding: 0 20px 20px 20px;
+}

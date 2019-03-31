@@ -1,0 +1,46 @@
+@mixin margin-calc($columns) {
+  margin: 0 calc((100% - (340px * #{$columns})) / 2) !important;
+}
+
+.filter-results {
+  @include margin-calc(1);
+  border-bottom: 1px solid #d9d9d9;
+  border-top: 1px solid #fff;
+  padding: 0;
+
+  h2 {
+    color: #f58500;
+    font-weight: 300;
+    font: 16pt/1.1 Arial, sans-serif !important;
+    margin: 20px 10px 0;
+    text-transform: uppercase;
+  }
+}
+
+@media screen and (min-width: 697px) {
+  .filter-results {
+    @include margin-calc(2);
+
+    h2 {
+      font: 20pt/1.1 Arial, sans-serif !important;
+    }
+  }
+}
+
+@media screen and (min-width: 1037px) {
+  .filter-results {
+    @include margin-calc(3);
+  }
+}
+
+@media screen and (min-width: 1377px) {
+  .filter-results {
+    @include margin-calc(4);
+  }
+}
+
+@media screen and (min-width: 1717px) {
+  .filter-results {
+    @include margin-calc(5);
+  }
+}

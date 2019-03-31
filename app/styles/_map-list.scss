@@ -1,0 +1,82 @@
+.map-header {
+  left: -2000px;
+  position: absolute;
+}
+
+.map {
+  background: #ccc;
+  width: 100%;
+  z-index: 10;
+}
+
+@media screen and (orientation: portrait) {
+  .map {
+    height: 120px;
+  }
+}
+
+@media screen and (orientation: portrait) and (min-width: 360px) {
+  .map {
+    height: 200px;
+  }
+}
+
+@media screen and (orientation: portrait) and (min-width: 384px) {
+  .map {
+    height: 240px;
+  }
+}
+
+@media screen and (orientation: portrait) and (min-width: 412px) {
+  .map {
+    height: 260px;
+  }
+}
+
+@media screen and (orientation: portrait) and (min-width: 800px) {
+  .map {
+    height: 290px;
+  }
+}
+
+@media screen and (orientation: landscape) {
+  .map {
+    height: 180px;
+  }
+}
+
+@media screen and (orientation: landscape) and (min-height: 375px) {
+  .map {
+    height: 235px;
+  }
+}
+
+@media screen and (orientation: landscape) and (min-height: 384px) {
+  .map {
+    height: 244px;
+  }
+}
+
+@media screen and (orientation: landscape) and (min-height: 411px) {
+  .map {
+    height: 270px;
+  }
+}
+
+@media screen and (orientation: landscape) and (min-height: 480px) {
+  .map {
+    height: 290px;
+  }
+}
+
+@media screen and (orientation: landscape) and (min-height: 950px) {
+  .map {
+    height: 325px;
+  }
+}
+
+@media screen and (orientation: landscape) and (min-height: 1024px) {
+  .map {
+    height: 400px;
+  }
+}
