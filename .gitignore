@@ -1,3 +1,15 @@
-# IntelliJ IDEA Files
+# dependencies
+node_modules
+bower_components
+
+# compiled output
+/dist
+/.tmp
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# IntelliJ files
 *.iml
 /.idea
