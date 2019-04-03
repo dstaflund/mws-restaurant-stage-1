@@ -7,9 +7,9 @@ const cacheName = 'assignment-1-cache-v1';
 /** Files to cache during service worker installation. */
 const urlsToCache = [
     '/',
-    '/css/restaurant-details.scss',
-    '/css/restaurant-list.scss',
-    '/css/styles.scss',
+    '/styles/restaurant-details.scss',
+    '/styles/restaurant-list.scss',
+    '/styles/styles.scss',
     '/data/restaurants.json',
     '/images/1-750px.jpg',
     '/images/2-750px.jpg',
