@@ -3,6 +3,7 @@
  *
  * NB:  Adaptation of code found at https://developers.google.com/web/fundamentals/primers/service-workers/
  */
+/*
 if (navigator.serviceWorker){
   window.addEventListener('load', () => {
     navigator.serviceWorker
@@ -15,6 +16,7 @@ if (navigator.serviceWorker){
         });
   });
 }
+ */
 
 
 /**
@@ -129,7 +131,7 @@ class DBHelper {
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant) {
-    return (`/img/${restaurant.photographs.images[0].name}`);
+    return (`/images/${restaurant.photographs.images[0].name}`);
   }
 
   /**
@@ -137,7 +139,7 @@ class DBHelper {
    */
   static srcSetForRestaurant(restaurant) {
     return restaurant.photographs.images
-        .map(photo => `/img/${photo.name} ${photo.width}w`)
+        .map(photo => `/images/${photo.name} ${photo.width}w`)
         .reduce((previous, current) => `${previous}, ${current}`);
   }
 

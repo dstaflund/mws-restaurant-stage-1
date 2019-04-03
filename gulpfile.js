@@ -79,7 +79,7 @@ function html() {
 }
 
 function images() {
-  return src('app/images/**/*', { since: lastRun(images) })
+  return src('app/images/img/*', { since: lastRun(images) })
     .pipe($.imagemin())
     .pipe(dest('dist/images'));
 };
@@ -133,7 +133,7 @@ function startAppServer() {
 
   watch([
     'app/*.html',
-    'app/images/**/*',
+    'app/images/img/*',
     '.tmp/fonts/**/*'
   ]).on('change', server.reload);
 
