@@ -84,11 +84,6 @@ function images() {
     .pipe(dest('dist/images'));
 };
 
-function fonts() {
-  return src('app/fonts/**/*.{eot,svg,ttf,woff,woff2}')
-    .pipe($.if(!isProd, dest('.tmp/fonts'), dest('dist/fonts')));
-};
-
 function extras() {
   return src([
     'app/*',
@@ -113,7 +108,6 @@ const build = series(
     lint,
     series(parallel(styles, scripts), html),
     images,
-    fonts,
     extras
   ),
   measureSize
@@ -134,12 +128,10 @@ function startAppServer() {
   watch([
     'app/*.html',
     'app/images/*',
-    '.tmp/fonts/**/*'
   ]).on('change', server.reload);
 
   watch('app/styles/**/*.scss', styles);
   watch('app/scripts/**/*.js', scripts);
-  watch('app/fonts/**/*', fonts);
 }
 
 function startTestServer() {
@@ -176,7 +168,7 @@ function startDistServer() {
 
 let serve;
 if (isDev) {
-  serve = series(clean, parallel(styles, scripts, fonts), startAppServer);
+  serve = series(clean, parallel(styles, scripts), startAppServer);
 } else if (isTest) {
   serve = series(clean, scripts, startTestServer);
 } else if (isProd) {
