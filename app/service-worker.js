@@ -10,7 +10,6 @@ const urlsToCache = [
     '/styles/restaurant-details.scss',
     '/styles/restaurant-list.scss',
     '/styles/styles.scss',
-    '/data/restaurants.json',
     '/images/1-750px.jpg',
     '/images/2-750px.jpg',
     '/images/3-750px.jpg',
