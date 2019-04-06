@@ -3,7 +3,9 @@
   "engines": {
     "node": ">=4"
   },
-  "dependencies": {},
+  "dependencies": {
+    "idb": "^4.0.3"
+  },
   "devDependencies": {
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
