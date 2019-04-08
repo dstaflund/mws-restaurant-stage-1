@@ -1,4 +1,9 @@
-// Adaptation of code found at https://developers.google.com/web/fundamentals/primers/service-workers/
+// Adaptation of service worker code found at https://developers.google.com/web/fundamentals/primers/service-workers/
+// Adaptation of IndexedDB code found at https://developers.google.com/web/ilt/pwa/working-with-indexeddb
+
+"use strict";
+
+import { openDB, deleteDB, wrap, unwrap } from 'idb';
 
 
 /** Name of cache */
