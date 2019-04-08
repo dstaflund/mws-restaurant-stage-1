@@ -18,9 +18,9 @@ if (navigator.serviceWorker){
 }
  */
 
-import {DataProvider} from "./provider/DataProvider";
+//import {DataProvider} from "./provider/DataProvider";
 
-DataProvider.openDatabase();
+//DataProvider.openDatabase();
 
 const imageDetails = [
   {
