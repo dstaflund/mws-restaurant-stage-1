@@ -1,0 +1,323 @@
+/**
+ * Stylize filter results
+ */
+.filter-results {
+  border-bottom: 1px solid #d9d9d9;
+  border-top: 1px solid #fff;
+  padding: 0;
+}
+
+.filter-results h2 {
+  color: #f58500;
+  font-weight: 300;
+  margin: 20px 10px 0;
+  text-transform: uppercase;
+}
+
+/**
+ * Stylize the restaurant list
+ */
+.restaurants-list {
+  background: #f3f3f3;
+  list-style: outside none none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.restaurants-list li {
+  background: #fff;
+  font-family: Arial, sans-serif;
+  margin: 10px;
+  min-height: 380px;
+  padding: 0;
+  text-align: left;
+  border-top-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  width: 320px;
+}
+
+.restaurant-img {
+  width: 250px !important;
+  height: 248px !important;
+}
+
+.restaurants-list .restaurant-img {
+  background: #ccc;
+  display: block;
+  max-width: 100%;
+  min-width: 100%;
+  border-top-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+}
+
+.restaurants-list li h3 {
+  color: #f18200;
+  font: 14pt/1.3 Arial, sans-serif;
+  font-weight: 200;
+  letter-spacing: 0;
+  margin: 20px 0 10px 20px;
+  text-transform: uppercase;
+  height: 1em;
+}
+
+.restaurants-list p {
+  font-size: 11pt;
+  margin: 0 0 0 20px;
+}
+
+.restaurants-list li a {
+  background: #f58500;
+  color: #fff;
+  display: inline-block;
+  font-size: 1.7em;
+  margin: 15px 20px;
+  padding: 10px 30px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  border-radius: 3px;
+
+  /* Following two lines adapted from https://codepen.io/sdthornton/pen/wBZdXq */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+}
+
+.restaurants-list li a:hover,
+.restaurants-list li a:focus {
+  outline: 0;
+
+  /* Following line adapted from https://codepen.io/sdthornton/pen/wBZdXq */
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  -webkit-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  -moz-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+@media screen and (min-width: 650px) {
+  .restaurants-list .restaurant-img {
+    min-height: 248px;
+  }
+}
+
+@media screen and (min-width: 737px) {
+  .restaurants-list .restaurant-img {
+    min-height: 248px;
+  }
+}
+
+
+/**
+ * Stylize the common look and feel of the filter controls
+ */
+.filter-options {
+  align-items: center;
+  background: #eee;
+  width: 100%;
+  border-top: 2px solid #888;
+  border-bottom: 2px solid #888;
+}
+
+.filter-options select {
+  background: white;
+  border: 1px solid #fff;
+  font: 11pt Arial, sans-serif;
+  height: 2.3em;
+  letter-spacing: 0;
+  padding: 0;
+
+  /* Following two lines adapted from https://codepen.io/sdthornton/pen/wBZdXq */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+}
+
+.filter-options select:hover,
+.filter-options select:focus {
+  outline-color: #f58500;
+
+  /* Following line adapted from https://codepen.io/sdthornton/pen/wBZdXq */
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  -webkit-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  -moz-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+/**
+ * Stylize the main page's skip link
+ */
+#skip-link {
+  position: absolute;
+  left: -2999px !important;
+  padding: 10px;
+  background-color: orange;
+  color: white;
+}
+
+#skip-link:focus {
+  left: 0 !important;
+}
+
+/**
+ * Use media queries to position and size filter controls based on width
+ */
+label {
+  padding: 10px;
+  font-size: 1.2em;
+  font-weight: bolder;
+}
+
+.filter-options {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#neighborhoods-select-controls {
+  width: 50%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#neighborhoods-select-label {
+  width: calc(100% - 20px);
+}
+
+#neighborhoods-select {
+  width: calc(100% - 20px - 2px);
+  margin: 0 10px 10px;
+  flex: 1;
+}
+
+#cuisines-select-controls {
+  width: 50%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#cuisines-select-label {
+  width: calc(100% - 20px);
+}
+
+#cuisines-select {
+  width: calc(100% - 20px - 2px);
+  margin: 0 10px 10px;
+  flex: 1;
+}
+
+@media screen and (min-width: 600px) {
+  #neighborhoods-select-controls {
+    align-items: center;
+  }
+
+  #neighborhoods-select-label {
+    width: auto;
+  }
+
+  #neighborhoods-select {
+    width: calc(50% - 20px - 2px);
+    max-width: 400px;
+    margin: 10px;
+  }
+
+  #cuisines-select-controls {
+    align-items: center;
+  }
+
+  #cuisines-select-label {
+    width: auto;
+  }
+
+  #cuisines-select {
+    width: calc(50% - 20px - 2px);
+    max-width: 400px;
+    margin: 10px;
+  }
+}
+
+@media screen and (min-width: 1100px) {
+  #neighborhoods-select-controls {
+    padding: 0 calc((50% - 600px) / 2);
+    max-width: 600px;
+  }
+
+  #cuisines-select-controls {
+    padding: 0 calc((50% - 600px) / 2);
+    max-width: 600px;
+  }
+}
+
+
+/**
+ * The following media queries takes care of MATCHING RESTAURANTS font size
+ */
+.filter-results h2 {
+  font: 16pt/1.1 Arial, sans-serif !important;
+}
+
+@media screen and (min-width: 697px) {
+  .filter-results h2 {
+    font: 20pt/1.1 Arial, sans-serif !important;
+  }
+}
+
+
+/**
+ *
+ *  The following media queries are used to calculate the width of the .restaurants-list.  If CSS supported modulo
+ *  functions inside of calc I could do this without media queries, but it doesn't so I'm using them (NB:  I know I could
+ *  use Javascript to do this as well, but I want to learn how to use media queries in this assignment.)
+ *
+ *  Since images are locked in at 320px and have 10px left and right margins, and since I use flexbox to wrap
+ *  list items, the following media queries should be enough to size .restaurants-list accordingly.
+ *
+ */
+.filter-results {
+  margin: 0 calc((100% - 340px) / 2) !important;
+}
+
+.restaurants-list {
+  width: 340px;
+}
+
+@media screen and (min-width: 697px) {
+  .filter-results {
+    margin: 0 calc((100% - (340px * 2)) / 2) !important;
+  }
+
+  .restaurants-list {
+    width: calc(340px * 2);
+  }
+}
+
+@media screen and (min-width: 1037px) {
+  .filter-results {
+    margin: 0 calc((100% - (340px * 3)) / 2) !important;
+  }
+
+  .restaurants-list {
+    width: calc(340px * 3);
+  }
+}
+
+@media screen and (min-width: 1377px) {
+  .filter-results {
+    margin: 0 calc((100% - (340px * 4)) / 2) !important;
+  }
+
+  .restaurants-list {
+    width: calc(340px * 4);
+  }
+}
+
+@media screen and (min-width: 1717px) {
+  .filter-results {
+    margin: 0 calc((100% - (340px * 5)) / 2) !important;
+  }
+
+  .restaurants-list {
+    width: calc(340px * 5);
+  }
+}
