@@ -1,10 +1,7 @@
 // Adaptation of service worker code found at https://developers.google.com/web/fundamentals/primers/service-workers/
 // Adaptation of IndexedDB code found at https://developers.google.com/web/ilt/pwa/working-with-indexeddb
 
-"use strict";
-
-import { openDB, deleteDB, wrap, unwrap } from 'idb';
-
+//"use strict";
 
 /** Name of cache */
 const cacheName = 'assignment-1-cache-v1';
@@ -12,9 +9,9 @@ const cacheName = 'assignment-1-cache-v1';
 /** Files to cache during service worker installation. */
 const urlsToCache = [
     '/',
-    '/styles/restaurant-details.scss',
-    '/styles/restaurant-list.scss',
-    '/styles/styles.scss',
+    '/styles/restaurant-details.css',
+    '/styles/restaurant-list.css',
+    '/styles/styles.css',
     '/images/1-750px.jpg',
     '/images/2-750px.jpg',
     '/images/3-750px.jpg',
@@ -25,11 +22,14 @@ const urlsToCache = [
     '/images/8-750px.jpg',
     '/images/9-750px.jpg',
     '/images/10-750px.jpg',
+    '/images/icons/android-chrome-192x192.png',
+    '/images/icons/android-chrome-512x512.png',
     '/scripts/dbhelper.js',
     '/scripts/main.js',
     '/scripts/restaurant_info.js',
     '/favicon.ico',
     '/index.html',
+    '/manifest.json',
     '/restaurant.html',
     '/service-worker.js'
 ];

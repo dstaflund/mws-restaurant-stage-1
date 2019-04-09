@@ -1,0 +1,25 @@
+{
+  "name": "Restaurant Reviews",
+  "short_name": "Restaurant Reviews",
+  "description": "Helps you find restaurants in New York City and surrounding area",
+  "dir": "rtl",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/images/icons/android-chrome-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/images/icons/android-chrome-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "orientation": "any",
+  "start_url": "index.html",
+  "background_color": "#ccc",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#ffa500"
+}
