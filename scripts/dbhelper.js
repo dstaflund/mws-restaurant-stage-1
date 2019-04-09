@@ -3,7 +3,6 @@
  *
  * NB:  Adaptation of code found at https://developers.google.com/web/fundamentals/primers/service-workers/
  */
-/*
 if (navigator.serviceWorker){
   window.addEventListener('load', () => {
     navigator.serviceWorker
@@ -16,7 +15,6 @@ if (navigator.serviceWorker){
         });
   });
 }
- */
 
 //import {DataProvider} from "./provider/DataProvider";
 
