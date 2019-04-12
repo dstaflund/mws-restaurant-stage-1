@@ -78,13 +78,14 @@ caption {
 }
 
 .breadcrumb li a {
-  color: #0275d8;
+  color: #8A4700;
+  font-weight: bold;
   text-decoration: none;
 }
 
 .breadcrumb li a:hover {
-  color: #01447e;
-  text-decoration: underline;
+  color: #ff4500;
+  text-decoration: none;
 }
 
 
@@ -97,7 +98,7 @@ caption {
 }
 
 .restaurant-name {
-  color: #f18200;
+  color: #8A4700;
   font: 16pt/1.1 Arial, sans-serif;
   font-weight: 200;
   letter-spacing: 0;
@@ -141,7 +142,7 @@ caption {
 }
 
 .reviews-container h2 {
-  color: #f58500;
+  color: #8A4700;
   font-size: 24pt;
   font-weight: 300;
   margin: 0;
@@ -199,7 +200,7 @@ caption {
 .review-rating {
   margin: 20px;
   padding: 8px 20px 8px 20px;
-  background-color: #f58500;
+  background-color: #8A4700;
   color: #fff;
   text-transform: uppercase;
   display: table;
