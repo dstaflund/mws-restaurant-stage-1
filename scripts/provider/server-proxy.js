@@ -1,4 +1,4 @@
-class HttpProxy {
+class ServerProxy {
     static _instance;
 
     /**
@@ -9,10 +9,10 @@ class HttpProxy {
      */
     static get instance() {
         return new Promise((resolve, reject) => {
-            if (! HttpProxy._instance) {
-                HttpProxy._instance = new HttpProxy();
+            if (! ServerProxy._instance) {
+                ServerProxy._instance = new ServerProxy();
             }
-            resolve(IdbProxy._instance);
+            resolve(ServerProxy._instance);
         });
     }
 }

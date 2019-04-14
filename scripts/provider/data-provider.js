@@ -14,16 +14,16 @@ class DataProvider {
   }
 
   _idbProxy;
-  _httpProxy;
+  _serverProxy;
 
   initialize(){
     return new Promise((resolve, reject) => {
       IdbProxy.instance
           .then(idbProxy => {
             this._idbProxy = idbProxy;
-            HttpProxy.instance
-                .then(httpProxy => {
-                  this._httpProxy = httpProxy;
+            ServerProxy.instance
+                .then(serverProxy => {
+                  this._serverProxy = serverProxy;
                   resolve();
                 })
                 .catch(error => reject(error));
