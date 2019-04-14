@@ -2,7 +2,7 @@ let restaurant;
 var newMap;
 
 
-let dbHelper;
+let restaurantService4;
 let imageService;
 
 window.onload = () => {
@@ -14,7 +14,7 @@ window.onload = () => {
  */
 document.addEventListener('DOMContentLoaded', () => {
   initMap();
-  dbHelper = DBHelper.instance;
+  restaurantService4 = RestaurantService.instance;
   imageService = ImageService.instance;
 });
 
@@ -40,7 +40,7 @@ let initMap = () => {
         id: 'mapbox.streets'
       }).addTo(newMap);
       fillBreadcrumb();
-      dbHelper.mapMarkerForRestaurant(self.restaurant, self.newMap);
+      restaurantService4.mapMarkerForRestaurant(self.restaurant, self.newMap);
     }
   });
 };
@@ -59,7 +59,7 @@ let fetchRestaurantFromURL = (callback) => {
     error = 'No restaurant id in URL';
     callback(error, null);
   } else {
-    dbHelper.fetchRestaurantById(id, (error, restaurant) => {
+    restaurantService4.fetchRestaurantById(id, (error, restaurant) => {
       self.restaurant = restaurant;
       if (!restaurant) {
         console.error(error);

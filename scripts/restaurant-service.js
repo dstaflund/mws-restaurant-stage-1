@@ -20,7 +20,7 @@
 /**
  * Common database helper functions.
  */
-class DBHelper {
+class RestaurantService {
   static _instance;
 
 
@@ -28,10 +28,10 @@ class DBHelper {
    * Static factory method.
    */
   static get instance() {
-    if (! DBHelper._instance) {
-      DBHelper._instance = new DBHelper();
+    if (! RestaurantService._instance) {
+      RestaurantService._instance = new RestaurantService();
     }
-    return DBHelper._instance;
+    return RestaurantService._instance;
   }
 
 
@@ -76,7 +76,7 @@ class DBHelper {
       }
 
       let xhr = new XMLHttpRequest();
-      xhr.open('GET', DBHelper.DATABASE_URL);
+      xhr.open('GET', RestaurantService.DATABASE_URL);
       xhr.onload = () => {
         if (xhr.status === 200) {
           let restaurants = JSON.parse(xhr.responseText);
@@ -110,7 +110,7 @@ class DBHelper {
       }
 
       let xhr = new XMLHttpRequest();
-      xhr.open('GET', DBHelper.DATABASE_URL + `?id=${id}`);
+      xhr.open('GET', RestaurantService.DATABASE_URL + `?id=${id}`);
       xhr.onload = () => {
         if (xhr.status === 200) {
           let restaurant = JSON.parse(xhr.responseText);

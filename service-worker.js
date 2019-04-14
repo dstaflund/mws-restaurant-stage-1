@@ -25,7 +25,7 @@ const urlsToCache = [
     '/index.html',
     '/manifest.json',
     '/restaurant.html',
-    '/scripts/dbhelper.js',
+    '/scripts/restaurant-service.js',
     '/scripts/main.js',
     '/scripts/restaurant_info.js',
     '/service-worker.js',
