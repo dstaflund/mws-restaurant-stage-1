@@ -170,12 +170,6 @@ const imageDetails = [
 class IdbProxy {
     static _instance;
 
-    /**
-     * Static factory method.
-     *
-     * Opening the database seems to be an expensive operation so I'll open and store a reference to it once,
-     * and model this class as a singleton to ensure that everyone uses the same instance.
-     */
     static get instance() {
         return new Promise((resolve, reject) => {
             if (! IdbProxy._instance) {
@@ -193,9 +187,6 @@ class IdbProxy {
     constructor(){
     }
 
-    /**
-     * Initialize the proxy object
-     */
     initialize(){
         return new Promise((resolve, reject) => {
             this.openDatabase()
@@ -204,13 +195,6 @@ class IdbProxy {
         });
     }
 
-
-    /**
-     * Open database and store reference.
-     *
-     * Our database consists of two stores -- one to store restaurant information fetched from the server, and
-     * another to store image details such as descriptions, width and density information, and so on.
-     */
     openDatabase() {
         return new Promise((resolve, reject) => {
             const request = window.indexedDB.open(dbName, dbVersion);
@@ -229,13 +213,6 @@ class IdbProxy {
         });
     }
 
-
-    /**
-     * Create the restaurant store.
-     *
-     * Our store will use 'id' as its primary key, as well as indexes on 'neighborhood', 'cuisine_type', and
-     * 'neighborhood' / 'cuisine_type' combination to support the restaurant filters.
-     */
     createRestaurantsStore(){
         return new Promise((resolve, reject) => {
             const store = this._db.createObjectStore(restaurantStore, { keyPath: "id" });
@@ -252,18 +229,6 @@ class IdbProxy {
         });
     }
 
-
-    /**
-     * Create the image details store.
-     *
-     * Our store will use 'photograph' as its primary key, and will be populated with the data declared at the
-     * top of this script.
-     *
-     * Image details should actually be returned by the server, but there's a consensus in the Udacity project
-     * forums that the server component shouldn't be modified.  I'm not sure if this is true or not as some
-     * of the github forks of the server project do modify the project.  But I'll stick with the forum consensus
-     * for this project and add image details after fetching it from the server.
-     */
     createImageDetailsStore(){
         return new Promise((resolve, reject) => {
             const store = this._db.createObjectStore(imageDetailsStore, { keyPath: "photograph" });
@@ -282,10 +247,6 @@ class IdbProxy {
         });
     }
 
-
-    /**
-     * Fetch all restaurants.
-     */
     getRestaurants() {
         return new Promise((resolve, reject) => {
             const store = this._db.transaction(restaurantStore).objectStore(restaurantStore);
@@ -296,10 +257,6 @@ class IdbProxy {
         });
     }
 
-
-    /**
-     * Get all restaurants in a given neighbourhood
-     */
     getRestaurantsByNeighborhood(neighborhood) {
         return new Promise((resolve, reject) => {
             const index = this._db
@@ -314,10 +271,6 @@ class IdbProxy {
         });
     }
 
-
-    /**
-     * Get all restaurants known for a given cuisine type
-     */
     getRestaurantsByCuisineType(cuisineType) {
         return new Promise((resolve, reject) => {
             const index = this._db
@@ -332,10 +285,6 @@ class IdbProxy {
         });
     }
 
-
-    /**
-     * Fetch restaurants by a cuisine and a neighborhood with proper error handling.
-     */
     getRestaurantsByCuisineTypeAndNeighborhood(cuisineType, neighborhood) {
         return new Promise((resolve, reject) => {
             const index = this._db
@@ -350,10 +299,6 @@ class IdbProxy {
         });
     }
 
-
-    /**
-     * Get restaurant by id
-     */
     getRestaurant(id) {
         return new Promise((resolve, reject) => {
             const request = this._db.transaction(restaurantStore).objectStore(restaurantStore).get(id);
@@ -362,10 +307,6 @@ class IdbProxy {
         });
     }
 
-
-    /**
-     * Insert an array of restaurants into the database.
-     */
     saveRestaurants(restaurants) {
         return new Promise((resolve, reject) => {
             const store = this._db.transaction(restaurantStore, "readwrite").objectStore(restaurantStore);
@@ -378,10 +319,6 @@ class IdbProxy {
         });
     }
 
-
-    /**
-     * Insert a single restaurant into the database.
-     */
     saveRestaurant(restaurant) {
         return new Promise((resolve, reject) => {
             const request = this._db
@@ -393,10 +330,6 @@ class IdbProxy {
         });
     }
 
-
-    /**
-     * Fetch a photograph's image details
-     */
     getImageDetails(photograph){
         return new Promise((resolve, reject) => {
             const request = this._db.transaction(imageDetailsStore).objectStore(imageDetailsStore).get(photograph);
@@ -405,10 +338,6 @@ class IdbProxy {
         });
     }
 
-
-    /**
-     * Fetch neighborhoods
-     */
     getNeighborhoods() {
         return new Promise((resolve, reject) => {
             const index = this._db
@@ -423,10 +352,6 @@ class IdbProxy {
         });
     }
 
-
-    /**
-     * Fetch cuisine types
-     */
     getCuisines() {
         return new Promise((resolve, reject) => {
             const index = this._db
@@ -441,12 +366,6 @@ class IdbProxy {
         });
     }
 
-
-    /**
-     * Returns all objects associated with the given request's cursor.
-     *
-     * This method assumes that the request pass into it has a cursor that can be opened.
-     */
     getCursorValues(request) {
         return new Promise((resolve, reject) => {
             const cursor = request.openCursor();
