@@ -3,9 +3,9 @@ var newMap;
 
 
 let dbHelper;
+let imageService;
 
 window.onload = () => {
-  dbHelper = DBHelper.instance;
 };
 
 
@@ -14,6 +14,8 @@ window.onload = () => {
  */
 document.addEventListener('DOMContentLoaded', () => {
   initMap();
+  dbHelper = DBHelper.instance;
+  imageService = ImageService.instance;
 });
 
 /**
@@ -81,9 +83,9 @@ let fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img';
-  image.src = dbHelper.imageUrlForRestaurant(restaurant);
-  image.srcset = dbHelper.srcSetForRestaurant(restaurant);
-  image.alt = dbHelper.imageDescriptionForRestaurant(restaurant);
+  image.src = imageService.imageUrlForRestaurant(restaurant);
+  image.srcset = imageService.srcSetForRestaurant(restaurant);
+  image.alt = imageService.imageDescriptionForRestaurant(restaurant);
   image.width = '320px';
 
   const cuisine = document.getElementById('restaurant-cuisine');

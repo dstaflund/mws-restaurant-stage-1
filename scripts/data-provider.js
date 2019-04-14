@@ -222,7 +222,7 @@ class DataProvider {
     store.createIndex(cuisineIndex, "cuisine_type", { unique: false });
     store.createIndex(
         neighborhoodCuisineIndex,
-        [ "neighborhood", "cuisine_type" ],
+        "neighborhood, cuisine_type",
         { unique: false, multiEntry: true }
     );
   }
@@ -257,6 +257,7 @@ class DataProvider {
     store.onsuccess = () => DataProvider.getCursorValues(store, (restaurants) => callback(null, restaurants));
   }
 
+
   /**
    * Get all restaurants in a given neighbourhood
    */
@@ -268,6 +269,7 @@ class DataProvider {
         .get(neighborhood);
     index.onsuccess = () => DataProvider.getCursorValues(index, (restaurants) => callback(null, restaurants));
   }
+
 
   /**
    * Get all restaurants known for a given cuisine type
@@ -303,6 +305,7 @@ class DataProvider {
     request.onsuccess = () => callback(null, request.result);
   }
 
+
   /**
    * Insert an array of restaurants into the database.
    */
@@ -318,6 +321,7 @@ class DataProvider {
       }
     });
   }
+
 
   /**
    * Insert a single restaurant into the database.

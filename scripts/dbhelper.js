@@ -46,6 +46,7 @@ class DBHelper {
 
 
   _provider;
+  _imageService;
 
 
   /**
@@ -55,6 +56,7 @@ class DBHelper {
    */
   constructor(){
     this._provider = DataProvider.instance;
+    this._imageService = ImageService.instance;
   }
 
 
@@ -79,7 +81,7 @@ class DBHelper {
         if (xhr.status === 200) {
           let restaurants = JSON.parse(xhr.responseText);
           this._provider.saveRestaurants(restaurants);
-          this.addImageDetails(restaurants);
+          this._imageService.addImageDetails(restaurants);
           callback(null, restaurants);
           return;
         }
@@ -90,29 +92,6 @@ class DBHelper {
     });
   }
 
-  /**
-   * Fetch image details from the database and add them to the restaurant objects.
-   */
-  addImageDetails(restaurants){
-    if (! restaurants) {
-      return;
-    }
-
-    restaurants.forEach(restaurant => this.addImageDetail(restaurant));
-  }
-
-  /**
-   * Fetch image detail from the database and add it to the restaurant object
-   */
-  addImageDetail(restaurant) {
-    if (! restaurant) {
-      return null;
-    }
-
-    this._provider.getImageDetails(restaurant.photograph, details => {
-      restaurant.photographs = details;
-    });
-  }
 
   /**
    * Fetch a restaurant by its ID.
@@ -125,7 +104,7 @@ class DBHelper {
       }
 
       if (restaurant) {
-        this.addImageDetail(restaurant);
+        this._imageService.addImageDetail(restaurant);
         callback(null, restaurant);
         return;
       }
@@ -136,7 +115,7 @@ class DBHelper {
         if (xhr.status === 200) {
           let restaurant = JSON.parse(xhr.responseText);
           this._provider.saveRestaurant(restaurant);
-          this.addImageDetail(restaurant);
+          this._imageService.addImageDetail(restaurant);
           callback(null, restaurant);
           return;
         }
@@ -146,6 +125,7 @@ class DBHelper {
       xhr.send();
     });
   }
+
 
   /**
    * Fetch all neighborhoods with proper error handling.
@@ -175,6 +155,7 @@ class DBHelper {
     });
   }
 
+
   /**
    * Fetch all cuisines with proper error handling.
    */
@@ -203,6 +184,7 @@ class DBHelper {
     });
   }
 
+
   /**
    * Fetch restaurants by cuisine
    */
@@ -230,6 +212,7 @@ class DBHelper {
     });
   }
 
+
   /**
    * Fetch restaurants by neighbourhood
    */
@@ -256,6 +239,7 @@ class DBHelper {
       });
     });
   }
+
 
   /**
    * Fetch restaurants by a cuisine and a neighborhood with proper error handling.
@@ -294,50 +278,6 @@ class DBHelper {
         callback(null, filteredRestaurants);
       });
     });
-  }
-
-  /**
-   * Restaurant page URL.
-   */
-  urlForRestaurant(restaurant) {
-    return (`./restaurant.html?id=${restaurant.id}`);
-  }
-
-  /**
-   * Restaurant image URL.
-   */
-  imageUrlForRestaurant(restaurant) {
-    return (`/images/${restaurant.photographs.images[0].name}`);
-  }
-
-  /**
-   * Return the srcSet attribute value for a given restaurant
-   */
-  srcSetForRestaurant(restaurant) {
-    return restaurant.photographs.images
-        .map(photo => `/images/${photo.name} ${photo.width}w`)
-        .reduce((previous, current) => `${previous}, ${current}`);
-  }
-
-  /**
-   * Return description of a given restaurant image
-   */
-  imageDescriptionForRestaurant(restaurant) {
-    return restaurant.photographs.description;
-  }
-
-  /**
-   * Map marker for a restaurant.
-   */
-   mapMarkerForRestaurant(restaurant, map) {
-    // https://leafletjs.com/reference-1.3.0.html#marker
-    const marker = new L.marker([restaurant.latlng.lat, restaurant.latlng.lng],
-      {title: restaurant.name,
-      alt: restaurant.name + ' marker',
-      url: this.urlForRestaurant(restaurant)
-      });
-      marker.addTo(newMap);
-    return marker;
   }
 }
 

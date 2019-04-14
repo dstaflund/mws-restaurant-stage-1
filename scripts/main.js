@@ -6,6 +6,8 @@ var markers = [];
 
 
 let dbHelper;
+let imageService;
+let mapService;
 
 
 /**
@@ -13,8 +15,12 @@ let dbHelper;
  */
 document.addEventListener('DOMContentLoaded', () => {
   console.log('[document][DOMContentLoaded]');
-  initMap(); // added
+
   dbHelper = DBHelper.instance;
+  imageService = ImageService.instance;
+  mapService = MapService.instance;
+
+  initMap(); // added
   fetchNeighborhoods();
   fetchCuisines();
 });
@@ -187,9 +193,9 @@ let createRestaurantHTML = (restaurant) => {
 
   const image = document.createElement('img');
   image.className = 'restaurant-img';
-  image.src = dbHelper.imageUrlForRestaurant(restaurant);
-  image.srcset = dbHelper.srcSetForRestaurant(restaurant);
-  image.alt = dbHelper.imageDescriptionForRestaurant(restaurant);
+  image.src = imageService.imageUrlForRestaurant(restaurant);
+  image.srcset = imageService.srcSetForRestaurant(restaurant);
+  image.alt = imageService.imageDescriptionForRestaurant(restaurant);
   li.append(image);
 
   const name = document.createElement('h3');
