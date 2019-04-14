@@ -9,10 +9,9 @@ const cacheName = 'assignment-1-cache-v1';
 /** Files to cache during service worker installation. */
 const urlsToCache = [
     '/',
-    '/styles/restaurant-details.css',
-    '/styles/restaurant-list.css',
-    '/styles/styles.css',
+    '/favicon.ico',
     '/images/1-750px.jpg',
+    '/images/10-750px.jpg',
     '/images/2-750px.jpg',
     '/images/3-750px.jpg',
     '/images/4-750px.jpg',
@@ -21,17 +20,18 @@ const urlsToCache = [
     '/images/7-750px.jpg',
     '/images/8-750px.jpg',
     '/images/9-750px.jpg',
-    '/images/10-750px.jpg',
     '/images/icons/android-chrome-192x192.png',
     '/images/icons/android-chrome-512x512.png',
-    '/scripts/dbhelper.js',
-    '/scripts/main.js',
-    '/scripts/restaurant_info.js',
-    '/favicon.ico',
     '/index.html',
     '/manifest.json',
     '/restaurant.html',
-    '/service-worker.js'
+    '/scripts/dbhelper.js',
+    '/scripts/main.js',
+    '/scripts/restaurant_info.js',
+    '/service-worker.js',
+    '/styles/restaurant-details.css',
+    '/styles/restaurant-list.css',
+    '/styles/styles.css'
 ];
 
 /**
@@ -98,7 +98,6 @@ self.addEventListener('fetch', event => {
             })
     );
 });
-
 
 
 
