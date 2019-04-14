@@ -4,12 +4,13 @@
 const dbName = 'mws-restaurant-db';
 const dbVersion = 1;
 
-const restaurantStoreName = "restaurants";
+const restaurantStore = "restaurants";
 const neighborhoodIndex = "neighborhood";
 const cuisineIndex = "cuisine_type";
 const neighborhoodCuisineIndex = "neighborhood_cuisine_type";
 
-const imageDetailsStoreName = "image-details";
+const imageDetailsStore = "image-details";
+
 
 /**
  * I would prefer to fetch this information from the server, but I am told we're not to
@@ -169,257 +170,218 @@ const imageDetails = [
 ];
 
 
-window.onload = () => {
-
-  // Initialize necessary indexedDb references depending on browser implementation
-  window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-  window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
-  window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
-
-  // Initialize and open the database
-  let db;
-  const dbOpenRequest = window.indexedDB.open(dbName, dbVersion);
-  dbOpenRequest.onsuccess = () => {
-    db = dbOpenRequest.result;
-  };
+class DataProvider {
+  static _instance;
+  static _db;
 
 
   /**
-   * Create the database if it doesn't yet exist
+   * Static factory method.
+   *
+   * Opening the database seems to be an expensive operation so I'll open and store a reference to it once,
+   * and model this class as a singleton to ensure that everyone uses the same instance.
    */
-  dbOpenRequest.onupgradeneeded = event => {
-    db = event.target.result;
+  static get instance() {
+    if (! DataProvider._instance) {
+      DataProvider._instance = new DataProvider();
+      DataProvider.openDatabase();
+    }
+    return DataProvider._instance;
+  }
 
-    // Create an initial store for our restaurants
-    const neighborhoodStore = db.createObjectStore(restaurantStoreName, { keyPath: "id" });
-    neighborhoodStore.createIndex(neighborhoodIndex, "neighborhood", { unique: false });
-    neighborhoodStore.createIndex(cuisineIndex, "cuisine_type", { unique: false });
-    neighborhoodStore.createIndex(
-      neighborhoodCuisineIndex,
-      [ "neighborhood", "cuisine_type" ],
-      { unique: false, multiEntry: true }
+
+  /**
+   * Open database and store reference.
+   *
+   * Our database consists of two stores -- one to store restaurant information fetched from the server, and
+   * another to store image details such as descriptions, width and density information, and so on.
+   */
+  static openDatabase() {
+    const dbOpenRequest = window.indexedDB.open(dbName, dbVersion);
+    dbOpenRequest.onsuccess = () => {
+      DataProvider._db = dbOpenRequest.result;
+    };
+
+    dbOpenRequest.onupgradeneeded = event => {
+      DataProvider._db = event.target.result;
+      DataProvider.createRestaurantsStore();
+      DataProvider.createImageDetailsStore();
+    };
+  }
+
+
+  /**
+   * Create the restaurant store.
+   *
+   * Our store will use 'id' as its primary key, as well as indexes on 'neighborhood', 'cuisine_type', and
+   * 'neighborhood' / 'cuisine_type' combination to support the restaurant filters.
+   */
+  static createRestaurantsStore(){
+    const store = DataProvider._db.createObjectStore(restaurantStore, { keyPath: "id" });
+    store.createIndex(neighborhoodIndex, "neighborhood", { unique: false });
+    store.createIndex(cuisineIndex, "cuisine_type", { unique: false });
+    store.createIndex(
+        neighborhoodCuisineIndex,
+        [ "neighborhood", "cuisine_type" ],
+        { unique: false, multiEntry: true }
     );
+  }
 
-    // Create and populate a second store for our image details
-    const imageDetailsStore = db.createObjectStore(imageDetailsStoreName, { keyPath: "photograph" });
-    imageDetailsStore.transaction.oncomplete = () => {
-      const transaction = db.transaction(imageDetailsStoreName, "readwrite");
-      const store = transaction.objectStore(imageDetailsStoreName);
+
+  /**
+   * Create the image details store.
+   *
+   * Our store will use 'photograph' as its primary key, and will be populated with the data declared at the
+   * top of this script.
+   *
+   * Image details should actually be returned by the server, but there's a consensus in the Udacity project
+   * forums that the server component shouldn't be modified.  I'm not sure if this is true or not as some
+   * of the github forks of the server project do modify the project.  But I'll stick with the forum consensus
+   * for this project and add image details after fetching it from the server.
+   */
+  static createImageDetailsStore(){
+    const store = DataProvider._db.createObjectStore(imageDetailsStore, { keyPath: "photograph" });
+    store.transaction.oncomplete = () => {
+      const transaction = DataProvider._db.transaction(imageDetailsStore, "readwrite");
+      const store = transaction.objectStore(imageDetailsStore);
       imageDetails.forEach(imageDetail => store.add(imageDetail));
     };
-  };
-};
-
-
-class DataProvider {
+  }
 
 
   /**
    * Fetch all restaurants.
    */
-  static getRestaurants(callback) {
-    const dbOpenRequest = window.indexedDB.open(dbName, dbVersion);
-    dbOpenRequest.onsuccess = () => {
-      const db = dbOpenRequest.result;
-      const transaction = db.transaction(restaurantStoreName, 'readonly');
-      const store = transaction.objectStore(restaurantStoreName);
-      const request = store.openCursor();
-      request.onsuccess = event => {
-        let results = [];
-        const cursor = event.target.result;
-        if (cursor) {
-          results.push(cursor.value);
-          cursor.continue();            // This looping syntax is #$%^&'ing bizarre
-        }
-        callback(null, results);
-      };
-    };
+  getRestaurants(callback) {
+    const store = DataProvider._db.transaction(restaurantStore).objectStore(restaurantStore);
+    store.onsuccess = () => DataProvider.getCursorValues(store, (restaurants) => callback(null, restaurants));
   }
 
   /**
    * Get all restaurants in a given neighbourhood
    */
-  static getRestaurantsByNeighborhood(neighborhood, callback) {
-    const dbOpenRequest = window.indexedDB.open(dbName, dbVersion);
-    dbOpenRequest.onsuccess = () => {
-      const db = dbOpenRequest.result;
-      const transaction = db.transaction(restaurantStoreName, 'readonly');
-      const store = transaction.objectStore(restaurantStoreName);
-      const index = store.index(neighborhoodIndex);
-      const request = index.get(neighborhood).openCursor();
-      request.onsuccess = event => {
-        let results = [];
-        const cursor = event.target.result;
-        if (cursor) {
-          results.push(cursor.value);
-          cursor.continue();            // This looping syntax is #$%^&'ing bizarre
-        }
-        callback(null, results);
-      };
-    }
+  getRestaurantsByNeighborhood(neighborhood, callback) {
+    const index = DataProvider._db
+        .transaction(restaurantStore)
+        .objectStore(restaurantStore)
+        .index(neighborhoodIndex)
+        .get(neighborhood);
+    index.onsuccess = () => DataProvider.getCursorValues(index, (restaurants) => callback(null, restaurants));
   }
 
   /**
    * Get all restaurants known for a given cuisine type
    */
-  static getRestaurantsByCuisineType(cuisineType, callback) {
-    const dbOpenRequest = window.indexedDB.open(dbName, dbVersion);
-    dbOpenRequest.onsuccess = () => {
-      const db = dbOpenRequest.result;
-      const transaction = db.transaction(restaurantStoreName, 'readonly');
-      const store = transaction.objectStore(restaurantStoreName);
-      const index = store.index(cuisineIndex);
-      const request = index.get(cuisineType).openCursor();
-      request.onsuccess = event => {
-        let results = [];
-        const cursor = event.target.result;
-        if (cursor) {
-          results.push(cursor.value);
-          cursor.continue();            // This looping syntax is #$%^&'ing bizarre
-        }
-        callback(null, results);
-      };
-    }
+  getRestaurantsByCuisineType(cuisineType, callback) {
+    const index = DataProvider._db
+        .transaction(restaurantStore)
+        .objectStore(restaurantStore)
+        .index(cuisineIndex)
+        .get(cuisineType);
+    index.onsuccess = () => DataProvider.getCursorValues(index, (restaurants) => callback(null, restaurants));
   }
 
 
   /**
    * Fetch restaurants by a cuisine and a neighborhood with proper error handling.
    */
-  static getRestaurantsByCuisineTypeAndNeighborhood(cuisineType, neighborhood, callback) {
-    const dbOpenRequest = window.indexedDB.open(dbName, dbVersion);
-    dbOpenRequest.onsuccess = () => {
-      const db = dbOpenRequest.result;
-      const transaction = db.transaction(restaurantStoreName, 'readonly');
-      const store = transaction.objectStore(restaurantStoreName);
-      const index = store.index(neighborhoodCuisineIndex);
-      const request = index.get([cuisineType, neighborhood]).openCursor();
-      request.onsuccess = event => {
-        let results = [];
-        const cursor = event.target.result;
-        if (cursor) {
-          results.push(cursor.value);
-          cursor.continue();            // This looping syntax is #$%^&'ing bizarre
-        }
-        callback(null, results);
-      };
-    }
+  getRestaurantsByCuisineTypeAndNeighborhood(cuisineType, neighborhood, callback) {
+    const index = DataProvider._db
+        .transaction(restaurantStore)
+        .objectStore(restaurantStore)
+        .index(neighborhoodCuisineIndex)
+        .get([cuisineType, neighborhood]);
+    index.onsuccess = () => DataProvider.getCursorValues(index, (restaurants) => callback(null, restaurants));
   }
 
 
   /**
    * Get restaurant by id
    */
-  static getRestaurant(id, callback) {
-    const dbOpenRequest = window.indexedDB.open(dbName, dbVersion);
-    dbOpenRequest.onsuccess = () => {
-      const db = dbOpenRequest.result;
-      const transaction = db.transaction(restaurantStoreName, 'readonly');
-      const store = transaction.objectStore(restaurantStoreName);
-      const request = store.get(id);
-      request.onsuccess = () => callback(null, request.result);
-    }
+  getRestaurant(id, callback) {
+    const request = DataProvider._db.transaction(restaurantStore).objectStore(restaurantStore).get(id);
+    request.onsuccess = () => callback(null, request.result);
   }
 
   /**
    * Insert an array of restaurants into the database.
    */
-  static saveRestaurants(restaurants) {
+  saveRestaurants(restaurants) {
     if (! restaurants) {
       return;
     }
 
-    const dbOpenRequest = window.indexedDB.open(dbName, dbVersion);
-    dbOpenRequest.onsuccess = () => {
-      const db = dbOpenRequest.result;
-      const transaction = db.transaction(restaurantStoreName, "readwrite");
-      const store = transaction.objectStore(restaurantStoreName);
-      restaurants.forEach(restaurant => {
-        if (restaurant) {
-          store.add(restaurant);
-        }
-      });
-    }
+    const store = DataProvider._db.transaction(restaurantStore, "readwrite").objectStore(restaurantStore);
+    restaurants.forEach(restaurant => {
+      if (restaurant) {
+        store.add(restaurant);
+      }
+    });
   }
 
   /**
    * Insert a single restaurant into the database.
    */
-  static saveRestaurant(restaurant) {
+  saveRestaurant(restaurant) {
     if (! restaurant) {
       return;
     }
 
-    const dbOpenRequest = window.indexedDB.open(dbName, dbVersion);
-    dbOpenRequest.onsuccess = () => {
-      const db = dbOpenRequest.result;
-      const transaction = db.transaction(restaurantStoreName, "readwrite");
-      const store = transaction.objectStore(restaurantStoreName);
-      store.add(restaurant);
-    }
+    DataProvider._db.transaction(restaurantStore, "readwrite").objectStore(restaurantStore).add(restaurant);
   }
 
 
   /**
-   * Fetch image details on a given photograph
+   * Fetch a photograph's image details
    */
-  static getImageDetails(photograph, callback){
-    const dbOpenRequest = window.indexedDB.open(dbName, dbVersion);
-    dbOpenRequest.onsuccess = () => {
-      const db = dbOpenRequest.result;
-      const transaction = db.transaction(imageDetailsStoreName, 'readonly');
-      const store = transaction.objectStore(imageDetailsStoreName);
-      const request = store.get(photograph);
-      request.onsuccess = () => callback(request.result);
-    }
+  getImageDetails(photograph, callback){
+    const request = DataProvider._db.transaction(imageDetailsStore).objectStore(imageDetailsStore).get(photograph);
+    request.onsuccess = () => callback(request.result);
   }
 
 
   /**
-   * Fetch all neighborhoods with proper error handling.
+   * Fetch neighborhoods
    */
-  static getNeighborhoods(callback) {
-    const dbOpenRequest = window.indexedDB.open(dbName, dbVersion);
-    dbOpenRequest.onsuccess = () => {
-      const db = dbOpenRequest.result;
-      const transaction = db.transaction(restaurantStoreName, 'readonly');
-      const store = transaction.objectStore(restaurantStoreName);
-      const index = store.index(neighborhoodIndex);
-      const request = index.getAllKeys().openCursor();
-      request.onsuccess = event => {
-        let neighbourhoods = [];
-        const cursor = event.target.result;
-        if (cursor) {
-          neighbourhoods.push(cursor.value);
-          cursor.continue();            // This looping syntax is #$%^&'ing bizarre
-        }
-        callback(null, neighbourhoods);
-      };
-    }
+  getNeighborhoods(callback) {
+    const index = DataProvider._db
+        .transaction(restaurantStore)
+        .objectStore(restaurantStore)
+        .index(neighborhoodIndex)
+        .getAllKeys();
+    index.onsuccess = () => DataProvider.getCursorValues(index, (restaurants) => callback(null, restaurants));
   }
 
 
   /**
-   * Fetch all cuisines with proper error handling.
+   * Fetch cuisine types
    */
-  static getCuisines(callback) {
-    const dbOpenRequest = window.indexedDB.open(dbName, dbVersion);
-    dbOpenRequest.onsuccess = () => {
-      const db = dbOpenRequest.result;
-      const transaction = db.transaction(restaurantStoreName, 'readonly');
-      const store = transaction.objectStore(restaurantStoreName);
-      const index = store.index(cuisineIndex);
-      const request = index.getAllKeys().openCursor();
-      request.onsuccess = event => {
-        let cuisines = [];
-        const cursor = event.target.result;
-        if (cursor) {
-          cuisines.push(cursor.value);
-          cursor.continue();            // This looping syntax is #$%^&'ing bizarre
-        }
-        callback(null, cuisines);
-      };
-    }
+  getCuisines(callback) {
+    const index = DataProvider._db
+        .transaction(restaurantStore)
+        .objectStore(restaurantStore)
+        .index(cuisineIndex)
+        .getAllKeys();
+    index.onsuccess = () => DataProvider.getCursorValues(index, (restaurants) => callback(null, restaurants));
+  }
+
+
+  /**
+   * Returns all objects associated with the given request's cursor.
+   *
+   * This method assumes that the request pass into it has a cursor that can be opened.
+   */
+  static getCursorValues(request, callback) {
+    const cursor = request.openCursor();
+    cursor.onsuccess = event => {
+      let values = [];
+      const cursor = event.target.result;
+      if (cursor) {
+        values.push(cursor.value);
+        cursor.continue();
+      }
+      callback(values);
+    };
   }
 }
 
