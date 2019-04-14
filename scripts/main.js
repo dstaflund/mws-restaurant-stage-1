@@ -225,7 +225,8 @@ let createRestaurantHTML = (restaurant) => {
 let addMarkersToMap = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     // Add marker to the map
-    const marker = restaurantService.mapMarkerForRestaurant(restaurant, self.newMap);
+    const marker = restaurantService.mapMarkerForRestaurant(restaurant);   // TODO:  use returned promise
+    marker.addTo(self.newMap);
     marker.on('click', onClick);
     function onClick() {
       window.location.href = marker.options.url;
