@@ -167,6 +167,9 @@ const imageDetails = [
 ];
 
 
+/**
+ * This class contains all IndexedDB-related code
+ */
 class IdbProxy {
     static _instance;
 

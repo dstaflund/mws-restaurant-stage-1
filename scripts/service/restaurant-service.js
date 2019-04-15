@@ -16,267 +16,196 @@
 //   });
 // }
 
-
-/**
- * Common database helper functions.
- */
 class RestaurantService {
   static _instance;
 
-
-  /**
-   * Static factory method.
-   */
   static get instance() {
-    if (! RestaurantService._instance) {
-      RestaurantService._instance = new RestaurantService();
-    }
-    return RestaurantService._instance;
+    return new Promise((resolve, reject) => {
+      if (! RestaurantService._instance) {
+        RestaurantService._instance = new RestaurantService();
+        RestaurantService._instance.initialize()
+            .then(() => resolve(RestaurantService._instance))
+            .catch(error => reject(error));
+      }
+      resolve(RestaurantService._instance);
+    });
   }
 
-
-  /**
-   * Database URL.
-   * Change this to restaurants.json file location on your server.
-   */
-  static get DATABASE_URL() {
-    const port = 1337;
-    return `http://localhost:${port}/restaurants`;
-  }
-
-
-  _provider;
+  _idbProxy;
+  _serverProxy;
   _imageService;
 
-
-  /**
-   * Constructor.
-   *
-   * Save a DataProvider reference.
-   */
-  constructor(){
-    this._provider = DataProvider.instance;
-    this._imageService = ImageService.instance;
-  }
-
-
-  /**
-   * Fetch all restaurants.
-   */
-  fetchRestaurants(callback) {
-    this._provider.getRestaurants((error, dbRestaurants) => {
-      if (error) {
-        callback(error, null);
-        return;
-      }
-
-      if (dbRestaurants && dbRestaurants.length > 0) {
-        callback(null, dbRestaurants);
-        return;
-      }
-
-      let xhr = new XMLHttpRequest();
-      xhr.open('GET', RestaurantService.DATABASE_URL);
-      xhr.onload = () => {
-        if (xhr.status === 200) {
-          let restaurants = JSON.parse(xhr.responseText);
-          this._provider.saveRestaurants(restaurants);
-          this._imageService.addImageDetails(restaurants);
-          callback(null, restaurants);
-          return;
-        }
-
-        callback(`Request failed. Returned status of ${xhr.status}`, null);
-      };
-      xhr.send();
+  initialize(){
+    return new Promise((resolve, reject) => {
+      IdbProxy.instance
+          .then(idbProxy => {
+              this._idbProxy = idbProxy;
+              ServerProxy.instance
+                  .then(serverProxy => {
+                    this._serverProxy = serverProxy;
+                    ImageService.instance
+                        .then(imageService => {
+                            this._imageService = imageService;
+                            resolve();
+                        })
+                        .catch(error => reject(error));
+                  })
+                  .catch(error => reject(error));
+          })
+          .catch(error => reject(error));
     });
   }
 
-
-  /**
-   * Fetch a restaurant by its ID.
-   */
-  fetchRestaurantById(id, callback) {
-    this._provider.getRestaurant(id, (error, restaurant) => {
-      if (error) {
-        callback(error, null);
-        return;
-      }
-
-      if (restaurant) {
-        this._imageService.addImageDetail(restaurant);
-        callback(null, restaurant);
-        return;
-      }
-
-      let xhr = new XMLHttpRequest();
-      xhr.open('GET', RestaurantService.DATABASE_URL + `?id=${id}`);
-      xhr.onload = () => {
-        if (xhr.status === 200) {
-          let restaurant = JSON.parse(xhr.responseText);
-          this._provider.saveRestaurant(restaurant);
-          this._imageService.addImageDetail(restaurant);
-          callback(null, restaurant);
-          return;
-        }
-
-        callback(`Request failed. Returned status of ${xhr.status}`, null);
-      };
-      xhr.send();
+  fetchRestaurants() {
+    return new Promise((resolve, reject) => {
+      this._idbProxy.fetchRestaurants()
+          .then(restaurants => {
+              if (restaurants && restaurants.length === 10) {
+                this._imageService.addImageDetails(restaurants)
+                    .then(() => resolve(restaurants))
+                    .catch(error => reject(error));
+              }
+              this._serverProxy.fetchRestaurants()
+                  .then(restaurants => {
+                      this._idbProxy.saveRestaurants(restaurants)
+                          .then(() => {
+                              this._imageService.addImageDetails(restaurants)
+                                  .then(() => resolve(restaurants))
+                                  .catch(error => reject(error));
+                          })
+                          .catch(error => reject(error));
+                  })
+                  .catch(error => reject(error));
+          })
+          .catch(error => reject(error));
     });
   }
 
-
-  /**
-   * Fetch all neighborhoods with proper error handling.
-   */
-  fetchNeighborhoods(callback) {
-    this._provider.getNeighborhoods((error, neighbourhoods) => {
-      if (error){
-        callback(error, null);
-        return;
-      }
-
-      if (neighbourhoods && neighbourhoods.length > 0) {
-        callback(null, neighbourhoods);
-        return;
-      }
-
-      this.fetchRestaurants((error, restaurants) => {
-        if (error) {
-          callback(error, null);
-          return;
-        }
-
-        const neighborhoods = restaurants.map((v, i) => restaurants[i].neighborhood);
-        const uniqueNeighborhoods = neighborhoods.filter((v, i) => neighborhoods.indexOf(v) === i);
-        callback(null, uniqueNeighborhoods);
-      });
+  fetchRestaurantById(id) {
+    return new Promise((resolve, reject) => {
+      this._idbProxy.fetchRestaurantById(id)
+          .then(restaurant => {
+            if (restaurant) {
+                this._imageService.addImageDetail(restaurant)
+                  .then(() => resolve(restaurant))
+                  .catch(error => reject(error));
+            }
+            this._serverProxy.fetchRestaurantById(id)
+                .then(restaurant => {
+                    this._idbProxy.saveRestaurant(restaurant)
+                      .then(() => {
+                          this._imageService.addImageDetail(restaurant)
+                            .then(() => resolve(restaurant))
+                            .catch(error => reject(error));
+                      })
+                      .catch(error => reject(error));
+                })
+                .catch(error => reject(error));
+          })
+          .catch(error => reject(error));
     });
   }
 
-
-  /**
-   * Fetch all cuisines with proper error handling.
-   */
-  fetchCuisines(callback) {
-    this._provider.getCuisines((error, cuisines) => {
-      if (error){
-        callback(error, null);
-        return;
-      }
-
-      if (cuisines && cuisines.length > 0) {
-        callback(null, cuisines);
-        return;
-      }
-
-      this.fetchRestaurants((error, restaurants) => {
-        if (error) {
-          callback(error, null);
-          return;
-        }
-
-        const cuisines = restaurants.map((v, i) => restaurants[i].cuisine_type);
-        const uniqueCuisines = cuisines.filter((v, i) => cuisines.indexOf(v) === i);
-        callback(null, uniqueCuisines);
-      });
+  fetchNeighborhoods() {
+    return new Promise((resolve, reject) => {
+      this._idbProxy.getNeighborhoods()
+          .then(neighborhoods => {
+            if (neighborhoods && neighborhoods.length === 3) {
+              resolve(neighborhoods);
+            }
+            this.fetchRestaurants()
+                .then(restaurants => {
+                  const neighborhoods = restaurants.map((v, i) => restaurants[i].neighborhood);
+                  const uniqueNeighborhoods = neighborhoods.filter((v, i) => neighborhoods.indexOf(v) === i);
+                  resolve(uniqueNeighborhoods);
+                })
+                .catch(error => reject(error));
+          })
+          .catch(error => reject(error));
     });
   }
 
-
-  /**
-   * Fetch restaurants by cuisine
-   */
-  fetchRestaurantsByCuisine(cuisine, callback) {
-    this._provider.getRestaurantsByCuisineType(cuisine,(error, restaurants) => {
-      if (error){
-        callback(error, null);
-        return;
-      }
-
-      if (restaurants) {
-        callback(null, restaurants);
-        return;
-      }
-
-      this.fetchRestaurants((error, restaurants) => {
-        if (error) {
-          callback(error, null);
-          return;
-        }
-
-        const filteredRestaurants = restaurants.filter(restaurant => restaurant.cuisine_type === cuisine);
-        callback(null, filteredRestaurants);
-      });
+  fetchCuisines() {
+    return new Promise((resolve, reject) => {
+      this._idbProxy.getCuisines()
+          .then(cuisines => {
+            if (cuisines && cuisines.length === 4) {
+              resolve(cuisines);
+            }
+            this.fetchRestaurants()
+                .then(restaurants => {
+                  const cuisines = restaurants.map((v, i) => restaurants[i].cuisine_type);
+                  const uniqueCuisines = cuisines.filter((v, i) => cuisines.indexOf(v) === i);
+                  resolve(uniqueCuisines);
+                })
+                .catch(error => reject(error));
+          })
+          .catch(error => reject(error));
     });
   }
 
-
-  /**
-   * Fetch restaurants by neighbourhood
-   */
-  fetchRestaurantsByNeighbourhood(neighbourhood, callback) {
-    this._provider.getRestaurantsByNeighborhood(neighbourhood,(error, restaurants) => {
-      if (error){
-        callback(error, null);
-        return;
-      }
-
-      if (restaurants) {
-        callback(null, restaurants);
-        return;
-      }
-
-      this.fetchRestaurants((error, restaurants) => {
-        if (error) {
-          callback(error, null);
-          return;
-        }
-
-        const filteredRestaurants = restaurants.filter(restaurant => restaurant.neighborhood === neighbourhood);
-        callback(null, filteredRestaurants);
-      });
+  fetchRestaurantsByCuisine(cuisine) {
+    return new Promise((resolve, reject) => {
+      this._idbProxy.getRestaurantsByCuisineType(cuisine)
+          .then(restaurants => {
+            if (restaurants && restaurants.length === 10) {
+              resolve(restaurants);
+            }
+            this.fetchRestaurants()
+                .then(restaurants => {
+                  resolve(restaurants.filter(restaurant => restaurant.cuisine_type === cuisine));
+                })
+                .catch(error => reject(error));
+          })
+          .catch(error => reject(error));
     });
   }
 
+  fetchRestaurantsByNeighbourhood(neighbourhood) {
+    return new Promise((resolve, reject) => {
+      this._idbProxy.getRestaurantsByNeighborhood(neighbourhood)
+          .then(restaurants => {
+            if (restaurants && restaurants.length === 10) {
+              resolve(restaurants);
+            }
+            this.fetchRestaurants()
+                .then(restaurants => {
+                  resolve(restaurants.filter(restaurant => restaurant.neighborhood === neighbourhood));
+                })
+                .catch(error => reject(error));
+          })
+          .catch(error => reject(error));
+    });
+  }
 
-  /**
-   * Fetch restaurants by a cuisine and a neighborhood with proper error handling.
-   */
-  fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, callback) {
-    if (cuisine && cuisine.toLowerCase() === 'all') {
-      this.fetchRestaurantsByCuisine(cuisine, callback);
-      return;
-    }
-
-    if (neighborhood && neighborhood.toLowerCase() === 'all') {
-      this.fetchRestaurantsByNeighbourhood(neighborhood, callback);
-      return;
-    }
-
-    this._provider.getRestaurantsByCuisineTypeAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
-      if (error) {
-        callback(error, null);
-        return;
+  fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood) {
+    return new Promise((resolve, reject) => {
+      if (cuisine && cuisine === 'all') {
+        this.fetchRestaurantsByNeighbourhood(neighborhood)
+            .then(restaurants => resolve(restaurants))
+            .catch(error => reject(error));
       }
-
-      if (restaurants) {
-        callback(null, restaurants);
-        return null;
+      if (neighborhood && neighborhood === 'all') {
+        this.fetchRestaurantsByCuisine(cuisine)
+            .then(restaurants => resolve(restaurants))
+            .catch(error => reject(error));
       }
-
-      this.fetchRestaurants((error, restaurants) => {
-        if (error) {
-          callback(error, null);
-          return;
-        }
-
-        const filteredRestaurants = restaurants.filter(
-            restaurant => restaurant.neighborhood === neighborhood && restaurant.cuisine_type === cuisine
-        );
-        callback(null, filteredRestaurants);
-      });
+      this._idbProxy.getRestaurantsByCuisineTypeAndNeighborhood(cuisine, neighborhood)
+          .then(restaurants => {
+            if (restaurants && restaurants.length === 10) {
+              resolve(restaurants);
+            }
+            this.fetchRestaurants()
+                .then(restaurants =>
+                    resolve(
+                        restaurants
+                            .filter(restaurant => restaurant.neighborhood === neighborhood)
+                            .filter(restaurant => restaurant.cuisine_type === cuisine)
+                    )
+                )
+                .catch(error => reject(error));
+          })
+          .catch(error => reject(error));
     });
   }
 }

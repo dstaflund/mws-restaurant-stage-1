@@ -1,18 +1,47 @@
+const port = 1337;
+const DATABASE_URL = `http://localhost:${port}/restaurants`;
+
+
+/**
+ * This class contains all code used to communicate with the backend server over HTTP
+ */
 class ServerProxy {
     static _instance;
 
-    /**
-     * Static factory method.
-     *
-     * Opening the database seems to be an expensive operation so I'll open and store a reference to it once,
-     * and model this class as a singleton to ensure that everyone uses the same instance.
-     */
     static get instance() {
         return new Promise((resolve, reject) => {
             if (! ServerProxy._instance) {
                 ServerProxy._instance = new ServerProxy();
             }
             resolve(ServerProxy._instance);
+        });
+    }
+
+    fetchRestaurants() {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', DATABASE_URL);
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    resolve(JSON.parse(xhr.responseText));
+                }
+                reject(`Request failed. Returned status of ${xhr.status}`);
+            };
+            xhr.send();
+        });
+    }
+
+    fetchRestaurantById(id) {
+        return new Promise((resolve, reject) => {
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', DATABASE_URL + `?id=${id}`);
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    resolve(JSON.parse(xhr.responseText));
+                }
+                reject(`Request failed. Returned status of ${xhr.status}`);
+            };
+            xhr.send();
         });
     }
 }
