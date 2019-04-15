@@ -5,38 +5,46 @@ var newMap;
 var markers = [];
 
 
-let restaurantService;
 let imageService;
 let mapService;
+let restaurantService;
 
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('[document][DOMContentLoaded]');
+  RestaurantService.instance
+      .then(service => {
+        restaurantService = service;
+        ImageService.instance
+            .then(service => {
+              imageService = service;
+              MapService.instance
+                  .then(service => {
+                    mapService = service;
 
-  restaurantService = RestaurantService.instance;
-  imageService = ImageService.instance;
-  mapService = MapService.instance;
-
-  initMap(); // added
-  fetchNeighborhoods();
-  fetchCuisines();
+                    initMap(); // added
+                    fetchNeighborhoods();
+                    fetchCuisines();
+                  })
+                  .catch(error => console.error(error));
+            })
+            .catch(error => console.error(error));
+      })
+      .catch(error => console.error(error));
 });
 
 /**
  * Fetch all neighborhoods and set their HTML.
  */
 let fetchNeighborhoods = () => {
-  restaurantService.fetchNeighborhoods((error, neighborhoods) => {
-    if (error) { // Got an error
-      console.error(error);
-    } else {
-      self.neighborhoods = neighborhoods;
-      fillNeighborhoodsHTML();
-    }
-  });
+  restaurantService.fetchNeighborhoods()
+      .then(neighborhoods => {
+        self.neighborhoods = neighborhoods;
+        fillNeighborhoodsHTML();
+      })
+      .catch(error => console.error(error));
 };
 
 /**
@@ -56,14 +64,12 @@ let fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
  * Fetch all cuisines and set their HTML.
  */
 let fetchCuisines = () => {
-  restaurantService.fetchCuisines((error, cuisines) => {
-    if (error) { // Got an error!
-      console.error(error);
-    } else {
-      self.cuisines = cuisines;
-      fillCuisinesHTML();
-    }
-  });
+  restaurantService.fetchCuisines()
+      .then(cuisines => {
+        self.cuisines = cuisines;
+        fillCuisinesHTML();
+      })
+      .catch(error => console.error(error));
 };
 
 /**
@@ -83,6 +89,7 @@ let fillCuisinesHTML = (cuisines = self.cuisines) => {
  * Initialize leaflet map, called from HTML.
  */
 let initMap = () => {
+  // TODO
   self.newMap = L.map('map', {
         center: [40.722216, -73.987501],
         zoom: 12,
@@ -114,17 +121,16 @@ let updateRestaurants = () => {
   const cuisine = cSelect[cIndex].value;
   const neighborhood = nSelect[nIndex].value;
 
-  restaurantService.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
-    if (error) {
-      console.error(error);
-    } else {
-      resetRestaurants(restaurants);
-      fillRestaurantsHTML();
-    }
-
-    lmSelect.innerHTML = getLiveMessage(neighborhood, cuisine, ! restaurants ? 0 : restaurants.length);
-    lmSelect.className = restaurants.length ? 'offscreen' : 'visible';
-  });
+  restaurantService.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood)
+      .then(restaurants => {
+        resetRestaurants(restaurants);
+        fillRestaurantsHTML();
+      })
+      .catch(error => console.error(error))
+      .finally(() => {
+        lmSelect.innerHTML = getLiveMessage(neighborhood, cuisine, ! restaurants ? 0 : restaurants.length);
+        lmSelect.className = restaurants.length ? 'offscreen' : 'visible';
+      });
 };
 
 /**
