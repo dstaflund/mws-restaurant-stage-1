@@ -58,7 +58,7 @@ class RestaurantService {
 
   fetchRestaurants() {
     return new Promise((resolve, reject) => {
-      this._idbProxy.fetchRestaurants()
+      this._idbProxy.getRestaurants()
           .then(restaurants => {
               if (restaurants && restaurants.length === 10) {
                 this._imageService.addImageDetails(restaurants)
@@ -83,7 +83,7 @@ class RestaurantService {
 
   fetchRestaurantById(id) {
     return new Promise((resolve, reject) => {
-      this._idbProxy.fetchRestaurantById(id)
+      this._idbProxy.getRestaurant(id)
           .then(restaurant => {
             if (restaurant) {
                 this._imageService.addImageDetail(restaurant)
