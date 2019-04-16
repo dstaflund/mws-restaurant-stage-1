@@ -49,8 +49,11 @@ class ImageService {
     }
 
     addImageDetails(restaurants){
-        // TODO
-        restaurants.forEach(restaurant => this.addImageDetail(restaurant));
+        return new Promise((resolve, reject) => {
+            let promises = [];
+            restaurants.forEach(restaurant => promises.push(this.addImageDetail(restaurant)));
+            Promise.all(promises).then(() => resolve());
+        });
     }
 
     addImageDetail(restaurant) {

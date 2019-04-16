@@ -36,24 +36,16 @@ class RestaurantService {
   _imageService;
 
   initialize(){
-    return new Promise((resolve, reject) => {
-      IdbProxy.instance
-          .then(idbProxy => {
-              this._idbProxy = idbProxy;
-              ServerProxy.instance
-                  .then(serverProxy => {
-                    this._serverProxy = serverProxy;
-                    ImageService.instance
-                        .then(imageService => {
-                            this._imageService = imageService;
-                            resolve();
-                        })
-                        .catch(error => reject(error));
-                  })
-                  .catch(error => reject(error));
-          })
-          .catch(error => reject(error));
-    });
+      return new Promise((resolve, reject) => {
+          new Promise
+              .all([ IdbProxy.instance, ServerProxy.instance, ImageService.instance])
+              .then((idbProxy, serverProxy, imageService) => {
+                  this._idbProxy = idbProxy;
+                  this._serverProxy = serverProxy;
+                  this._imageService = imageService;
+                  resolve();
+              });
+      });
   }
 
   fetchRestaurants() {
