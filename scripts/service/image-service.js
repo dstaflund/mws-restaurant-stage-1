@@ -13,13 +13,13 @@ class ImageService {
         });
     }
 
-    _provider;
+    _idbProxy;
 
     initialize(){
         return new Promise((resolve, reject) => {
-            DataProvider.instance
+            IdbProxy.instance
                 .then(provider => {
-                    this._provider = provider;
+                    this._idbProxy = provider;
                     resolve();
                 })
                 .catch(error => reject(error));
@@ -55,7 +55,7 @@ class ImageService {
 
     addImageDetail(restaurant) {
         return new Promise((resolve, reject) => {
-            this._provider.getImageDetails(restaurant.photograph)
+            this._idbProxy.getImageDetails(restaurant.photograph)
                 .then(details => {
                     restaurant.photographs = details;
                     resolve();
