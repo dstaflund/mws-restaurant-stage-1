@@ -200,5 +200,37 @@ class RestaurantService {
           .catch(error => reject(error));
     });
   }
+
+    /**
+     * Creates and returns a live message whenever the filters are modified
+     *
+     * @param neighborhood  neighbour selection
+     * @param cuisine       cuisine selection
+     * @param resultCount   number of restaurants matching on neighbourhood and cuisine
+     * @returns {string}    generated live message
+     */
+    getLiveMessage(neighborhood, cuisine, resultCount){
+        return new Promise((resolve, reject) => {
+            let msg;
+
+            switch(resultCount) {
+                case 0:
+                    msg = 'No restaurants found ';
+                    break;
+
+                case 1:
+                    msg = '1 restaurant found ';
+                    break;
+
+                default:
+                    msg = resultCount + ' restaurants found ';
+            }
+
+            msg += cuisine === 'all' ? ''  : cuisine === 'Pizza' ? 'serving pizza ' : 'serving ' + cuisine + ' cuisine ';
+            msg += neighborhood === 'all' ? '' : 'in ' + neighborhood;
+
+            resolve(msg);
+        });
+    }
 }
 
