@@ -20,6 +20,7 @@ class RestaurantService {
   static _instance;
 
   static get instance() {
+      console.log('[restaurant-service - instance]');
     return new Promise((resolve, reject) => {
       if (! RestaurantService._instance) {
         RestaurantService._instance = new RestaurantService();
@@ -35,19 +36,21 @@ class RestaurantService {
   _imageService;
 
   initialize(){
+      console.log('[restaurant-service - initialize]');
       return new Promise((resolve, reject) => {
-          new Promise
+          Promise
               .all([ IdbProxy.instance, ServerProxy.instance, ImageService.instance])
-              .then((idbProxy, serverProxy, imageService) => {
-                  this._idbProxy = idbProxy;
-                  this._serverProxy = serverProxy;
-                  this._imageService = imageService;
+              .then(dependencies => {
+                  this._idbProxy = dependencies[0];
+                  this._serverProxy = dependencies[1];
+                  this._imageService = dependencies[2];
                   resolve();
               });
       });
   }
 
   fetchRestaurants() {
+      console.log('[restaurant-service - fetchRestaurants]');
     return new Promise((resolve, reject) => {
       this._idbProxy.getRestaurants()
           .then(restaurants => {
@@ -64,6 +67,7 @@ class RestaurantService {
   }
 
   fetchRestaurantById(id) {
+      console.log('[restaurant-service - fetchRestaurantById]');
       return new Promise((resolve, reject) => {
           this._idbProxy.getRestaurant(id)
               .then(restaurant => {
@@ -80,6 +84,7 @@ class RestaurantService {
   }
 
   fetchNeighborhoods() {
+      console.log('[restaurant-service - fetchNeighborhoods]');
     return new Promise((resolve, reject) => {
       this._idbProxy.getNeighborhoods()
           .then(neighborhoods => {
@@ -97,6 +102,7 @@ class RestaurantService {
   }
 
   fetchCuisines() {
+      console.log('[restaurant-service - fetchCuisines]');
     return new Promise((resolve, reject) => {
       this._idbProxy.getCuisines()
           .then(cuisines => {
@@ -114,6 +120,7 @@ class RestaurantService {
   }
 
   fetchRestaurantsByCuisine(cuisine) {
+      console.log('[restaurant-service - fetchRestaurantsByCuisine]');
     return new Promise((resolve, reject) => {
       this._idbProxy.getRestaurantsByCuisineType(cuisine)
           .then(restaurants => {
@@ -127,6 +134,7 @@ class RestaurantService {
   }
 
   fetchRestaurantsByNeighbourhood(neighbourhood) {
+      console.log('[restaurant-service - fetchRestaurantsByNeighborhood]');
     return new Promise((resolve, reject) => {
       this._idbProxy.getRestaurantsByNeighborhood(neighbourhood)
           .then(restaurants => {
@@ -140,6 +148,7 @@ class RestaurantService {
   }
 
   fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood) {
+      console.log('[restaurant-service - fetchRestaurantsByCuisineAndNeighborhood]');
     return new Promise((resolve, reject) => {
       if (cuisine && cuisine === 'all') {
         this.fetchRestaurantsByNeighbourhood(neighborhood)
@@ -167,6 +176,7 @@ class RestaurantService {
   }
 
     getLiveMessage(neighborhood, cuisine, resultCount){
+        console.log('[restaurant-service - getLiveMessage]');
         return new Promise((resolve, reject) => {
             let msg;
 

@@ -9,6 +9,7 @@ class ServerProxy {
     static _instance;
 
     static get instance() {
+        console.log('[server-proxy - instance]');
         return new Promise((resolve, reject) => {
             if (! ServerProxy._instance) {
                 ServerProxy._instance = new ServerProxy();
@@ -18,6 +19,7 @@ class ServerProxy {
     }
 
     fetchRestaurants() {
+        console.log('[server-proxy - fetchRestaurants]');
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
             xhr.open('GET', DATABASE_URL);
@@ -32,6 +34,7 @@ class ServerProxy {
     }
 
     fetchRestaurantById(id) {
+        console.log('[server-proxy - fetchRestaurantById]');
         return new Promise((resolve, reject) => {
             let xhr = new XMLHttpRequest();
             xhr.open('GET', DATABASE_URL + `?id=${id}`);

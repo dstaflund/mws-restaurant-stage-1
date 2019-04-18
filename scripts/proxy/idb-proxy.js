@@ -174,6 +174,7 @@ class IdbProxy {
     static _instance;
 
     static get instance() {
+        console.log('[idb-proxy - instance]');
         return new Promise((resolve, reject) => {
             if (! IdbProxy._instance) {
                 IdbProxy._instance = new IdbProxy();
@@ -191,6 +192,7 @@ class IdbProxy {
     }
 
     initialize(){
+        console.log('[idb-proxy - initialize]');
         return new Promise((resolve, reject) => {
             this.openDatabase()
                 .then(() => resolve())
@@ -199,24 +201,35 @@ class IdbProxy {
     }
 
     openDatabase() {
+        console.log('[idb-proxy - openDatabase]');
         return new Promise((resolve, reject) => {
             const request = window.indexedDB.open(dbName, dbVersion);
             request.onerror = error => reject(error);
             request.onsuccess = () => {
+                console.log('[idb-proxy - openDatabase#onsuccess]');
+                console.log(request.result);
                 this._db = request.result;
+                console.log(this._db);
+                console.log('[! idb-proxy - openDatabase]');
                 resolve();
             };
             request.onupgradeneeded = event => {
+                console.log('[idb-proxy - openDatabase#onupgradeneeded]');
+                console.log(event);
+                console.log(event.result);
                 this._db = event.result;
+                console.log(this._db);
                 this.createRestaurantsStore()
                     .then(() => this.createImageDetailsStore())
                     .catch(error => reject(error));
+                console.log('[! idb-proxy - openDatabase]');
                 resolve();
             };
         });
     }
 
     createRestaurantsStore(){
+        console.log('[idb-proxy - createRestaurantStore]');
         return new Promise((resolve, reject) => {
             const store = this._db.createObjectStore(restaurantStore, { keyPath: "id" });
             store.onerror = error => reject(error);
@@ -233,6 +246,7 @@ class IdbProxy {
     }
 
     createImageDetailsStore(){
+        console.log('[idb-proxy - createImageDetailsStore]');
         return new Promise((resolve, reject) => {
             const store = this._db.createObjectStore(imageDetailsStore, { keyPath: "photograph" });
             store.transaction.onerror = error => reject(error);
@@ -251,6 +265,7 @@ class IdbProxy {
     }
 
     getRestaurants() {
+        console.log('[idb-proxy - getRestaurants]');
         return new Promise((resolve, reject) => {
             const store = this._db.transaction(restaurantStore).objectStore(restaurantStore);
             store.onerror = error => reject(error);
@@ -261,6 +276,7 @@ class IdbProxy {
     }
 
     getRestaurantsByNeighborhood(neighborhood) {
+        console.log('[idb-proxy - getRestaurantsByNeighborhood]');
         return new Promise((resolve, reject) => {
             const index = this._db
                 .transaction(restaurantStore)
@@ -275,6 +291,7 @@ class IdbProxy {
     }
 
     getRestaurantsByCuisineType(cuisineType) {
+        console.log('[idb-proxy - getRestaurantsByCuisineType]');
         return new Promise((resolve, reject) => {
             const index = this._db
                 .transaction(restaurantStore)
@@ -289,6 +306,7 @@ class IdbProxy {
     }
 
     getRestaurantsByCuisineTypeAndNeighborhood(cuisineType, neighborhood) {
+        console.log('[idb-proxy - getRestaurantsByCuisineTypeAndNeighborhood]');
         return new Promise((resolve, reject) => {
             const index = this._db
                 .transaction(restaurantStore)
@@ -303,6 +321,7 @@ class IdbProxy {
     }
 
     getRestaurant(id) {
+        console.log('[idb-proxy - getRestaurant]');
         return new Promise((resolve, reject) => {
             const request = this._db.transaction(restaurantStore).objectStore(restaurantStore).get(id);
             request.onerror = error => reject(error);
@@ -311,6 +330,7 @@ class IdbProxy {
     }
 
     saveRestaurants(restaurants) {
+        console.log('[idb-proxy - saveRestaurants]');
         return new Promise((resolve, reject) => {
             const store = this._db.transaction(restaurantStore, "readwrite").objectStore(restaurantStore);
             store.onerror = error => reject(error);
@@ -323,6 +343,7 @@ class IdbProxy {
     }
 
     saveRestaurant(restaurant) {
+        console.log('[idb-proxy - saveRestaurant]');
         return new Promise((resolve, reject) => {
             const request = this._db
                 .transaction(restaurantStore, "readwrite")
@@ -334,6 +355,7 @@ class IdbProxy {
     }
 
     getImageDetails(photograph){
+        console.log('[idb-proxy - getImageDetails]');
         return new Promise((resolve, reject) => {
             const request = this._db.transaction(imageDetailsStore).objectStore(imageDetailsStore).get(photograph);
             request.onerror = error => reject(error);
@@ -342,6 +364,7 @@ class IdbProxy {
     }
 
     getNeighborhoods() {
+        console.log('[idb-proxy - getNeighborhoods]');
         return new Promise((resolve, reject) => {
             const index = this._db
                 .transaction(restaurantStore)
@@ -356,6 +379,7 @@ class IdbProxy {
     }
 
     getCuisines() {
+        console.log('[idb-proxy - getCuisines]');
         return new Promise((resolve, reject) => {
             const index = this._db
                 .transaction(restaurantStore)
@@ -370,6 +394,7 @@ class IdbProxy {
     }
 
     getCursorValues(request) {
+        console.log('[idb-proxy - getCursorValues]');
         return new Promise((resolve, reject) => {
             const cursor = request.openCursor();
             cursor.onerror = event => reject(event);

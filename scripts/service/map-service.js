@@ -19,6 +19,7 @@ class MapService {
     static _instance;
 
     static get instance() {
+        console.log('[map-service - instance]');
         return new Promise((resolve, reject) => {
             if (! MapService._instance) {
                 MapService._instance = new MapService();
@@ -29,12 +30,14 @@ class MapService {
     }
 
     urlForRestaurant(restaurant) {
+        console.log('[map-service - urlForRestaurant]');
         return new Promise((resolve, reject) => {
             resolve(`./restaurant.html?id=${restaurant.id}`);
         });
     }
 
     mapMarkerForRestaurant(restaurant) {
+        console.log('[map-service - mapMarkerForRestaurant]');
         return new Promise((resolve, reject) => {
             const coord = [restaurant.latlng.lat, restaurant.latlng.lng];
             const options = {
@@ -47,6 +50,7 @@ class MapService {
     }
 
     initMap(lat, lng, zoom) {
+        console.log('[map-service - initMap]');
         return new Promise((resolve, reject) => {
             const mapOptions = { center: [lat, lng], zoom: zoom, scrollWheelZoom: false };
             const newMap = L.map('map', mapOptions);
@@ -55,6 +59,7 @@ class MapService {
     }
 
     addTileLayerToMap(map){
+        console.log('[map-service - addTileLayerToMap]');
         return new Promise((resolve, reject) => {
             L.tileLayer(layerUrl, layerOptions).addTo(map);
             resolve();
