@@ -25,7 +25,6 @@ class RestaurantService {
         RestaurantService._instance = new RestaurantService();
         RestaurantService._instance.initialize()
             .then(() => resolve(RestaurantService._instance))
-            .catch(error => reject(error));
       }
       resolve(RestaurantService._instance);
     });
@@ -53,67 +52,47 @@ class RestaurantService {
       this._idbProxy.getRestaurants()
           .then(restaurants => {
               if (restaurants && restaurants.length === 10) {
-                this._imageService.addImageDetails(restaurants)
-                    .then(() => resolve(restaurants))
-                    .catch(error => reject(error));
+                  this._imageService.addImageDetails(restaurants)
+                      .then(() => resolve(restaurants));
               }
-              this._serverProxy.fetchRestaurants()
-                  .then(restaurants => {
-                      this._idbProxy.saveRestaurants(restaurants)
-                          .then(() => {
-                              this._imageService.addImageDetails(restaurants)
-                                  .then(() => resolve(restaurants))
-                                  .catch(error => reject(error));
-                          })
-                          .catch(error => reject(error));
-                  })
-                  .catch(error => reject(error));
           })
-          .catch(error => reject(error));
+          .then(() => this._serverProxy.fetchRestaurants())
+          .then(restaurants => this._idbProxy.saveRestaurants(restaurants))
+          .then(() => this._imageService.addImageDetails(restaurants))
+          .then(() => resolve(restaurants));
     });
   }
 
   fetchRestaurantById(id) {
-    return new Promise((resolve, reject) => {
-      this._idbProxy.getRestaurant(id)
-          .then(restaurant => {
-            if (restaurant) {
-                this._imageService.addImageDetail(restaurant)
-                  .then(() => resolve(restaurant))
-                  .catch(error => reject(error));
-            }
-            this._serverProxy.fetchRestaurantById(id)
-                .then(restaurant => {
-                    this._idbProxy.saveRestaurant(restaurant)
-                      .then(() => {
-                          this._imageService.addImageDetail(restaurant)
-                            .then(() => resolve(restaurant))
-                            .catch(error => reject(error));
-                      })
-                      .catch(error => reject(error));
-                })
-                .catch(error => reject(error));
-          })
-          .catch(error => reject(error));
-    });
+      return new Promise((resolve, reject) => {
+          this._idbProxy.getRestaurant(id)
+              .then(restaurant => {
+                  if (restaurant) {
+                      this._imageService.addImageDetail(restaurant)
+                          .then(() => resolve(restaurant))
+                  }
+              })
+              .then(() => this._serverProxy.fetchRestaurantById(id))
+              .then(restaurant => this._idbProxy.saveRestaurant(restaurant))
+              .then(() => this._imageService.addImageDetail(restaurant))
+              .then(() => resolve(restaurant));
+      });
   }
 
   fetchNeighborhoods() {
     return new Promise((resolve, reject) => {
       this._idbProxy.getNeighborhoods()
           .then(neighborhoods => {
-            if (neighborhoods && neighborhoods.length === 3) {
-              resolve(neighborhoods);
-            }
-            this.fetchRestaurants()
-                .then(restaurants => {
-                  const neighborhoods = restaurants.map((v, i) => restaurants[i].neighborhood);
-                  const uniqueNeighborhoods = neighborhoods.filter((v, i) => neighborhoods.indexOf(v) === i);
-                  resolve(uniqueNeighborhoods);
-                })
-                .catch(error => reject(error));
+              if (neighborhoods && neighborhoods.length === 3) {
+                  resolve(neighborhoods);
+              }
           })
-          .catch(error => reject(error));
+          .then(() => this.fetchRestaurants())
+          .then(restaurants => {
+              const neighborhoods = restaurants.map((v, i) => restaurants[i].neighborhood);
+              const uniqueNeighborhoods = neighborhoods.filter((v, i) => neighborhoods.indexOf(v) === i);
+              resolve(uniqueNeighborhoods);
+          });
     });
   }
 
@@ -121,18 +100,16 @@ class RestaurantService {
     return new Promise((resolve, reject) => {
       this._idbProxy.getCuisines()
           .then(cuisines => {
-            if (cuisines && cuisines.length === 4) {
-              resolve(cuisines);
-            }
-            this.fetchRestaurants()
-                .then(restaurants => {
-                  const cuisines = restaurants.map((v, i) => restaurants[i].cuisine_type);
-                  const uniqueCuisines = cuisines.filter((v, i) => cuisines.indexOf(v) === i);
-                  resolve(uniqueCuisines);
-                })
-                .catch(error => reject(error));
+              if (cuisines && cuisines.length === 4) {
+                  resolve(cuisines);
+              }
           })
-          .catch(error => reject(error));
+          .then(() => this.fetchRestaurants())
+          .then(restaurants => {
+              const cuisines = restaurants.map((v, i) => restaurants[i].cuisine_type);
+              const uniqueCuisines = cuisines.filter((v, i) => cuisines.indexOf(v) === i);
+              resolve(uniqueCuisines);
+          });
     });
   }
 
@@ -140,16 +117,12 @@ class RestaurantService {
     return new Promise((resolve, reject) => {
       this._idbProxy.getRestaurantsByCuisineType(cuisine)
           .then(restaurants => {
-            if (restaurants && restaurants.length === 10) {
-              resolve(restaurants);
-            }
-            this.fetchRestaurants()
-                .then(restaurants => {
-                  resolve(restaurants.filter(restaurant => restaurant.cuisine_type === cuisine));
-                })
-                .catch(error => reject(error));
+              if (restaurants && restaurants.length === 10) {
+                  resolve(restaurants);
+              }
           })
-          .catch(error => reject(error));
+          .then(() => this.fetchRestaurants())
+          .then(restaurants => resolve(restaurants.filter(restaurant => restaurant.cuisine_type === cuisine)));
     });
   }
 
@@ -157,16 +130,12 @@ class RestaurantService {
     return new Promise((resolve, reject) => {
       this._idbProxy.getRestaurantsByNeighborhood(neighbourhood)
           .then(restaurants => {
-            if (restaurants && restaurants.length === 10) {
-              resolve(restaurants);
-            }
-            this.fetchRestaurants()
-                .then(restaurants => {
-                  resolve(restaurants.filter(restaurant => restaurant.neighborhood === neighbourhood));
-                })
-                .catch(error => reject(error));
+              if (restaurants && restaurants.length === 10) {
+                  resolve(restaurants);
+              }
           })
-          .catch(error => reject(error));
+          .then(() => this.fetchRestaurants())
+          .then(restaurants => resolve(restaurants.filter(restaurant => restaurant.neighborhood === neighbourhood)));
     });
   }
 
@@ -175,40 +144,28 @@ class RestaurantService {
       if (cuisine && cuisine === 'all') {
         this.fetchRestaurantsByNeighbourhood(neighborhood)
             .then(restaurants => resolve(restaurants))
-            .catch(error => reject(error));
       }
       if (neighborhood && neighborhood === 'all') {
         this.fetchRestaurantsByCuisine(cuisine)
             .then(restaurants => resolve(restaurants))
-            .catch(error => reject(error));
       }
       this._idbProxy.getRestaurantsByCuisineTypeAndNeighborhood(cuisine, neighborhood)
           .then(restaurants => {
-            if (restaurants && restaurants.length === 10) {
-              resolve(restaurants);
-            }
-            this.fetchRestaurants()
-                .then(restaurants =>
-                    resolve(
-                        restaurants
-                            .filter(restaurant => restaurant.neighborhood === neighborhood)
-                            .filter(restaurant => restaurant.cuisine_type === cuisine)
-                    )
-                )
-                .catch(error => reject(error));
+              if (restaurants && restaurants.length === 10) {
+                  resolve(restaurants);
+              }
           })
-          .catch(error => reject(error));
+          .then(() =>this.fetchRestaurants())
+          .then(restaurants =>
+              resolve(
+                  restaurants
+                      .filter(restaurant => restaurant.neighborhood === neighborhood)
+                      .filter(restaurant => restaurant.cuisine_type === cuisine)
+              )
+          );
     });
   }
 
-    /**
-     * Creates and returns a live message whenever the filters are modified
-     *
-     * @param neighborhood  neighbour selection
-     * @param cuisine       cuisine selection
-     * @param resultCount   number of restaurants matching on neighbourhood and cuisine
-     * @returns {string}    generated live message
-     */
     getLiveMessage(neighborhood, cuisine, resultCount){
         return new Promise((resolve, reject) => {
             let msg;
