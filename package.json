@@ -1,0 +1,33 @@
+{
+  "name": "restaurant-reviews",
+  "version": "2.0.0",
+  "description": "Reviews of restaurants in the NYC area",
+  "main": "scripts/main.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dstaflund/mws-restaurant-stage-1.git"
+  },
+  "keywords": [
+    "Restaurant",
+    "Reviews",
+    "Udacity",
+    "Mobile",
+    "Developer",
+    "Nanodegree"
+  ],
+  "author": "Darryl Staflund",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dstaflund/mws-restaurant-stage-1/issues"
+  },
+  "homepage": "https://github.com/dstaflund/mws-restaurant-stage-1#readme",
+  "dependencies": {
+    "idb": "^4.0.3"
+  }
+}
