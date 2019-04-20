@@ -29,9 +29,9 @@ const urlsToCache = [
     '/scripts/main.js',
     '/scripts/restaurant_info.js',
     '/service-worker.js',
-    '/styles/restaurant-details.css',
-    '/styles/restaurant-list.css',
-    '/styles/styles.css'
+    '/styles/restaurant-details.scss',
+    '/styles/restaurant-list.scss',
+    '/styles/styles.scss'
 ];
 
 /**
