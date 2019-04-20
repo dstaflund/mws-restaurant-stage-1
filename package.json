@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/dstaflund/mws-restaurant-stage-1#readme",
   "dependencies": {
-    "idb": "^4.0.3"
+    "idb": "^4.0.3",
+    "yo": "^2.0.6"
   }
 }
