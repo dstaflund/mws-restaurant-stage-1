@@ -1,13 +1,15 @@
 class ImageService {
     static _instance;
 
-    async static get instance() {
+    static get instance() {
         console.log('[image-service - instance]');
-        if (! ImageService._instance) {
+        return async () => {
+          if (! ImageService._instance) {
             ImageService._instance = new ImageService();
             await ImageService._instance.initialize();
-        }
-        return ImageService._instance;
+          }
+          return ImageService._instance;
+        };
     }
 
     _idbProxy;

@@ -18,12 +18,14 @@ const layerOptions = {
 class MapService {
     static _instance;
 
-    async static get instance() {
+    static get instance() {
         console.log('[map-service - instance]');
-        if (! MapService._instance) {
+        return async() => {
+          if (! MapService._instance) {
             MapService._instance = new MapService();
-        }
-        return MapService._instance;
+          }
+          return MapService._instance;
+        };
     }
 
     async urlForRestaurant(restaurant) {

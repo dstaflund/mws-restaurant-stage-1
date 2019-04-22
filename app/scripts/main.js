@@ -146,11 +146,7 @@ let addMarkersToMap = async (restaurants = self.restaurants) => {
       const marker = self.restaurantService.mapMarkerForRestaurant(restaurant);
       marker.addTo(self.newMap);
       marker.on('click', onClick);
-
-      function onClick() {
-        window.location.href = marker.options.url;
-      }
-
+      marker.onclick = () => window.location.href = marker.options.url;
       self.markers.push(marker);
     }
 };

@@ -4,11 +4,13 @@
     "node": ">=4"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.4.3",
     "idb": "^4.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
     "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/plugin-transform-regenerator": "^7.4.3",
     "@babel/preset-env": "^7.1.0",
     "autoprefixer": "^9.4.4",
     "browser-sync": "^2.2.1",

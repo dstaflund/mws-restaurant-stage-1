@@ -1,4 +1,5 @@
 // generated on 2019-04-20 using generator-webapp 4.0.0-5
+const polyfill = require('@babel/polyfill');
 const { src, dest, watch, series, parallel, lastRun } = require('gulp');
 const gulpLoadPlugins = require('gulp-load-plugins');
 const browserSync = require('browser-sync');

@@ -19,13 +19,15 @@
 class RestaurantService {
   static _instance;
 
-  async static get instance() {
+  static get instance() {
       console.log('[restaurant-service - instance]');
-      if (! RestaurantService._instance) {
-        RestaurantService._instance = new RestaurantService();
-        await RestaurantService._instance.initialize();
-      }
-      return RestaurantService._instance;
+      return async() => {
+        if (! RestaurantService._instance) {
+          RestaurantService._instance = new RestaurantService();
+          await RestaurantService._instance.initialize();
+        }
+        return RestaurantService._instance;
+      };
   }
 
   _idbProxy;

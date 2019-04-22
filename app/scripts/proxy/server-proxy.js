@@ -8,12 +8,15 @@ const DATABASE_URL = `http://localhost:${port}/restaurants`;
 class ServerProxy {
     static _instance;
 
-    async static get instance() {
+    static get instance() {
+
         console.log('[server-proxy - instance]');
-        if (! ServerProxy._instance) {
+        return async () => {
+          if (! ServerProxy._instance) {
             ServerProxy._instance = new ServerProxy();
-        }
-        return ServerProxy._instance;
+          }
+          return ServerProxy._instance;
+        };
     }
 
     async fetchRestaurants() {
