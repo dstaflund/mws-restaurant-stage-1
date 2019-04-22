@@ -8,43 +8,37 @@ const DATABASE_URL = `http://localhost:${port}/restaurants`;
 class ServerProxy {
     static _instance;
 
-    static get instance() {
+    async static get instance() {
         console.log('[server-proxy - instance]');
-        return new Promise((resolve, reject) => {
-            if (! ServerProxy._instance) {
-                ServerProxy._instance = new ServerProxy();
-            }
-            resolve(ServerProxy._instance);
-        });
+        if (! ServerProxy._instance) {
+            ServerProxy._instance = new ServerProxy();
+        }
+        return ServerProxy._instance;
     }
 
-    fetchRestaurants() {
+    async fetchRestaurants() {
         console.log('[server-proxy - fetchRestaurants]');
-        return new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', DATABASE_URL);
-            xhr.onload = () => {
-                if (xhr.status === 200) {
-                    resolve(JSON.parse(xhr.responseText));
-                }
-                reject(`Request failed. Returned status of ${xhr.status}`);
-            };
-            xhr.send();
-        });
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', DATABASE_URL);
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+                return JSON.parse(xhr.responseText);
+            }
+            return new Error(`Request failed. Returned status of ${xhr.status}`);
+        };
+        xhr.send();
     }
 
-    fetchRestaurantById(id) {
+    async fetchRestaurantById(id) {
         console.log('[server-proxy - fetchRestaurantById]');
-        return new Promise((resolve, reject) => {
-            let xhr = new XMLHttpRequest();
-            xhr.open('GET', DATABASE_URL + `?id=${id}`);
-            xhr.onload = () => {
-                if (xhr.status === 200) {
-                    resolve(JSON.parse(xhr.responseText));
-                }
-                reject(`Request failed. Returned status of ${xhr.status}`);
-            };
-            xhr.send();
-        });
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', DATABASE_URL + `?id=${id}`);
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+                return JSON.parse(xhr.responseText);
+            }
+            return new Error(`Request failed. Returned status of ${xhr.status}`);
+        };
+        xhr.send();
     }
 }

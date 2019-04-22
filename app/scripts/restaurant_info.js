@@ -5,44 +5,34 @@ var newMap;
 let restaurantService;
 let imageService;
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   console.log('[restaurant_info - addEventListener]');
-  Promise.all([ RestaurantService.instance, ImageService.instance ])
-      .then(services => {
-        self.restaurantService = services[0];
-        self.imageService = services[1];
-      })
-      .then(() => initMap())
-      .then(map => self.newMap = map);
+  self.restaurantService = await RestaurantService.instance;
+  self.imageService = await ImageService.instance;
+  await initMap();
 });
 
-let initMap = () => {
+let initMap = async () => {
   console.log('[restaurant_info - initMap]');
-  return new Promise((resolve, reject) => {
-    fetchRestaurantFromURL()
-        .then(restaurant => self.mapService.initMap(restaurant.latlng.lat, restaurant.latlng.lng, 16))
-        .then(() => fillBreadcrumb())
-        .then(() => self.restaurantService.mapMarkerForRestaurant(self.restaurant, self.newMap))
-        .then(() => resolve());
-  });
+  const restaurant = await fetchRestaurantFromURL();
+  self.newMap = self.mapService.initMap(restaurant.latlng.lat, restaurant.latlng.lng, 16);
+  await fillBreadcrumb();
+  await self.restaurantService.mapMarkerForRestaurant(self.restaurant, self.newMap);
 };
 
-let fetchRestaurantFromURL = () => {
+let fetchRestaurantFromURL = async () => {
   console.log('[restaurant_info - fetchRestaurantsFromURL]');
-  return new Promise((resolve, reject) => {
-    if (self.restaurant) {
-      resolve(self.restaurant);
-    }
+  if (self.restaurant) {
+    return self.restaurant;
+  }
 
-    getParameterByName('id')
-        .then(id => self.restaurantService.fetchRestaurantById(id))
-        .then(restaurant => self.restaurant = restaurant)
-        .then(() => fillRestaurantHTML())
-        .then(() => resolve(self.restaurant));
-  });
+  const id = await getParameterByName('id');
+  self.restaurant = self.restaurantService.fetchRestaurantById(id);
+  await fillRestaurantHTML();
+  return self.restaurant;
 };
 
-let fillRestaurantHTML = (restaurant = self.restaurant) => {
+let fillRestaurantHTML = async (restaurant = self.restaurant) => {
   console.log('[restaurant_info - fillRestaurantHTML]');
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
@@ -53,54 +43,43 @@ let fillRestaurantHTML = (restaurant = self.restaurant) => {
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
 
-  return Promise
-      .all([
-        self.imageService.imageUrlForRestaurant(restaurant),
-        self.imageService.srcSetForRestaurant(restaurant),
-        self.imageService.imageDescriptionForRestaurant(restaurant)
-      ])
-      .then(values => {
-        const image = document.getElementById('restaurant-img');
-        image.src = values[0];
-        image.srcset = values[1];
-        image.alt = values[2];
-        image.className = 'restaurant-img';
-        image.width = '320px';
-      })
-      .then(() => {
-        if (restaurant.operating_hours) {
-          return fillRestaurantHoursHTML();
-        }
-      })
-      .then(() => fillReviewsHTML())
-      .then(() => Promise.resolve());
+  const image = document.getElementById('restaurant-img');
+  image.src = await self.imageService.imageUrlForRestaurant(restaurant);
+  image.srcset = await self.imageService.srcSetForRestaurant(restaurant);
+  image.alt = await self.imageService.imageDescriptionForRestaurant(restaurant);
+  image.className = 'restaurant-img';
+  image.width = '320px';
+
+  if (restaurant.operating_hours) {
+    return await fillRestaurantHoursHTML();
+  }
+
+  await fillReviewsHTML();
 };
 
-let fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
+let fillRestaurantHoursHTML = async (operatingHours = self.restaurant.operating_hours) => {
   console.log('[restaurant_info - fillRestaurantHoursHTML]');
   const hours = document.getElementById('restaurant-hours');
 
-  return self.createHeaderRowHTML()
-      .then(row => hours.appendChild(row))
-      .then(() => {
-        for (let key in operatingHours) {
-          const row = document.createElement('tr');
+  const row = await self.createHeaderRowHTML();
+  await hours.appendChild(row);
 
-          const day = document.createElement('td');
-          day.innerHTML = key;
-          row.appendChild(day);
+  for (let key in operatingHours) {
+    const row = document.createElement('tr');
 
-          const time = document.createElement('td');
-          time.innerHTML = operatingHours[key];
-          row.appendChild(time);
+    const day = document.createElement('td');
+    day.innerHTML = key;
+    row.appendChild(day);
 
-          hours.appendChild(row);
-        }
-      })
-      .then(() => Promise.resolve());
+    const time = document.createElement('td');
+    time.innerHTML = operatingHours[key];
+    row.appendChild(time);
+
+    hours.appendChild(row);
+  }
 };
 
-function createHeaderRowHTML() {
+async function createHeaderRowHTML() {
   console.log('[restaurant_info - createHeaderRowHTML]');
   const r = document.createElement('tr');
   r.className = 'header-row';
@@ -115,10 +94,10 @@ function createHeaderRowHTML() {
   t.scope = 'col';
   r.appendChild(t);
 
-  return Promise.resolve(r);
+  return r;
 }
 
-let fillReviewsHTML = (reviews = self.restaurant.reviews) => {
+let fillReviewsHTML = async (reviews = self.restaurant.reviews) => {
   console.log('[restaurant_info - fillReviewsHTML]');
   const container = document.getElementById('reviews-container');
 
@@ -126,23 +105,19 @@ let fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     const noReviews = document.createElement('p');
     noReviews.innerHTML = 'No reviews yet!';
     container.appendChild(noReviews);
-    return Promise.resolve();
-  }
-
-  let promises = [];
-  for(const review of reviews) {
-    promises.push(createReviewHTML(review));
+    return;
   }
 
   const ul = document.getElementById('reviews-list');
-  return Promise
-      .all(promises)
-      .then(reviews => reviews.forEach(review => ul.appendChild(review)))
-      .then(() => container.appendChild(ul))
-      .then(() => Promise.resolve());
+
+  for(const review of reviews) {
+    ul.appendChild(await createReviewHTML(review))
+  }
+
+  container.appendChild(ul);
 };
 
-let createReviewHTML = (review) => {
+let createReviewHTML = async (review) => {
   console.log('[restaurant_info - createReviewHTML]');
   const li = document.createElement('li');
   const container = document.createElement('div');
@@ -171,21 +146,19 @@ let createReviewHTML = (review) => {
   comments.innerHTML = review.comments;
   li.appendChild(comments);
 
-  return Promise.resolve(li);
+  return li;
 };
 
-let fillBreadcrumb = (restaurant = self.restaurant) => {
+let fillBreadcrumb = async (restaurant = self.restaurant) => {
   console.log('[restaurant_info - fillBreadcrumb]');
   const breadcrumb = document.getElementById('breadcrumb');
   const li = document.createElement('li');
 
   li.innerHTML = restaurant.name;
   breadcrumb.appendChild(li);
-
-  return Promise.resolve();
 };
 
-let getParameterByName = (name, url) => {
+let getParameterByName = async (name, url) => {
   console.log('[restaurant_info - getParameterByName]');
   url = ! url ? window.location.href : url;
   name = name.replace(/[\[\]]/g, '\\$&');
@@ -193,10 +166,10 @@ let getParameterByName = (name, url) => {
   const results = regex.exec(url);
 
   if (! results) {
-    return Promise.resolve(null);
+    return null;
   }
   if (! results[2]) {
-    return Promise.resolve('');
+    return '';
   }
-  return Promise.resolve(decodeURIComponent(results[2].replace(/\+/g, ' ')));
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
 };

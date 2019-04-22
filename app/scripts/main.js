@@ -10,207 +10,149 @@ let mapService;
 let restaurantService;
 
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     console.log('[main - addEventListener]');
-    Promise
-        .all([RestaurantService.instance, ImageService.instance, MapService.instance])
-        .then(services => {
-            self.restaurantService = services[0];
-            self.imageService = services[1];
-            self.mapService = services[2];
-        })
-        .then(() => initMap())
-        .then(() => fetchNeighborhoods())
-        .then(() => fetchCuisines())
-        .catch(error => console.error(error));
+
+    self.restaurantService = await RestaurantService.instance;
+    self.imageService = await ImageService.instance;
+    self.mapService = await MapService.instance;
+
+    await initMap();
+    await fetchNeighborhoods();
+    await fetchCuisines();
 });
 
-let fetchNeighborhoods = () => {
+let fetchNeighborhoods = async () => {
     console.log('[main - fetchNeighborhoods]');
-    return new Promise((resolve, reject) => {
-        self.restaurantService.fetchNeighborhoods()
-            .then(neighborhoods => self.neighborhoods = neighborhoods)
-            .then(() => fillNeighborhoodsHTML())
-            .then(() => resolve());
-    });
+    self.neighborhoods = await self.restaurantService.fetchNeighborhoods();
+    await fillNeighborhoodsHTML();
 };
 
-let fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
+let fillNeighborhoodsHTML = async (neighborhoods = self.neighborhoods) => {
     console.log('[main - fetchNeighborhoodsHTML]');
-    return new Promise((resolve, reject) => {
-        const select = document.getElementById('neighborhoods-select');
-        neighborhoods.forEach(neighborhood => {
-            const option = document.createElement('option');
-            option.innerHTML = neighborhood;
-            option.value = neighborhood;
-            select.append(option);
-        });
-        resolve();
+    const select = document.getElementById('neighborhoods-select');
+    neighborhoods.forEach(neighborhood => {
+        const option = document.createElement('option');
+        option.innerHTML = neighborhood;
+        option.value = neighborhood;
+        select.append(option);
     });
 };
 
-let fetchCuisines = () => {
+let fetchCuisines = async () => {
     console.log('[main - fetchCuisines]');
-    return new Promise((resolve, reject) => {
-        self.restaurantService.fetchCuisines()
-            .then(cuisines => self.cuisines = cuisines)
-            .then(() => fillCuisinesHTML())
-            .then(() => resolve());
-    });
+    self.cuisines = await self.restaurantService.fetchCuisines();
+    await fillCuisinesHTML();
 };
 
-let fillCuisinesHTML = (cuisines = self.cuisines) => {
+let fillCuisinesHTML = async (cuisines = self.cuisines) => {
     console.log('[main - fillCuisinesHTML]');
-    return new Promise((resolve, reject) => {
-        const select = document.getElementById('cuisines-select');
-        cuisines.forEach(cuisine => {
-            const option = document.createElement('option');
-            option.innerHTML = cuisine;
-            option.value = cuisine;
-            select.append(option);
-        });
-        resolve();
+    const select = document.getElementById('cuisines-select');
+    cuisines.forEach(cuisine => {
+        const option = document.createElement('option');
+        option.innerHTML = cuisine;
+        option.value = cuisine;
+        select.append(option);
     });
 };
 
-let initMap = () => {
+let initMap = async () => {
     console.log('[main - initMap]');
-    return new Promise((resolve, reject) => {
-        self.mapService.initMap(40.722216, -73.987501, 12)
-            .then(map => self.newMap = map)
-            .then(() => updateRestaurants())
-            .then(() => resolve());
-    });
+    self.newMap = await self.mapService.initMap(40.722216, -73.987501, 12);
+    await updateRestaurants();
 };
 
-let updateRestaurants = () => {
+let updateRestaurants = async () => {
     console.log('[main - updateRestaurants]');
-    return new Promise((resolve, reject) => {
-        const cSelect = document.getElementById('cuisines-select');
-        const nSelect = document.getElementById('neighborhoods-select');
-        const lmSelect = document.getElementById('live-message');
+    const cSelect = document.getElementById('cuisines-select');
+    const nSelect = document.getElementById('neighborhoods-select');
+    const lmSelect = document.getElementById('live-message');
 
-        const cIndex = cSelect.selectedIndex;
-        const nIndex = nSelect.selectedIndex;
+    const cIndex = cSelect.selectedIndex;
+    const nIndex = nSelect.selectedIndex;
 
-        const cuisine = cSelect[cIndex].value;
-        const neighborhood = nSelect[nIndex].value;
+    const cuisine = cSelect[cIndex].value;
+    const neighborhood = nSelect[nIndex].value;
 
-        let foundRestaurants;
+    let foundRestaurants = await self.restaurantService.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood);
 
-        self.restaurantService.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood)
-            .then(restaurants => foundRestaurants = restaurants)
-            .then(() => resetRestaurants(foundRestaurants))
-            .then(() => fillRestaurantsHTML())
-            .then(() => self.restaurantService.getLiveMessage(neighborhood, cuisine, ! foundRestaurants ? 0 : foundRestaurants.length))
-            .then(message => {
-                lmSelect.innerHTML = message;
-                lmSelect.className = foundRestaurants.length ? 'offscreen' : 'visible';
-                resolve();
-            });
-    });
+    await resetRestaurants(foundRestaurants);
+    await fillRestaurantsHTML();
+
+    lmSelect.innerHTML = await self.restaurantService.getLiveMessage(neighborhood, cuisine, ! foundRestaurants ? 0 : foundRestaurants.length);
+    lmSelect.className = foundRestaurants.length ? 'offscreen' : 'visible';
 };
 
-let resetRestaurants = (restaurants) => {
+let resetRestaurants = async (restaurants) => {
     console.log('[main - resetRestaurants]');
-    return new Promise((resolve, reject) => {
-        self.restaurants = [];
-        const ul = document.getElementById('restaurants-list');
-        ul.innerHTML = '';
+    self.restaurants = [];
+    const ul = document.getElementById('restaurants-list');
+    ul.innerHTML = '';
 
-        if (self.markers) {
-            for (const marker of self.markers) {
-                marker.remove();
-            }
+    if (self.markers) {
+        for (const marker of self.markers) {
+            marker.remove();
         }
-        self.markers = [];
-        self.restaurants = restaurants;
-        resolve();
-    });
+    }
+    self.markers = [];
+    self.restaurants = restaurants;
 };
 
-let fillRestaurantsHTML = (restaurants = self.restaurants) => {
+let fillRestaurantsHTML = async (restaurants = self.restaurants) => {
     console.log('[main - fillRestaurantsHTML]');
-    return new Promise((resolve, reject) => {
-        const ul = document.getElementById('restaurants-list');
+    const ul = document.getElementById('restaurants-list');
 
-        let promises = [];
-        for (const restaurant of restaurants) {
-            promises.push(createRestaurantHTML(restaurant));
-        }
-
-        new Promise.all(promises)
-            .then(results => results.forEach(result => ul.append(result)))
-            .then(() => addMarkersToMap())
-            .then(() => resolve());
-    });
+    for (const restaurant of restaurants) {
+      ul.append(await createRestaurantHTML(restaurant));
+      await addMarkersToMap();
+    }
 };
 
-let createRestaurantHTML = (restaurant) => {
+let createRestaurantHTML = async (restaurant) => {
     console.log('[main - createRestaurantHTML]');
-    return new Promise((resolve, reject) => {
-        const li = document.createElement('li');
-        const image = document.createElement('img');
+    const li = document.createElement('li');
+    const image = document.createElement('img');
 
-        self.imageService.imageUrlForRestaurant(restaurant)
-            .then(src => image.src = src)
-            .then(() => self.imageService.srcSetForRestaurant(restaurant))
-            .then(srcset => image.srcset = srcset)
-            .then(() => self.imageService.imageDescriptionForRestaurant(restaurant))
-            .then(alt => image.alt = alt)
-            .then(() => {
-                image.className = 'restaurant-img';
-                li.append(image);
-            })
-            .then(() => {
-                const name = document.createElement('h3');
-                name.innerHTML = restaurant.name;
-                li.append(name);
-            })
-            .then(() => {
-                const neighborhood = document.createElement('p');
-                neighborhood.innerHTML = restaurant.neighborhood;
-                li.append(neighborhood);
-            })
-            .then(() => {
-                const address = document.createElement('p');
-                address.innerHTML = restaurant.address;
-                li.append(address);
-            })
-            .then(() => self.restaurantService.urlForRestaurant(restaurant))
-            .then(url => {
-                const more = document.createElement('a');
-                more.innerHTML = 'View Details';
-                more.href = url;
-                more.setAttribute('aria-label', 'View details on ' + restaurant.name);
-                li.append(more);
-            })
-            .then(() => resolve(li));
-    });
+    image.src = await self.imageService.imageUrlForRestaurant(restaurant);
+    image.srcset = await self.imageService.srcSetForRestaurant(restaurant);
+    image.alt = await self.imageService.imageDescriptionForRestaurant(restaurant);
+    image.className = 'restaurant-img';
+    li.append(image);
+
+    const name = document.createElement('h3');
+    name.innerHTML = restaurant.name;
+    li.append(name);
+
+    const neighborhood = document.createElement('p');
+    neighborhood.innerHTML = restaurant.neighborhood;
+    li.append(neighborhood);
+
+    const address = document.createElement('p');
+    address.innerHTML = restaurant.address;
+    li.append(address);
+
+    const more = document.createElement('a');
+    more.innerHTML = 'View Details';
+    more.href = await self.restaurantService.urlForRestaurant(restaurant);
+    more.setAttribute('aria-label', 'View details on ' + restaurant.name);
+    li.append(more);
+
+    return li;
 };
 
-let addMarkersToMap = (restaurants = self.restaurants) => {
+let addMarkersToMap = async (restaurants = self.restaurants) => {
     console.log('[main - addMarkersToMap]');
-    return new Promise((resolve, reject) => {
-        let promises = [];
-        for (const restaurant of restaurants) {
-            promises.push(self.restaurantService.mapMarkerForRestaurant(restaurant));
-        }
-        new Promise.all(promises)
-            .then(markers => {
-                markers.forEach(marker => {
-                    marker.addTo(self.newMap);
-                    marker.on('click', onClick);
+    for (const restaurant of restaurants) {
+      const marker = self.restaurantService.mapMarkerForRestaurant(restaurant);
+      marker.addTo(self.newMap);
+      marker.on('click', onClick);
 
-                    function onClick() {
-                        window.location.href = marker.options.url;
-                    }
+      function onClick() {
+        window.location.href = marker.options.url;
+      }
 
-                    self.markers.push(marker);
-                });
-            })
-            .then(() => resolve());
-    });
+      self.markers.push(marker);
+    }
 };
 
 document.getElementById('skip-link').focus();

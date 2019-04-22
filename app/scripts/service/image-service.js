@@ -1,76 +1,48 @@
 class ImageService {
     static _instance;
 
-    static get instance() {
+    async static get instance() {
         console.log('[image-service - instance]');
-        return new Promise((resolve, reject) => {
-            if (! ImageService._instance) {
-                ImageService._instance = new ImageService();
-                ImageService._instance.initialize()
-                    .then(() => resolve(ImageService._instance))
-                    .catch(error => reject(error));
-            }
-            resolve(ImageService._instance);
-        });
+        if (! ImageService._instance) {
+            ImageService._instance = new ImageService();
+            await ImageService._instance.initialize();
+        }
+        return ImageService._instance;
     }
 
     _idbProxy;
 
-    initialize(){
+    async initialize(){
         console.log('[image-service - initialize]');
-        return new Promise((resolve, reject) => {
-            IdbProxy.instance
-                .then(provider => {
-                    this._idbProxy = provider;
-                    resolve();
-                })
-                .catch(error => reject(error));
-        });
+        this._idbProxy = await IdbProxy.instance;
     }
 
-    imageUrlForRestaurant(restaurant) {
+    async imageUrlForRestaurant(restaurant) {
         console.log('[image-service - imageUrlForRestaurant]');
-        return new Promise((resolve, reject) => {
-            resolve(`/images/${restaurant.photographs.images[0].name}`);
-        });
+        return `/images/${restaurant.photographs.images[0].name}`;
     }
 
-    srcSetForRestaurant(restaurant) {
+    async srcSetForRestaurant(restaurant) {
         console.log('[image-service - srcSetForRestaurant]');
-        return new Promise((resolve, reject) => {
-            resolve(
-                restaurant.photographs.images
-                    .map(photo => `/images/${photo.name} ${photo.width}w`)
-                    .reduce((previous, current) => `${previous}, ${current}`)
-            );
-        });
+        return restaurant.photographs.images
+                .map(photo => `/images/${photo.name} ${photo.width}w`)
+                .reduce((previous, current) => `${previous}, ${current}`);
     }
 
-    imageDescriptionForRestaurant(restaurant) {
+    async imageDescriptionForRestaurant(restaurant) {
         console.log('[image-service - ImageDescriptionForRestaurant]');
-        return new Promise((resolve, reject) => {
-            resolve(restaurant.photographs.description);
-        });
+        return restaurant.photographs.description;
     }
 
-    addImageDetails(restaurants){
+    async addImageDetails(restaurants){
         console.log('[image-service - addImageDetails]');
-        return new Promise((resolve, reject) => {
-            let promises = [];
-            restaurants.forEach(restaurant => promises.push(this.addImageDetail(restaurant)));
-            Promise.all(promises).then(() => resolve());
-        });
+        let promises = [];
+        restaurants.forEach(restaurant => promises.push(this.addImageDetail(restaurant)));
+        await Promise.all(promises);
     }
 
-    addImageDetail(restaurant) {
+    async addImageDetail(restaurant) {
         console.log('[image-service - addImageDetail]');
-        return new Promise((resolve, reject) => {
-            this._idbProxy.getImageDetails(restaurant.photograph)
-                .then(details => {
-                    restaurant.photographs = details;
-                    resolve();
-                })
-                .catch(error => reject(error));
-        });
+        restaurant.photographs = await this._idbProxy.getImageDetails(restaurant.photograph);
     }
 }

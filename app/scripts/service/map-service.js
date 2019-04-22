@@ -18,51 +18,40 @@ const layerOptions = {
 class MapService {
     static _instance;
 
-    static get instance() {
+    async static get instance() {
         console.log('[map-service - instance]');
-        return new Promise((resolve, reject) => {
-            if (! MapService._instance) {
-                MapService._instance = new MapService();
-                resolve(MapService._instance);
-            }
-            resolve(MapService._instance);
-        });
+        if (! MapService._instance) {
+            MapService._instance = new MapService();
+        }
+        return MapService._instance;
     }
 
-    urlForRestaurant(restaurant) {
+    async urlForRestaurant(restaurant) {
         console.log('[map-service - urlForRestaurant]');
-        return new Promise((resolve, reject) => {
-            resolve(`./restaurant.html?id=${restaurant.id}`);
-        });
+        return `./restaurant.html?id=${restaurant.id}`;
     }
 
-    mapMarkerForRestaurant(restaurant) {
+    async mapMarkerForRestaurant(restaurant) {
         console.log('[map-service - mapMarkerForRestaurant]');
-        return new Promise((resolve, reject) => {
-            const coord = [restaurant.latlng.lat, restaurant.latlng.lng];
-            const options = {
-                title: restaurant.name,
-                alt: restaurant.name + ' marker',
-                url: this.urlForRestaurant(restaurant)
-            };
-            resolve(new L.marker(coord, options));
-        });
+        const coord = [restaurant.latlng.lat, restaurant.latlng.lng];
+        const options = {
+            title: restaurant.name,
+            alt: restaurant.name + ' marker',
+            url: this.urlForRestaurant(restaurant)
+        };
+        return new L.marker(coord, options);
     }
 
-    initMap(lat, lng, zoom) {
+    async initMap(lat, lng, zoom) {
         console.log('[map-service - initMap]');
-        return new Promise((resolve, reject) => {
-            const mapOptions = { center: [lat, lng], zoom: zoom, scrollWheelZoom: false };
-            const newMap = L.map('map', mapOptions);
-            this.addTileLayerToMap(newMap).then(() => resolve(newMap));
-        });
+        const mapOptions = { center: [lat, lng], zoom: zoom, scrollWheelZoom: false };
+        const newMap = L.map('map', mapOptions);
+        await this.addTileLayerToMap(newMap);
+        return newMap;
     }
 
-    addTileLayerToMap(map){
+    async addTileLayerToMap(map){
         console.log('[map-service - addTileLayerToMap]');
-        return new Promise((resolve, reject) => {
-            L.tileLayer(layerUrl, layerOptions).addTo(map);
-            resolve();
-        });
+        L.tileLayer(layerUrl, layerOptions).addTo(map);
     }
 }
