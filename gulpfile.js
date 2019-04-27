@@ -1,8 +1,10 @@
 const { src, dest, series, parallel, lastRun } = require('gulp');
 const { argv } = require('yargs');
 const autoprefixer = require('autoprefixer');
-const babel = require('gulp-babel')
+const babel = require('gulp-babel');
+const babelify = require('babelify');
 const browserSync = require('browser-sync');
+const browserify = require('browserify');
 const del = require('del');
 const eslint = require('gulp-eslint');
 const gulpif = require('gulp-if');
@@ -13,6 +15,8 @@ const postcss = require('gulp-postcss');
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
 const uglify = require('gulp-uglify');
+const source = require('vinyl-source-stream');
+const buffer = require('vinyl-buffer');
 
 const server = browserSync.create();
 const port = argv.port || 8000;
@@ -67,16 +71,59 @@ function styles() {
 /**
  * Optimize javascript files
  */
-function scripts() {
-  return src('app/scripts/**/*.js')                         // Specify file locations
+function main_scripts() {
+  var b = browserify(
+    [
+      'app/scripts/proxy/idb-proxy.js',
+      'app/scripts/proxy/server-proxy.js',
+      'app/scripts/service/image-service.js',
+      'app/scripts/service/map-service.js',
+      'app/scripts/service/restaurant-service.js',
+      'app/scripts/main.js',
+      './app/service-worker.js'
+    ],
+    {debug: true}
+  );
+  return b
+    .transform(babelify.configure({presets: ["@babel/preset-env"]}))
+    .bundle()
+    .pipe(source('main_bundle.js'))
+    .pipe(buffer())
     .pipe(plumber())                                        // Prevent pipe breaking
     .pipe(sourcemaps.init())                                // Initialize our sourcemaps
-    .pipe(babel())                                          // Transpile our javascript
-//    .pipe(uglify({compress: {drop_console: true}}))   // Minify our javascript
+//    .pipe(babel())                                          // Transpile our javascript
+    //    .pipe(uglify({compress: {drop_console: true}}))   // Minify our javascript
+    .pipe(sourcemaps.write('.'))                            // Update our sourcemaps
+    .pipe(dest('dist/scripts'))                             // Save results to dist directory
+    .pipe(server.reload({stream: true}));                   // Reload the server
+}
+function restaurant_scripts() {
+  var b = browserify(
+    [
+      'app/scripts/proxy/idb-proxy.js',
+      'app/scripts/proxy/server-proxy.js',
+      'app/scripts/service/image-service.js',
+      'app/scripts/service/map-service.js',
+      'app/scripts/service/restaurant-service.js',
+      'app/scripts/restaurant_info.js',
+      './app/service-worker.js'
+    ],
+    { debug: true }
+  );
+  return b
+    .transform(babelify.configure({presets: ["@babel/preset-env"]}))
+    .bundle()
+    .pipe(source('restaurant_bundle.js'))
+    .pipe(buffer())
+    .pipe(plumber())                                        // Prevent pipe breaking
+    .pipe(sourcemaps.init())                                // Initialize our sourcemaps
+//    .pipe(babel())                                          // Transpile our javascript
+    //    .pipe(uglify({compress: {drop_console: true}}))   // Minify our javascript
     .pipe(sourcemaps.write('.'))                            // Update our sourcemaps
     .pipe(dest('dist/scripts'))                             // Save results to dist directory
     .pipe(server.reload({stream: true}));                   // Reload the server
 };
+scripts = series(main_scripts, restaurant_scripts);
 
 
 /**
