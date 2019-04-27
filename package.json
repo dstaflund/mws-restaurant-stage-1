@@ -8,6 +8,7 @@
     "idb": "^4.0.3"
   },
   "devDependencies": {
+    "@babel/cli": "^7.4.4",
     "@babel/core": "^7.1.2",
     "@babel/plugin-proposal-class-properties": "^7.4.0",
     "@babel/plugin-transform-regenerator": "^7.4.3",
