@@ -1,72 +1,90 @@
-// generated on 2019-04-20 using generator-webapp 4.0.0-5
-const polyfill = require('@babel/polyfill');
-const { src, dest, watch, series, parallel, lastRun } = require('gulp');
-const gulpLoadPlugins = require('gulp-load-plugins');
+const { src, dest, series, parallel, lastRun } = require('gulp');
+const { argv } = require('yargs');
+const autoprefixer = require('autoprefixer');
+const babel = require('gulp-babel')
 const browserSync = require('browser-sync');
 const del = require('del');
-const autoprefixer = require('autoprefixer');
-const cssnano = require('cssnano');
-const { argv } = require('yargs');
+const eslint = require('gulp-eslint');
+const gulpif = require('gulp-if');
+const htmlmin = require('gulp-htmlmin');
+const imagemin = require('gulp-imagemin');
+const plumber = require('gulp-plumber');
+const postcss = require('gulp-postcss');
+const sass = require('gulp-sass');
+const sourcemaps = require('gulp-sourcemaps');
+const uglify = require('gulp-uglify');
 
-const $ = gulpLoadPlugins();
 const server = browserSync.create();
-
 const port = argv.port || 8000;
 
-const isProd = process.env.NODE_ENV === 'production';
-const isTest = process.env.NODE_ENV === 'test';
-const isDev = !isProd && !isTest;
 
+/**
+ * Delete working directories
+ */
+function clean() {
+  return del([ 'dist' ])
+}
+
+
+/**
+ * Run javascript files through a linter.
+ *
+ * @param files   files to process
+ */
+const lintBase = files => {
+  return src(files)                                             // For each of the source files...
+    .pipe(eslint({ fix: true }))                        // Run them through the linter
+    .pipe(server.reload({stream: true, once: true}))            // Then reload the stream
+    .pipe(eslint.format())                                      // And format the results
+    .pipe(gulpif(!server.active, eslint.failAfterError()));     // If there are errors, halt build if the server isn't running
+};
+function lint() {
+  return lintBase('app/scripts/**/*.js')                   // Specify source location of javascript files to lint
+    .pipe(dest('app/scripts'));                                 // Specify destination where linted files are written to
+};
+
+
+/**
+ * Optimize stylesheets
+ */
 function styles() {
-  return src('app/styles/*.scss')
-    .pipe($.plumber())
-    .pipe($.if(!isProd, $.sourcemaps.init()))
-    .pipe($.sass.sync({
+  return src('app/styles/*.scss')             // Specify file locations
+    .pipe(plumber())                          // Prevent pipe breaking
+    .pipe(sourcemaps.init())                  // Initialize our sourcemaps
+    .pipe(sass.sync({                 // Convert SASS files to CSS
       outputStyle: 'expanded',
       precision: 10,
       includePaths: ['.']
-    }).on('error', $.sass.logError))
-    .pipe($.postcss([
-      autoprefixer()
-    ]))
-    .pipe($.if(!isProd, $.sourcemaps.write()))
-    .pipe(dest('.tmp/styles'))
-    .pipe(server.reload({stream: true}));
+    })
+    .on('error', sass.logError))
+    .pipe(postcss([ autoprefixer() ]))        // Add browser-specific prefixes where needed
+    .pipe(sourcemaps.write())                 // Update sourcemaps
+    .pipe(dest('dist/styles'))                // Write resulting stylesheet to dist directory
+    .pipe(server.reload({stream: true}));     // Reload the server
 };
 
+
+/**
+ * Optimize javascript files
+ */
 function scripts() {
-  return src('app/scripts/**/*.js')
-    .pipe($.plumber())
-    .pipe($.if(!isProd, $.sourcemaps.init()))
-    .pipe($.babel())
-    .pipe($.if(!isProd, $.sourcemaps.write('.')))
-    .pipe(dest('.tmp/scripts'))
-    .pipe(server.reload({stream: true}));
+  return src('app/scripts/**/*.js')                         // Specify file locations
+    .pipe(plumber())                                        // Prevent pipe breaking
+    .pipe(sourcemaps.init())                                // Initialize our sourcemaps
+    .pipe(babel())                                          // Transpile our javascript
+//    .pipe(uglify({compress: {drop_console: true}}))   // Minify our javascript
+    .pipe(sourcemaps.write('.'))                            // Update our sourcemaps
+    .pipe(dest('dist/scripts'))                             // Save results to dist directory
+    .pipe(server.reload({stream: true}));                   // Reload the server
 };
 
 
-const lintBase = files => {
-  return src(files)
-    .pipe($.eslint({ fix: true }))
-    .pipe(server.reload({stream: true, once: true}))
-    .pipe($.eslint.format())
-    .pipe($.if(!server.active, $.eslint.failAfterError()));
-}
-function lint() {
-  return lintBase('app/scripts/**/*.js')
-    .pipe(dest('app/scripts'));
-};
-function lintTest() {
-  return lintBase('test/spec/**/*.js')
-    .pipe(dest('test/spec'));
-};
-
+/**
+ * Optimize HTML files
+ */
 function html() {
-  return src('app/*.html')
-    .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
-    .pipe($.if(/\.js$/, $.uglify({compress: {drop_console: true}})))
-    .pipe($.if(/\.css$/, $.postcss([cssnano({safe: true, autoprefixer: false})])))
-    .pipe($.if(/\.html$/, $.htmlmin({
+  return src('app/*.html')                            // Specify file locations
+    .pipe(htmlmin({                           // Minify the HTML
       collapseWhitespace: true,
       minifyCSS: true,
       minifyJS: {compress: {drop_console: true}},
@@ -74,94 +92,34 @@ function html() {
       removeComments: true,
       removeEmptyAttributes: true,
       removeScriptTypeAttributes: true,
-      removeStyleLinkTypeAttributes: true
-    })))
+      removeStyleLinkTypeAttributes: true             // Save resulting files in the dist directory
+    }))
     .pipe(dest('dist'));
 }
 
+
+/**
+ * Optimize images
+ */
 function images() {
-  return src('app/images/**/*', { since: lastRun(images) })
-    .pipe($.imagemin())
-    .pipe(dest('dist/images'));
+  return src('app/images/**/*', { since: lastRun(images) })     // Specify file locations
+    .pipe(imagemin())                                           // Minify them
+    .pipe(dest('dist/images'));                                 // And write results to dist directory
 };
 
-function fonts() {
-  return src('app/fonts/**/*.{eot,svg,ttf,woff,woff2}')
-    .pipe($.if(!isProd, dest('.tmp/fonts'), dest('dist/fonts')));
-};
 
+/**
+ * Move all other files to dist (ex:  manifest.json, favicon.ico, robots.txt)
+ */
 function extras() {
-  return src([
-    'app/*',
-    '!app/*.html'
-  ], {
-    dot: true
-  }).pipe(dest('dist'));
+  return src([ 'app/*', '!app/*.html' ], { dot: true })     // File all other files in the 'app' folder
+    .pipe(dest('dist'));                                    // And move them into dist directory
 };
 
-function clean() {
-  return del(['.tmp', 'dist'])
-}
 
-function measureSize() {
-  return src('dist/**/*')
-    .pipe($.size({title: 'build', gzip: true}));
-}
-
-const build = series(
-  clean,
-  parallel(
-    lint,
-    series(parallel(styles, scripts), html),
-    images,
-    fonts,
-    extras
-  ),
-  measureSize
-);
-
-function startAppServer() {
-  server.init({
-    notify: false,
-    port,
-    server: {
-      baseDir: ['.tmp', 'app'],
-      routes: {
-        '/node_modules': 'node_modules'
-      }
-    }
-  });
-
-  watch([
-    'app/*.html',
-    'app/images/**/*',
-    '.tmp/fonts/**/*'
-  ]).on('change', server.reload);
-
-  watch('app/styles/**/*.scss', styles);
-  watch('app/scripts/**/*.js', scripts);
-  watch('app/fonts/**/*', fonts);
-}
-
-function startTestServer() {
-  server.init({
-    notify: false,
-    port,
-    ui: false,
-    server: {
-      baseDir: 'test',
-      routes: {
-        '/scripts': '.tmp/scripts',
-        '/node_modules': 'node_modules'
-      }
-    }
-  });
-
-  watch('app/scripts/**/*.js', scripts);
-  watch(['test/spec/**/*.js', 'test/index.html']).on('change', server.reload);
-  watch('test/spec/**/*.js', lintTest);
-}
-
+/**
+ * Starts the distribution server
+ */
 function startDistServer() {
   server.init({
     notify: false,
@@ -175,15 +133,25 @@ function startDistServer() {
   });
 }
 
-let serve;
-if (isDev) {
-  serve = series(clean, parallel(styles, scripts, fonts), startAppServer);
-} else if (isTest) {
-  serve = series(clean, scripts, startTestServer);
-} else if (isProd) {
-  serve = series(build, startDistServer);
-}
 
-exports.serve = serve;
+/**
+ * Define the two commands that we'll use during development and production -- i.e. build and serve
+ */
+let build = series(
+  clean,
+  parallel(
+//    lint,
+    series(parallel(styles, scripts), html),
+    images,
+    extras
+  )
+);
+let serve = series(build, startDistServer);
+
+
+/**
+ * Export the three commands that people using this script can invoke
+ */
 exports.build = build;
+exports.serve = serve;
 exports.default = build;
