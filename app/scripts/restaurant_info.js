@@ -1,14 +1,21 @@
+import RestaurantService from './service/restaurant-service';
+import ImageService from './service/image-service';
+import MapService from './service/map-service';
+
+
 let restaurant;
 var newMap;
 
 
 let restaurantService;
 let imageService;
+let mapService;
 
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('[restaurant_info - addEventListener]');
-  self.restaurantService = await RestaurantService.instance;
-  self.imageService = await ImageService.instance;
+  self.restaurantService = new RestaurantService();
+  self.imageService = new ImageService();
+  self.mapService = new MapService();
   await initMap();
 });
 

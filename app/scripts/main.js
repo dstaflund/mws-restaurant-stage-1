@@ -1,3 +1,8 @@
+import RestaurantService from './service/restaurant-service';
+import ImageService from './service/image-service';
+import MapService from './service/map-service';
+
+
 let restaurants,
   neighborhoods,
   cuisines;
@@ -13,9 +18,9 @@ let restaurantService;
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('[main - addEventListener]');
 
-    self.restaurantService = await RestaurantService.instance;
-    self.imageService = await ImageService.instance;
-    self.mapService = await MapService.instance;
+    self.restaurantService = new RestaurantService();
+    self.imageService = new ImageService();
+    self.mapService = new MapService();
 
     await initMap();
     await fetchNeighborhoods();

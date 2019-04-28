@@ -1,22 +1,11 @@
-class ImageService {
-    static _instance;
+import IdbProxy from '../proxy/idb-proxy';
 
-    static get instance() {
-        console.log('[image-service - instance]');
-        return async () => {
-          if (! ImageService._instance) {
-            ImageService._instance = new ImageService();
-            await ImageService._instance.initialize();
-          }
-          return ImageService._instance;
-        };
-    }
 
+export default class ImageService {
     _idbProxy;
 
-    async initialize(){
-        console.log('[image-service - initialize]');
-        this._idbProxy = await IdbProxy.instance;
+    constructor(){
+      this._idbProxy = new IdbProxy();
     }
 
     async imageUrlForRestaurant(restaurant) {

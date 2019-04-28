@@ -5,43 +5,34 @@ const DATABASE_URL = `http://localhost:${port}/restaurants`;
 /**
  * This class contains all code used to communicate with the backend server over HTTP
  */
-class ServerProxy {
-    static _instance;
+export default class ServerProxy {
 
-    static get instance() {
+  constructor(){
+  }
 
-        console.log('[server-proxy - instance]');
-        return async () => {
-          if (! ServerProxy._instance) {
-            ServerProxy._instance = new ServerProxy();
+  async fetchRestaurants() {
+      console.log('[server-proxy - fetchRestaurants]');
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', DATABASE_URL);
+      xhr.onload = () => {
+          if (xhr.status === 200) {
+              return JSON.parse(xhr.responseText);
           }
-          return ServerProxy._instance;
-        };
-    }
+          return new Error(`Request failed. Returned status of ${xhr.status}`);
+      };
+      xhr.send();
+  }
 
-    async fetchRestaurants() {
-        console.log('[server-proxy - fetchRestaurants]');
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', DATABASE_URL);
-        xhr.onload = () => {
-            if (xhr.status === 200) {
-                return JSON.parse(xhr.responseText);
-            }
-            return new Error(`Request failed. Returned status of ${xhr.status}`);
-        };
-        xhr.send();
-    }
-
-    async fetchRestaurantById(id) {
-        console.log('[server-proxy - fetchRestaurantById]');
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', DATABASE_URL + `?id=${id}`);
-        xhr.onload = () => {
-            if (xhr.status === 200) {
-                return JSON.parse(xhr.responseText);
-            }
-            return new Error(`Request failed. Returned status of ${xhr.status}`);
-        };
-        xhr.send();
-    }
+  async fetchRestaurantById(id) {
+      console.log('[server-proxy - fetchRestaurantById]');
+      let xhr = new XMLHttpRequest();
+      xhr.open('GET', DATABASE_URL + `?id=${id}`);
+      xhr.onload = () => {
+          if (xhr.status === 200) {
+              return JSON.parse(xhr.responseText);
+          }
+          return new Error(`Request failed. Returned status of ${xhr.status}`);
+      };
+      xhr.send();
+  }
 }

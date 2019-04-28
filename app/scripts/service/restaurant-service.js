@@ -16,33 +16,20 @@
 //   });
 // }
 
-class RestaurantService {
-  static _instance;
+import IdbProxy from '../proxy/idb-proxy';
+import ServerProxy from '../proxy/server-proxy';
+import ImageService from '../service/image-service';
 
-  static get instance() {
-      console.log('[restaurant-service - instance]');
-      return async() => {
-        if (! RestaurantService._instance) {
-          RestaurantService._instance = new RestaurantService();
-          await RestaurantService._instance.initialize();
-        }
-        return RestaurantService._instance;
-      };
-  }
 
+export default class RestaurantService {
   _idbProxy;
   _serverProxy;
   _imageService;
 
-  async initialize(){
-      console.log('[restaurant-service - initialize]');
-      Promise
-          .all([ IdbProxy.instance, ServerProxy.instance, ImageService.instance])
-          .then(dependencies => {
-              this._idbProxy = dependencies[0];
-              this._serverProxy = dependencies[1];
-              this._imageService = dependencies[2];
-          });
+  constructor(){
+    this._idbProxy = new IdbProxy();
+    this._serverProxy = new ServerProxy();
+    this._imageService = new ImageService();
   }
 
   async fetchRestaurants() {
@@ -154,4 +141,3 @@ class RestaurantService {
         return msg;
     }
 }
-
