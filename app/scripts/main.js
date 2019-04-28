@@ -138,7 +138,7 @@ let createRestaurantHTML = async (restaurant) => {
 
     const more = document.createElement('a');
     more.innerHTML = 'View Details';
-    more.href = await self.restaurantService.urlForRestaurant(restaurant);
+    more.href = await self.imageService.imageUrlForRestaurant(restaurant);
     more.setAttribute('aria-label', 'View details on ' + restaurant.name);
     li.append(more);
 
@@ -148,10 +148,17 @@ let createRestaurantHTML = async (restaurant) => {
 let addMarkersToMap = async (restaurants = self.restaurants) => {
     console.log('[main - addMarkersToMap]');
     for (const restaurant of restaurants) {
-      const marker = self.restaurantService.mapMarkerForRestaurant(restaurant);
+      const marker = await self.mapService.mapMarkerForRestaurant(restaurant);
+      console.log(marker);
       marker.addTo(self.newMap);
-      marker.on('click', onClick);
-      marker.onclick = () => window.location.href = marker.options.url;
+
+      // TODO
+      //marker.on('click', () => onClick);
+      //
+      // function onClick() {
+      //   window.location.href = marker.options.url;
+      // }
+
       self.markers.push(marker);
     }
 };

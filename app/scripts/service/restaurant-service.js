@@ -40,6 +40,8 @@ export default class RestaurantService {
           return restaurants;
       }
       restaurants = await this._serverProxy.fetchRestaurants();
+      console.log('fetched the following restaurants...');
+      console.log(restaurants);
       await this._idbProxy.saveRestaurants(restaurants);
       await this._imageService.addImageDetails(restaurants);
       return restaurants;
@@ -102,6 +104,9 @@ export default class RestaurantService {
 
   async fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood) {
       console.log('[restaurant-service - fetchRestaurantsByCuisineAndNeighborhood]');
+      if (cuisine && cuisine === 'all' && neighborhood && neighborhood === 'all'){
+        return await this.fetchRestaurants();
+      }
       if (cuisine && cuisine === 'all') {
         return await this.fetchRestaurantsByNeighbourhood(neighborhood);
       }
