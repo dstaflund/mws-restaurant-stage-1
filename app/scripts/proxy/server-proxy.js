@@ -14,22 +14,20 @@ export default class ServerProxy {
       console.log('[server-proxy - fetchRestaurants]');
       const response = await fetch(DATABASE_URL);
       if (response.status === 200) {
-        const restaurants = await response.json();
-        console.log('fetched the following restaurants from the network...');
-        console.log(restaurants);
-        return restaurants;
+        return await response.json();
       }
       return new Error(`Request failed. Returned status of ${xhr.status}`);
   }
 
+  fetchRestaurantByIdUri(id) {
+    return DATABASE_URL + `?id=${id}`;
+  }
+
   async fetchRestaurantById(id) {
     console.log('[server-proxy - fetchRestaurantById]');
-    const response = await fetch(DATABASE_URL + `?id=${id}`);
+    const response = this.fetchRestaurantByIdUri(id);
     if (response.status === 200) {
-      const restaurant = await response.json();
-      console.log('fetched the following restaurant from the network...');
-      console.log(restaurant);
-      return restaurant;
+      return await response.json();
     }
     return new Error(`Request failed. Returned status of ${xhr.status}`);
   }

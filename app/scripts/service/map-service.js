@@ -30,7 +30,7 @@ export default class MapService {
       const options = {
           title: restaurant.name,
           alt: restaurant.name + ' marker',
-          url: this.urlForRestaurant(restaurant)
+          url: await this.urlForRestaurant(restaurant)
       };
       return new L.marker(coord, options);
   }

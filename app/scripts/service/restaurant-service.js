@@ -40,8 +40,6 @@ export default class RestaurantService {
           return restaurants;
       }
       restaurants = await this._serverProxy.fetchRestaurants();
-      console.log('fetched the following restaurants...');
-      console.log(restaurants);
       await this._idbProxy.saveRestaurants(restaurants);
       await this._imageService.addImageDetails(restaurants);
       return restaurants;

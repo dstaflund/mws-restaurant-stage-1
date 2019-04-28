@@ -10,7 +10,6 @@ export default class ImageService {
 
     async imageUrlForRestaurant(restaurant) {
         console.log('[image-service - imageUrlForRestaurant]');
-        console.log(restaurant);
         return `/images/${restaurant.photographs.images[0].name}`;
     }
 
@@ -29,7 +28,6 @@ export default class ImageService {
     async addImageDetails(restaurants){
         console.log('[image-service - addImageDetails]');
         for(const restaurant of restaurants) {
-          console.log(restaurant);
           await this.addImageDetail(restaurant);
         }
     }
@@ -37,11 +35,6 @@ export default class ImageService {
     async addImageDetail(restaurant) {
         console.log('[image-service - addImageDetail]');
         const imageDetails = await this._idbProxy.getImageDetails(restaurant.photograph);
-        console.log('-----');
-        console.log(imageDetails);
-      console.log('-----');
         restaurant.photographs = imageDetails;
-        console.log(restaurant);
-      console.log('-----');
     }
 }

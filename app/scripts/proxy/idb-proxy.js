@@ -183,43 +183,31 @@ export default class IdbProxy {
       let upgraded = false;
       const db = await openDB(dbName, dbVersion, {
         upgrade(db) {
-          console.log(1);
 
           // Create restaurant store
           const imageStore = db.createObjectStore(rStore, { keyPath: "id" });
-          console.log(2);
           imageStore.createIndex(neighborhoodIndex, "neighborhood", { unique: false });
-          console.log(3);
           imageStore.createIndex(cuisineIndex, "cuisine_type", { unique: false });
-          console.log(4);
           imageStore.createIndex(
             neighborhoodCuisineIndex,
             "neighborhood.cuisine_type",
             { unique: false, multiEntry: true }
           );
-          console.log(5);
 
           // Create and populate image details store
           db.createObjectStore(idStore, { keyPath: "photograph" });
-          console.log(5);
           upgraded = true;
         }
       });
       if (upgraded) {
-        console.log(6);
         const tx = db.transaction(idStore, "readwrite");
-        console.log(7);
-        console.log(imageDetails);
         for (const imageDetail of imageDetails) {
-          console.log(8);
           tx.store.add(imageDetail);
         }
-        console.log(9);
 
         await tx.done;
       }
 
-      console.log(10);
       return db;
     }
 
@@ -227,62 +215,59 @@ export default class IdbProxy {
       console.log('[idb-proxy - getRestaurants]');
       const db = await this.openDatabase();
       const store = await db.transaction(rStore).objectStore(rStore);
-      const restaurants = await this.getCursorValues(store);
-      console.log('returning the following restaurants from the database...');
-      console.log(restaurants);
-      return restaurants;
+      let cursor = await store.openCursor();
+      let values = [];
+      while (cursor) {
+        values.push(cursor.value);
+        cursor = await cursor.continue();
+      }
+      return values;
+
     }
 
     async getRestaurantsByNeighborhood(neighborhood) {
       console.log('[idb-proxy - getRestaurantsByNeighborhood]');
-      console.log('neighbourhood = ' + neighborhood);
       const db = await this.openDatabase();
-      console.log(db);
-      const tx = await db.transaction(rStore);
-      console.log(tx);
-      const index = await tx.objectStore(rStore).index(neighborhoodIndex);
-      console.log(index);
-      const index2 = await index.get(neighborhood);
-      console.log(index2);
-      return await this.getCursorValues(index2);
+      return await db.transaction(rStore)
+        .objectStore(rStore)
+        .index(neighborhoodIndex)
+        .get(neighborhood);
     }
 
     async getRestaurantsByCuisineType(cuisineType) {
       console.log('[idb-proxy - getRestaurantsByCuisineType]');
       const db = await this.openDatabase();
-      const index = await db
+      return await db
           .transaction(rStore)
           .objectStore(rStore)
           .index(cuisineIndex)
           .get(cuisineType);
-      return await this.getCursorValues(index);
     }
 
     async getRestaurantsByCuisineTypeAndNeighborhood(cuisineType, neighborhood) {
       console.log('[idb-proxy - getRestaurantsByCuisineTypeAndNeighborhood]');
       const db = await this.openDatabase();
-      const index = await db
+      return await db
           .transaction(rStore)
           .objectStore(rStore)
           .index(neighborhoodCuisineIndex)
           .get([cuisineType, neighborhood]);
-      return await this.getCursorValues(index);
     }
 
     async getRestaurant(id) {
       console.log('[idb-proxy - getRestaurant]');
       const db = await this.openDatabase();
-      const request = await db.transaction(rStore).objectStore(rStore).get(id);
-      return request;
+      return await db
+        .transaction(rStore)
+        .objectStore(rStore)
+        .get(id);
     }
 
     async saveRestaurants(restaurants) {
       console.log('[idb-proxy - saveRestaurants]');
       const db = await this.openDatabase();
       const store = db.transaction(rStore, "readwrite").objectStore(rStore);
-      console.log('inserting...');
       restaurants.forEach(restaurant => {
-        console.log(restaurant);
           store.add(restaurant);
       });
     }
@@ -291,9 +276,9 @@ export default class IdbProxy {
       console.log('[idb-proxy - saveRestaurant]');
       const db = await this.openDatabase();
       db
-          .transaction(rStore, "readwrite")
-          .objectStore(rStore)
-          .add(restaurant);
+        .transaction(rStore, "readwrite")
+        .objectStore(rStore)
+        .add(restaurant);
     }
 
     async getImageDetails(photograph){
@@ -302,46 +287,29 @@ export default class IdbProxy {
         photograph = parseInt(photograph);
       }
       const db = await this.openDatabase();
-      const request = await db.transaction(idStore).objectStore(idStore).get(photograph);
-      console.log(photograph);
-      console.log(request);
-      console.log(typeof photograph);
-      return request;
+      return await db
+        .transaction(idStore)
+        .objectStore(idStore)
+        .get(photograph);
     }
 
     async getNeighborhoods() {
       console.log('[idb-proxy - getNeighborhoods]');
       const db = await this.openDatabase();
-      const index = await db
+      return await db
             .transaction(rStore)
             .objectStore(rStore)
             .index(neighborhoodIndex)
             .getAllKeys();
-        return await this.getCursorValues(index);
     }
 
     async getCuisines() {
         console.log('[idb-proxy - getCuisines]');
         const db = await this.openDatabase();
-        const index = await db
+        return await db
             .transaction(rStore)
             .objectStore(rStore)
             .index(cuisineIndex)
             .getAllKeys();
-        return await this.getCursorValues(index);
-    }
-
-    async getCursorValues(request) {
-      console.log('[idb-proxy - getCursorValues]');
-      console.log(request);
-      let cursor = await request.openCursor();
-      let values = [];
-      console.log('pushing...');
-      while (cursor) {
-        console.log(cursor.value);
-        values.push(cursor.value);
-        cursor = await cursor.continue();
-      }
-      return values;
     }
 }
