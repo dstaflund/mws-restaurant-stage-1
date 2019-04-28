@@ -85,7 +85,7 @@ function main_scripts() {
     {debug: true}
   );
   return b
-    .transform(babelify.configure({presets: ["@babel/preset-env"]}))
+    .transform(babelify.configure({ "babelrc": true }))
     .bundle()
     .pipe(source('main_bundle.js'))
     .pipe(buffer())

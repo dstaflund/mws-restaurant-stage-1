@@ -10,7 +10,7 @@
           "safari": "11.1"
         },
         "corejs":"3.0.1",
-        "useBuiltIns": "usage"
+        "useBuiltIns": "entry"
       }
     ]
   ],
