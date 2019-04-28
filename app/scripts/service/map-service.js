@@ -20,12 +20,10 @@ export default class MapService {
   }
 
   async urlForRestaurant(restaurant) {
-      console.log('[map-service - urlForRestaurant]');
       return `./restaurant.html?id=${restaurant.id}`;
   }
 
   async mapMarkerForRestaurant(restaurant) {
-      console.log('[map-service - mapMarkerForRestaurant]');
       const coord = [restaurant.latlng.lat, restaurant.latlng.lng];
       const options = {
           title: restaurant.name,
@@ -36,7 +34,6 @@ export default class MapService {
   }
 
   async initMap(lat, lng, zoom) {
-      console.log('[map-service - initMap]');
       const mapOptions = { center: [lat, lng], zoom: zoom, scrollWheelZoom: false };
       const newMap = L.map('map', mapOptions);
       await this.addTileLayerToMap(newMap);
@@ -44,7 +41,6 @@ export default class MapService {
   }
 
   async addTileLayerToMap(map){
-      console.log('[map-service - addTileLayerToMap]');
       L.tileLayer(layerUrl, layerOptions).addTo(map);
   }
 }

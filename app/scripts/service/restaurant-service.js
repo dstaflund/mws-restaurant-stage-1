@@ -33,20 +33,18 @@ export default class RestaurantService {
   }
 
   async fetchRestaurants() {
-      console.log('[restaurant-service - fetchRestaurants]');
-      let restaurants = await this._idbProxy.getRestaurants();
-      if (restaurants && restaurants.length === 10) {
-          await this._imageService.addImageDetails(restaurants);
-          return restaurants;
+      const cachedRestaurants = await this._idbProxy.getRestaurants();
+      if (cachedRestaurants && cachedRestaurants.length === 10) {
+          await this._imageService.addImageDetails(cachedRestaurants);
+          return cachedRestaurants;
       }
-      restaurants = await this._serverProxy.fetchRestaurants();
-      await this._idbProxy.saveRestaurants(restaurants);
+      const restaurants = await this._serverProxy.fetchRestaurants();
+      await this._idbProxy.saveRestaurants(restaurants, cachedRestaurants);
       await this._imageService.addImageDetails(restaurants);
       return restaurants;
   }
 
   async fetchRestaurantById(id) {
-      console.log('[restaurant-service - fetchRestaurantById]');
       let restaurant = await this._idbProxy.getRestaurant(id);
       if (restaurant) {
           await this._imageService.addImageDetail(restaurant);
@@ -59,7 +57,6 @@ export default class RestaurantService {
   }
 
   async fetchNeighborhoods() {
-      console.log('[restaurant-service - fetchNeighborhoods]');
       let neighborhoods = await this._idbProxy.getNeighborhoods();
       if (neighborhoods && neighborhoods.length === 3) {
         return neighborhoods;
@@ -70,7 +67,6 @@ export default class RestaurantService {
   }
 
   async fetchCuisines() {
-      console.log('[restaurant-service - fetchCuisines]');
       let cuisines = await this._idbProxy.getCuisines();
       if (cuisines && cuisines.length === 4) {
           return cuisines;
@@ -81,7 +77,6 @@ export default class RestaurantService {
   }
 
   async fetchRestaurantsByCuisine(cuisine) {
-      console.log('[restaurant-service - fetchRestaurantsByCuisine]');
       let restaurants = await this._idbProxy.getRestaurantsByCuisineType(cuisine);
       if (restaurants && restaurants.length === 10) {
           return restaurants;
@@ -91,7 +86,6 @@ export default class RestaurantService {
   }
 
   async fetchRestaurantsByNeighbourhood(neighbourhood) {
-      console.log('[restaurant-service - fetchRestaurantsByNeighborhood]');
       let restaurants = await this._idbProxy.getRestaurantsByNeighborhood(neighbourhood);
       if (restaurants && restaurants.length === 10) {
           return restaurants;
@@ -101,7 +95,6 @@ export default class RestaurantService {
   }
 
   async fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood) {
-      console.log('[restaurant-service - fetchRestaurantsByCuisineAndNeighborhood]');
       if (cuisine && cuisine === 'all' && neighborhood && neighborhood === 'all'){
         return await this.fetchRestaurants();
       }
@@ -122,7 +115,6 @@ export default class RestaurantService {
   }
 
     async getLiveMessage(neighborhood, cuisine, resultCount){
-        console.log('[restaurant-service - getLiveMessage]');
         let msg;
 
         switch(resultCount) {

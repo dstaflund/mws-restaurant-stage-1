@@ -11,24 +11,18 @@ export default class ServerProxy {
   }
 
   async fetchRestaurants() {
-      console.log('[server-proxy - fetchRestaurants]');
       const response = await fetch(DATABASE_URL);
       if (response.status === 200) {
         return await response.json();
       }
-      return new Error(`Request failed. Returned status of ${xhr.status}`);
-  }
-
-  fetchRestaurantByIdUri(id) {
-    return DATABASE_URL + `?id=${id}`;
+      return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
   }
 
   async fetchRestaurantById(id) {
-    console.log('[server-proxy - fetchRestaurantById]');
-    const response = this.fetchRestaurantByIdUri(id);
+    const response = await fetch(DATABASE_URL + `?id=${id}`);
     if (response.status === 200) {
       return await response.json();
     }
-    return new Error(`Request failed. Returned status of ${xhr.status}`);
+    return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
   }
 }

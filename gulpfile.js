@@ -72,19 +72,18 @@ function styles() {
  * Optimize javascript files
  */
 function main_scripts() {
-  var b = browserify(
-    [
-      'app/scripts/proxy/idb-proxy.js',
-      'app/scripts/proxy/server-proxy.js',
-      'app/scripts/service/image-service.js',
-      'app/scripts/service/map-service.js',
-      'app/scripts/service/restaurant-service.js',
-      'app/scripts/main.js',
-      './app/service-worker.js'
-    ],
-    {debug: true}
-  );
-  return b
+  return browserify(
+      [
+        'app/scripts/proxy/idb-proxy.js',
+        'app/scripts/proxy/server-proxy.js',
+        'app/scripts/service/image-service.js',
+        'app/scripts/service/map-service.js',
+        'app/scripts/service/restaurant-service.js',
+        'app/scripts/main.js',
+        './app/service-worker.js'
+      ],
+      {debug: true}
+    )
     .transform(babelify.configure({ "babelrc": true }))
     .bundle()
     .pipe(source('main_bundle.js'))
@@ -98,20 +97,19 @@ function main_scripts() {
     .pipe(server.reload({stream: true}));                   // Reload the server
 }
 function restaurant_scripts() {
-  var b = browserify(
-    [
-      'app/scripts/proxy/idb-proxy.js',
-      'app/scripts/proxy/server-proxy.js',
-      'app/scripts/service/image-service.js',
-      'app/scripts/service/map-service.js',
-      'app/scripts/service/restaurant-service.js',
-      'app/scripts/restaurant_info.js',
-      './app/service-worker.js'
-    ],
-    { debug: true }
-  );
-  return b
-    .transform(babelify.configure({presets: ["@babel/preset-env"]}))
+  return browserify(
+      [
+        'app/scripts/proxy/idb-proxy.js',
+        'app/scripts/proxy/server-proxy.js',
+        'app/scripts/service/image-service.js',
+        'app/scripts/service/map-service.js',
+        'app/scripts/service/restaurant-service.js',
+        'app/scripts/restaurant_info.js',
+        './app/service-worker.js'
+      ],
+      { debug: true }
+    )
+    .transform(babelify.configure({ "babelrc": true }))
     .bundle()
     .pipe(source('restaurant_bundle.js'))
     .pipe(buffer())

@@ -1,4 +1,4 @@
-import { openDB } from 'idb';
+import {openDB} from 'idb';
 
 const dbName = 'mws_restaurant_db';
 const dbVersion = 1;
@@ -179,7 +179,6 @@ export default class IdbProxy {
     }
 
     async openDatabase() {
-      console.log('[idb-proxy - openDatabase]');
       let upgraded = false;
       const db = await openDB(dbName, dbVersion, {
         upgrade(db) {
@@ -212,7 +211,6 @@ export default class IdbProxy {
     }
 
     async getRestaurants() {
-      console.log('[idb-proxy - getRestaurants]');
       const db = await this.openDatabase();
       const store = await db.transaction(rStore).objectStore(rStore);
       let cursor = await store.openCursor();
@@ -226,7 +224,6 @@ export default class IdbProxy {
     }
 
     async getRestaurantsByNeighborhood(neighborhood) {
-      console.log('[idb-proxy - getRestaurantsByNeighborhood]');
       const db = await this.openDatabase();
       return await db.transaction(rStore)
         .objectStore(rStore)
@@ -235,7 +232,6 @@ export default class IdbProxy {
     }
 
     async getRestaurantsByCuisineType(cuisineType) {
-      console.log('[idb-proxy - getRestaurantsByCuisineType]');
       const db = await this.openDatabase();
       return await db
           .transaction(rStore)
@@ -245,7 +241,6 @@ export default class IdbProxy {
     }
 
     async getRestaurantsByCuisineTypeAndNeighborhood(cuisineType, neighborhood) {
-      console.log('[idb-proxy - getRestaurantsByCuisineTypeAndNeighborhood]');
       const db = await this.openDatabase();
       return await db
           .transaction(rStore)
@@ -255,7 +250,9 @@ export default class IdbProxy {
     }
 
     async getRestaurant(id) {
-      console.log('[idb-proxy - getRestaurant]');
+      if ('string' === typeof id) {
+        id = parseInt(id);
+      }
       const db = await this.openDatabase();
       return await db
         .transaction(rStore)
@@ -263,17 +260,18 @@ export default class IdbProxy {
         .get(id);
     }
 
-    async saveRestaurants(restaurants) {
-      console.log('[idb-proxy - saveRestaurants]');
+    async saveRestaurants(restaurants, cachedRestaurants) {
+      const cachedRestaurantIds = cachedRestaurants.map(restaurant => restaurant.id);
       const db = await this.openDatabase();
       const store = db.transaction(rStore, "readwrite").objectStore(rStore);
       restaurants.forEach(restaurant => {
+        if (! cachedRestaurantIds.includes(restaurant.id)) {
           store.add(restaurant);
+        }
       });
     }
 
     async saveRestaurant(restaurant) {
-      console.log('[idb-proxy - saveRestaurant]');
       const db = await this.openDatabase();
       db
         .transaction(rStore, "readwrite")
@@ -282,7 +280,6 @@ export default class IdbProxy {
     }
 
     async getImageDetails(photograph){
-      console.log('[idb-proxy - getImageDetails]');
       if ('string' === typeof photograph) {
         photograph = parseInt(photograph);
       }
@@ -294,7 +291,6 @@ export default class IdbProxy {
     }
 
     async getNeighborhoods() {
-      console.log('[idb-proxy - getNeighborhoods]');
       const db = await this.openDatabase();
       return await db
             .transaction(rStore)
@@ -304,7 +300,6 @@ export default class IdbProxy {
     }
 
     async getCuisines() {
-        console.log('[idb-proxy - getCuisines]');
         const db = await this.openDatabase();
         return await db
             .transaction(rStore)
