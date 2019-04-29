@@ -25,13 +25,12 @@ const urlsToCache = [
     '/index.html',
     '/manifest.json',
     '/restaurant.html',
-    '/scripts/restaurant-service.js',
-    '/scripts/main.js',
-    '/scripts/restaurant_info.js',
-    '/service-worker.js',
-    '/styles/restaurant-details.scss',
-    '/styles/restaurant-list.scss',
-    '/styles/styles.scss'
+    '/robots.txt',
+    '/scripts/main_bundle.js',
+    '/scripts/restaurant_bundle.js',
+    '/styles/restaurant-details.css',
+    '/styles/restaurant-list.css',
+    '/styles/styles.css'
 ];
 
 /**
@@ -81,7 +80,7 @@ self.addEventListener('fetch', event => {
                 }
                 return fetch(event.request)
                     .then(response => {
-                        if (! response || response.status !== 200 || response.type !== 'basic') {
+                        if (! response || response.status !== 200 || response.type !== 'basic' || response.url.indexOf('socket.io') >= 0) {
                             return response;
                         }
                         const responseToCache = response.clone();

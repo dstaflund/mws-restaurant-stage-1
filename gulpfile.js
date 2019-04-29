@@ -1,7 +1,7 @@
 const { src, dest, series, parallel, lastRun } = require('gulp');
 const { argv } = require('yargs');
 const autoprefixer = require('autoprefixer');
-const babel = require('gulp-babel');
+//const babel = require('gulp-babel');
 const babelify = require('babelify');
 const browserSync = require('browser-sync');
 const browserify = require('browserify');
@@ -38,7 +38,7 @@ function clean() {
 const lintBase = files => {
   return src(files)                                             // For each of the source files...
     .pipe(eslint({ fix: true }))                        // Run them through the linter
-    .pipe(server.reload({stream: true, once: true}))            // Then reload the stream
+//    .pipe(server.reload({stream: true, once: true}))            // Then reload the stream
     .pipe(eslint.format())                                      // And format the results
     .pipe(gulpif(!server.active, eslint.failAfterError()));     // If there are errors, halt build if the server isn't running
 };
@@ -63,8 +63,8 @@ function styles() {
     .on('error', sass.logError))
     .pipe(postcss([ autoprefixer() ]))        // Add browser-specific prefixes where needed
     .pipe(sourcemaps.write())                 // Update sourcemaps
-    .pipe(dest('dist/styles'))                // Write resulting stylesheet to dist directory
-    .pipe(server.reload({stream: true}));     // Reload the server
+    .pipe(dest('dist/styles'));                // Write resulting stylesheet to dist directory
+//    .pipe(server.reload({stream: true}));     // Reload the server
 };
 
 
@@ -80,6 +80,7 @@ function main_scripts() {
         'app/scripts/service/map-service.js',
         'app/scripts/service/restaurant-service.js',
         'app/scripts/main.js',
+        'app/service-worker-bootstrap.js',
         './app/service-worker.js'
       ],
       {debug: true}
@@ -91,10 +92,10 @@ function main_scripts() {
     .pipe(plumber())                                        // Prevent pipe breaking
     .pipe(sourcemaps.init())                                // Initialize our sourcemaps
 //    .pipe(babel())                                          // Transpile our javascript
-    //    .pipe(uglify({compress: {drop_console: true}}))   // Minify our javascript
+    .pipe(uglify())                                         // Minify our javascript
     .pipe(sourcemaps.write('.'))                            // Update our sourcemaps
-    .pipe(dest('dist/scripts'))                             // Save results to dist directory
-    .pipe(server.reload({stream: true}));                   // Reload the server
+    .pipe(dest('dist/scripts'));                             // Save results to dist directory
+//    .pipe(server.reload({stream: true}));                   // Reload the server
 }
 function restaurant_scripts() {
   return browserify(
@@ -105,6 +106,7 @@ function restaurant_scripts() {
         'app/scripts/service/map-service.js',
         'app/scripts/service/restaurant-service.js',
         'app/scripts/restaurant_info.js',
+        'app/service-worker-bootstrap.js',
         './app/service-worker.js'
       ],
       { debug: true }
@@ -116,10 +118,10 @@ function restaurant_scripts() {
     .pipe(plumber())                                        // Prevent pipe breaking
     .pipe(sourcemaps.init())                                // Initialize our sourcemaps
 //    .pipe(babel())                                          // Transpile our javascript
-    //    .pipe(uglify({compress: {drop_console: true}}))   // Minify our javascript
+    .pipe(uglify())                                         // Minify our javascript
     .pipe(sourcemaps.write('.'))                            // Update our sourcemaps
-    .pipe(dest('dist/scripts'))                             // Save results to dist directory
-    .pipe(server.reload({stream: true}));                   // Reload the server
+    .pipe(dest('dist/scripts'));                            // Save results to dist directory
+//    .pipe(server.reload({stream: true}));                   // Reload the server
 };
 scripts = series(main_scripts, restaurant_scripts);
 
