@@ -5,6 +5,7 @@ const autoprefixer = require('autoprefixer');
 const babelify = require('babelify');
 const browserSync = require('browser-sync');
 const browserify = require('browserify');
+const compress = require('compression');
 const del = require('del');
 const eslint = require('gulp-eslint');
 const gulpif = require('gulp-if');
@@ -173,6 +174,7 @@ function startDistServer() {
     port,
     server: {
       baseDir: 'dist',
+      middleware: [ compress() ],
       routes: {
         '/node_modules': 'node_modules'
       }
