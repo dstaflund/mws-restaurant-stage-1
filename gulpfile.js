@@ -1,14 +1,11 @@
 const { src, dest, series, parallel, lastRun } = require('gulp');
 const { argv } = require('yargs');
 const autoprefixer = require('autoprefixer');
-//const babel = require('gulp-babel');
 const babelify = require('babelify');
 const browserSync = require('browser-sync');
 const browserify = require('browserify');
 const compress = require('compression');
 const del = require('del');
-const eslint = require('gulp-eslint');
-const gulpif = require('gulp-if');
 const htmlmin = require('gulp-htmlmin');
 const imagemin = require('gulp-imagemin');
 const plumber = require('gulp-plumber');
@@ -32,24 +29,6 @@ function clean() {
 
 
 /**
- * Run javascript files through a linter.
- *
- * @param files   files to process
- */
-const lintBase = files => {
-  return src(files)                                             // For each of the source files...
-    .pipe(eslint({ fix: true }))                        // Run them through the linter
-//    .pipe(server.reload({stream: true, once: true}))            // Then reload the stream
-    .pipe(eslint.format())                                      // And format the results
-    .pipe(gulpif(!server.active, eslint.failAfterError()));     // If there are errors, halt build if the server isn't running
-};
-function lint() {
-  return lintBase('app/scripts/**/*.js')                   // Specify source location of javascript files to lint
-    .pipe(dest('app/scripts'));                                 // Specify destination where linted files are written to
-}
-
-
-/**
  * Optimize stylesheets
  */
 function styles() {
@@ -65,7 +44,6 @@ function styles() {
     .pipe(postcss([ autoprefixer() ]))        // Add browser-specific prefixes where needed
     .pipe(sourcemaps.write())                 // Update sourcemaps
     .pipe(dest('dist/styles'));                // Write resulting stylesheet to dist directory
-//    .pipe(server.reload({stream: true}));     // Reload the server
 }
 
 
@@ -92,11 +70,9 @@ function main_scripts() {
     .pipe(buffer())
     .pipe(plumber())                                        // Prevent pipe breaking
     .pipe(sourcemaps.init())                                // Initialize our sourcemaps
-//    .pipe(babel())                                          // Transpile our javascript
     .pipe(terser())                                         // Minify our javascript
     .pipe(sourcemaps.write('.'))                            // Update our sourcemaps
     .pipe(dest('dist/scripts'));                             // Save results to dist directory
-//    .pipe(server.reload({stream: true}));                   // Reload the server
 }
 function restaurant_scripts() {
   return browserify(
@@ -118,11 +94,9 @@ function restaurant_scripts() {
     .pipe(buffer())
     .pipe(plumber())                                        // Prevent pipe breaking
     .pipe(sourcemaps.init())                                // Initialize our sourcemaps
-//    .pipe(babel())                                          // Transpile our javascript
     .pipe(terser())                                         // Minify our javascript
     .pipe(sourcemaps.write('.'))                            // Update our sourcemaps
     .pipe(dest('dist/scripts'));                            // Save results to dist directory
-//    .pipe(server.reload({stream: true}));                   // Reload the server
 }
 scripts = series(main_scripts, restaurant_scripts);
 
@@ -189,7 +163,6 @@ function startDistServer() {
 let build = series(
   clean,
   parallel(
-//    lint,
     series(parallel(styles, scripts), html),
     images,
     extras
