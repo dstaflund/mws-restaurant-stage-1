@@ -14,7 +14,7 @@ const plumber = require('gulp-plumber');
 const postcss = require('gulp-postcss');
 const sass = require('gulp-sass');
 const sourcemaps = require('gulp-sourcemaps');
-const uglify = require('gulp-uglify');
+const terser = require('gulp-terser');
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 
@@ -45,7 +45,7 @@ const lintBase = files => {
 function lint() {
   return lintBase('app/scripts/**/*.js')                   // Specify source location of javascript files to lint
     .pipe(dest('app/scripts'));                                 // Specify destination where linted files are written to
-};
+}
 
 
 /**
@@ -56,7 +56,7 @@ function styles() {
     .pipe(plumber())                          // Prevent pipe breaking
     .pipe(sourcemaps.init())                  // Initialize our sourcemaps
     .pipe(sass.sync({                 // Convert SASS files to CSS
-      outputStyle: 'expanded',
+      outputStyle: 'compressed',
       precision: 10,
       includePaths: ['.']
     })
@@ -65,7 +65,7 @@ function styles() {
     .pipe(sourcemaps.write())                 // Update sourcemaps
     .pipe(dest('dist/styles'));                // Write resulting stylesheet to dist directory
 //    .pipe(server.reload({stream: true}));     // Reload the server
-};
+}
 
 
 /**
@@ -92,7 +92,7 @@ function main_scripts() {
     .pipe(plumber())                                        // Prevent pipe breaking
     .pipe(sourcemaps.init())                                // Initialize our sourcemaps
 //    .pipe(babel())                                          // Transpile our javascript
-    .pipe(uglify())                                         // Minify our javascript
+    .pipe(terser())                                         // Minify our javascript
     .pipe(sourcemaps.write('.'))                            // Update our sourcemaps
     .pipe(dest('dist/scripts'));                             // Save results to dist directory
 //    .pipe(server.reload({stream: true}));                   // Reload the server
@@ -118,11 +118,11 @@ function restaurant_scripts() {
     .pipe(plumber())                                        // Prevent pipe breaking
     .pipe(sourcemaps.init())                                // Initialize our sourcemaps
 //    .pipe(babel())                                          // Transpile our javascript
-    .pipe(uglify())                                         // Minify our javascript
+    .pipe(terser())                                         // Minify our javascript
     .pipe(sourcemaps.write('.'))                            // Update our sourcemaps
     .pipe(dest('dist/scripts'));                            // Save results to dist directory
 //    .pipe(server.reload({stream: true}));                   // Reload the server
-};
+}
 scripts = series(main_scripts, restaurant_scripts);
 
 
@@ -152,7 +152,7 @@ function images() {
   return src('app/images/**/*', { since: lastRun(images) })     // Specify file locations
     .pipe(imagemin())                                           // Minify them
     .pipe(dest('dist/images'));                                 // And write results to dist directory
-};
+}
 
 
 /**
@@ -161,7 +161,7 @@ function images() {
 function extras() {
   return src([ 'app/*', '!app/*.html' ], { dot: true })     // File all other files in the 'app' folder
     .pipe(dest('dist'));                                    // And move them into dist directory
-};
+}
 
 
 /**
