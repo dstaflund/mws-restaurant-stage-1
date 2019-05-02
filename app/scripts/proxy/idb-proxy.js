@@ -5,10 +5,12 @@ const dbVersion = 1;
 
 const rStore = 'restaurants';
 const idStore = 'image_details';
+const revStore = 'reviews';
 
 const neighborhoodIndex = 'neighborhood';
 const cuisineIndex = 'cuisine_type';
 const neighborhoodCuisineIndex = 'neighborhood_cuisine_type';
+const restaurantIdIndex = 'restaurant_id';
 
 
 
@@ -193,11 +195,17 @@ export default class IdbProxy {
             { unique: false, multiEntry: true }
           );
 
-          // Create and populate image details store
+          // Create the image details store
           db.createObjectStore(idStore, { keyPath: "photograph" });
+
+          // Create the reviews store
+          const reviewStore = db.createObjectStore(revStore, {keyPath: "id" });
+          reviewStore.createIndex(restaurantIdIndex, "restaurant_id", {unique: false});
           upgraded = true;
         }
       });
+
+      // Populate the image details store
       if (upgraded) {
         const tx = db.transaction(idStore, "readwrite");
         for (const imageDetail of imageDetails) {
@@ -220,7 +228,6 @@ export default class IdbProxy {
         cursor = await cursor.continue();
       }
       return values;
-
     }
 
     async getRestaurantsByNeighborhood(neighborhood) {
@@ -279,6 +286,14 @@ export default class IdbProxy {
         .add(restaurant);
     }
 
+    async favoriteRestaurant(restaurantId){
+      // TODO
+    }
+
+    async unfavoriteRestaurant(restaurantId){
+      // TODO
+    }
+
     async getImageDetails(photograph){
       if ('string' === typeof photograph) {
         photograph = parseInt(photograph);
@@ -306,5 +321,52 @@ export default class IdbProxy {
             .objectStore(rStore)
             .index(cuisineIndex)
             .getAllKeys();
+    }
+
+    async getReviews(){
+      const db = await this.openDatabase();
+      const store = await db.transaction(revStore).objectStore(revStore);
+      let cursor = await store.openCursor();
+      let values = [];
+      while (cursor) {
+        values.push(cursor.value);
+        cursor = await cursor.continue();
+      }
+      return values;
+    }
+
+    async getReviewsByRestaurantId(restaurantId){
+      const db = await this.openDatabase();
+      return await db.transaction(revStore)
+        .objectStore(revStore)
+        .index(restaurantIdIndex)
+        .get(restaurantId);
+    }
+
+    async saveReviews(reviews, cachedReviews){
+      const cachedReviewIds = cachedReviews.map(review => review.id);
+      const db = await this.openDatabase();
+      const store = db.transaction(revStore, "readwrite").objectStore(revStore);
+      reviews.forEach(review => {
+        if (! cachedReviews.includes(review.id)) {
+          store.add(review);
+        }
+      });
+    }
+
+    async saveReview(review){
+      const db = await this.openDatabase();
+      db
+        .transaction(revStore, "readwrite")
+        .objectStore(revStore)
+        .add(review);
+    }
+
+    async updateReview(review){
+      // TODO
+    }
+
+    async deleteReview(reviewId){
+      // TODO
     }
 }
