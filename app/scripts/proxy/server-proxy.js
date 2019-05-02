@@ -1,5 +1,7 @@
 const port = 1337;
-const DATABASE_URL = `http://localhost:${port}/restaurants`;
+const DB_STEM = `http://localhost:${port}`;
+const RESTAURANTS_URL = `${DB_STEM}/restaurants`;
+const REVIEWS_URL = `${DB_STEM}/reviews`;
 
 
 /**
@@ -11,15 +13,63 @@ export default class ServerProxy {
   }
 
   async fetchRestaurants() {
-      const response = await fetch(DATABASE_URL);
+      const response = await fetch(RESTAURANTS_URL);
       if (response.status === 200) {
         return await response.json();
       }
       return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
   }
 
-  async fetchRestaurantById(id) {
-    const response = await fetch(DATABASE_URL + `?id=${id}`);
+  async fetchRestaurantById(restaurantId) {
+    const response = await fetch(RESTAURANTS_URL + `?id=${restaurantId}`);
+    if (response.status === 200) {
+      return await response.json();
+    }
+    return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
+  }
+
+  async fetchReviews(){
+    const response = await fetch(REVIEWS_URL);
+    if (response.status === 200) {
+      return await response.json();
+    }
+    return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
+  }
+
+  async fetchReviewsByRestaurantId(restaurantId){
+    const response = await fetch(`${REVIEWS_URL}/?restaurant_id=${restaurantId}`);
+    if (response.status === 200) {
+      return await response.json();
+    }
+    return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
+  }
+
+  async fetchReviewById(reviewId){
+    const response = await fetch(`${REVIEWS_URL}/${reviewId}`);
+    if (response.status === 200) {
+      return await response.json();
+    }
+    return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
+  }
+
+  async saveReview(review){
+    const response = await fetch(REVIEWS_URL, { method: 'post', body: JSON.stringify(review) });
+    if (response.status === 200) {
+      return await response.json();
+    }
+    return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
+  }
+
+  async updateReview(review){
+    const response = await fetch(`${REVIEWS_URL}/${review.id}`, { method: 'put', body: JSON.stringify(review) });
+    if (response.status === 200) {
+      return await response.json();
+    }
+    return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
+  }
+
+  async deleteReview(reviewId){
+    const response = await fetch(`${REVIEWS_URL}/${reviewId}`, { method: 'delete' });
     if (response.status === 200) {
       return await response.json();
     }
