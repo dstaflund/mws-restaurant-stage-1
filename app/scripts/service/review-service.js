@@ -31,12 +31,19 @@ export default class ReviewService {
 
   async fetchReviewsByRestaurantId(restaurantId) {
     console.log('[ReviewService - fetchReviewsByRestaurantId(' + restaurantId + ')]');
+    console.log('[ReviewService - fetchReviewsByRestaurantId] ' + 1);
     let reviews = await this._idbProxy.getReviewsByRestaurantId(restaurantId);
-    if (reviews) {
+    console.log(reviews);
+    console.log('[ReviewService - fetchReviewsByRestaurantId] ' + 2);
+    if (reviews && reviews.length > 0) {
+      console.log('[ReviewService - fetchReviewsByRestaurantId] ' + 3);
       return reviews;
     }
+    console.log('[ReviewService - fetchReviewsByRestaurantId] ' + 4);
     reviews = await this._serverProxy.fetchReviewsByRestaurantId(restaurantId);
+    console.log('[ReviewService - fetchReviewsByRestaurantId] ' + 5);
     await this._idbProxy.saveReviews(reviews, []);
+    console.log('[ReviewService - fetchReviewsByRestaurantId] ' + 6);
     return reviews;
   }
 
