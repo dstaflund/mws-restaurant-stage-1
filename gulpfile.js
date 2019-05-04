@@ -70,7 +70,7 @@ function main_scripts() {
     .pipe(buffer())
     .pipe(plumber())                                        // Prevent pipe breaking
     .pipe(sourcemaps.init())                                // Initialize our sourcemaps
-    .pipe(terser())                                         // Minify our javascript
+//    .pipe(terser())                                         // Minify our javascript
     .pipe(sourcemaps.write('.'))                            // Update our sourcemaps
     .pipe(dest('dist/scripts'));                             // Save results to dist directory
 }
@@ -82,6 +82,7 @@ function restaurant_scripts() {
         'app/scripts/service/image-service.js',
         'app/scripts/service/map-service.js',
         'app/scripts/service/restaurant-service.js',
+        'app/scripts/service/review-service.js',
         'app/scripts/restaurant_info.js',
         'app/service-worker-bootstrap.js',
         './app/service-worker.js'
@@ -94,7 +95,7 @@ function restaurant_scripts() {
     .pipe(buffer())
     .pipe(plumber())                                        // Prevent pipe breaking
     .pipe(sourcemaps.init())                                // Initialize our sourcemaps
-    .pipe(terser())                                         // Minify our javascript
+//    .pipe(terser())                                         // Minify our javascript
     .pipe(sourcemaps.write('.'))                            // Update our sourcemaps
     .pipe(dest('dist/scripts'));                            // Save results to dist directory
 }
@@ -106,16 +107,16 @@ scripts = series(main_scripts, restaurant_scripts);
  */
 function html() {
   return src('app/*.html')                            // Specify file locations
-    .pipe(htmlmin({                           // Minify the HTML
-      collapseWhitespace: true,
-      minifyCSS: true,
-      minifyJS: {compress: {drop_console: true}},
-      processConditionalComments: true,
-      removeComments: true,
-      removeEmptyAttributes: true,
-      removeScriptTypeAttributes: true,
-      removeStyleLinkTypeAttributes: true             // Save resulting files in the dist directory
-    }))
+    // .pipe(htmlmin({                           // Minify the HTML
+    //   collapseWhitespace: true,
+    //   minifyCSS: true,
+    //   minifyJS: {compress: {drop_console: true}},
+    //   processConditionalComments: true,
+    //   removeComments: true,
+    //   removeEmptyAttributes: true,
+    //   removeScriptTypeAttributes: true,
+    //   removeStyleLinkTypeAttributes: true             // Save resulting files in the dist directory
+    // }))
     .pipe(dest('dist'));
 }
 
@@ -125,7 +126,7 @@ function html() {
  */
 function images() {
   return src('app/images/**/*', { since: lastRun(images) })     // Specify file locations
-    .pipe(imagemin())                                           // Minify them
+//    .pipe(imagemin())                                           // Minify them
     .pipe(dest('dist/images'));                                 // And write results to dist directory
 }
 

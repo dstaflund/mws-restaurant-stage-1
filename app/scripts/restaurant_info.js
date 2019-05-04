@@ -1,6 +1,7 @@
-import RestaurantService from './service/restaurant-service';
 import ImageService from './service/image-service';
 import MapService from './service/map-service';
+import RestaurantService from './service/restaurant-service';
+import ReviewService from './service/review-service';
 
 
 let restaurant;
@@ -10,15 +11,19 @@ var newMap;
 let restaurantService;
 let imageService;
 let mapService;
+let reviewService;
 
 document.addEventListener('DOMContentLoaded', async () => {
+  console.log('[restaurant-info - ]');
   self.restaurantService = new RestaurantService();
   self.imageService = new ImageService();
   self.mapService = new MapService();
+  self.reviewService = new ReviewService();
   await initMap();
 });
 
 let initMap = async () => {
+  console.log('[restaurant-info - initMap]');
   const restaurant = await fetchRestaurantFromURL();
   self.newMap = await self.mapService.initMap(restaurant.latlng.lat, restaurant.latlng.lng, 16);
   await fillBreadcrumb();
@@ -26,11 +31,13 @@ let initMap = async () => {
 };
 
 let addMarkerToMap = async (restaurant = self.restaurant) => {
+  console.log('[restaurant-info - addMarkerToMap]');
   const marker = await self.mapService.mapMarkerForRestaurant(restaurant);
   marker.addTo(self.newMap);
 };
 
 let fetchRestaurantFromURL = async () => {
+  console.log('[restaurant-info - fetchRestaurantFromURL]');
   if (self.restaurant) {
     return self.restaurant;
   }
@@ -42,6 +49,7 @@ let fetchRestaurantFromURL = async () => {
 };
 
 let fillRestaurantHTML = async (restaurant = self.restaurant) => {
+  console.log('[restaurant-info - fillRestaurantHTML]');
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
 
@@ -66,6 +74,7 @@ let fillRestaurantHTML = async (restaurant = self.restaurant) => {
 };
 
 let fillRestaurantHoursHTML = async (operatingHours = self.restaurant.operating_hours) => {
+  console.log('[restaurant-info - fillRestaurantHoursHTML]');
   const hours = document.getElementById('restaurant-hours');
 
   const row = await createHeaderRowHTML();
@@ -87,6 +96,7 @@ let fillRestaurantHoursHTML = async (operatingHours = self.restaurant.operating_
 };
 
 async function createHeaderRowHTML() {
+  console.log('[restaurant-info - createHeaderRowHTML]');
   const r = document.createElement('tr');
   r.className = 'header-row';
 
@@ -103,7 +113,9 @@ async function createHeaderRowHTML() {
   return r;
 }
 
-let fillReviewsHTML = async (reviews = self.restaurant.reviews) => {
+let fillReviewsHTML = async (restaurantId = self.restaurant.id) => {
+  console.log('[restaurant-info - fillReviewsHTML]');
+  const reviews = await self.reviewService.fetchReviewsByRestaurantId(restaurantId);
   const container = document.getElementById('reviews-container');
 
   if (! reviews) {
@@ -123,6 +135,7 @@ let fillReviewsHTML = async (reviews = self.restaurant.reviews) => {
 };
 
 let createReviewHTML = async (review) => {
+  console.log('[restaurant-info - createReviewHTML]');
   const li = document.createElement('li');
   const container = document.createElement('div');
 
@@ -154,6 +167,7 @@ let createReviewHTML = async (review) => {
 };
 
 let fillBreadcrumb = async (restaurant = self.restaurant) => {
+  console.log('[restaurant-info - fillBreadcrumb]');
   const breadcrumb = document.getElementById('breadcrumb');
   const li = document.createElement('li');
 
@@ -162,6 +176,7 @@ let fillBreadcrumb = async (restaurant = self.restaurant) => {
 };
 
 let getParameterByName = async (name, url) => {
+  console.log('[restaurant-info - getParameterByName]');
   url = ! url ? window.location.href : url;
   name = name.replace(/[\[\]]/g, '\\$&');
   const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);

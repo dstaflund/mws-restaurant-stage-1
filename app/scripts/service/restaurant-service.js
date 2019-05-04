@@ -15,6 +15,7 @@ export default class RestaurantService {
   }
 
   async fetchRestaurants() {
+    console.log('[RestaurantService - fetchRestaurants]');
       const cachedRestaurants = await this._idbProxy.getRestaurants();
       if (cachedRestaurants && cachedRestaurants.length === 10) {
           await this._imageService.addImageDetails(cachedRestaurants);
@@ -27,6 +28,7 @@ export default class RestaurantService {
   }
 
   async fetchRestaurantById(id) {
+    console.log('[RestaurantService - fetchRestaurantById (' + id + ')]');
       let restaurant = await this._idbProxy.getRestaurant(id);
       if (restaurant) {
           await this._imageService.addImageDetail(restaurant);
@@ -39,6 +41,7 @@ export default class RestaurantService {
   }
 
   async fetchNeighborhoods() {
+    console.log('[RestaurantService - fetchNeighbourhoods]');
       let neighborhoods = await this._idbProxy.getNeighborhoods();
       if (neighborhoods && neighborhoods.length === 3) {
         return neighborhoods;
@@ -49,6 +52,7 @@ export default class RestaurantService {
   }
 
   async fetchCuisines() {
+    console.log('[RestaurantService - fetchCuisines]');
       let cuisines = await this._idbProxy.getCuisines();
       if (cuisines && cuisines.length === 4) {
           return cuisines;
@@ -59,6 +63,7 @@ export default class RestaurantService {
   }
 
   async fetchRestaurantsByCuisine(cuisine) {
+    console.log('[RestaurantService - fetchRestaurantsByCuisine(' + cuisine+ ')]');
       let restaurants = await this._idbProxy.getRestaurantsByCuisineType(cuisine);
       if (restaurants && restaurants.length === 10) {
           return restaurants;
@@ -68,6 +73,7 @@ export default class RestaurantService {
   }
 
   async fetchRestaurantsByNeighbourhood(neighbourhood) {
+    console.log('[RestaurantService - fetchRestaurantsByNeighborhood(' + neighborhood + ')]');
       let restaurants = await this._idbProxy.getRestaurantsByNeighborhood(neighbourhood);
       if (restaurants && restaurants.length === 10) {
           return restaurants;
@@ -77,6 +83,7 @@ export default class RestaurantService {
   }
 
   async fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood) {
+    console.log('[RestaurantService - fetchRestaurantsByCuisineAndNeighborhood(' + cuisine + ', ' + neighborhood + ')]');
       if (cuisine && cuisine === 'all' && neighborhood && neighborhood === 'all'){
         return await this.fetchRestaurants();
       }
@@ -96,7 +103,20 @@ export default class RestaurantService {
         .filter(restaurant => restaurant.cuisine_type === cuisine);
   }
 
+  //  TODO: Make sure it works offline as well
+  async favoriteRestaurant(restaurantId){
+    console.log('[RestaurantService - favoriteRestaurant(' + restaurantId + ')]');
+    await this._serverProxy.updateRestaurantFavoriteStatus(restaurantId, true);
+  }
+
+  // TODO: Make sure it works offline as well
+  async unfavoriteRestaurant(restaurantId){
+    console.log('[RestaurantService - unfavoriteRestaurant(' + restaurantId + ')]');
+    await this._serverProxy.updateRestaurantFavoriteStatus(restaurantId, false);
+  }
+
     async getLiveMessage(neighborhood, cuisine, resultCount){
+      console.log('[RestaurantService - getLiveMessage]');
         let msg;
 
         switch(resultCount) {
