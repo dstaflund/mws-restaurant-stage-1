@@ -148,9 +148,10 @@ let createReviewHTML = async (review) => {
   name.setAttribute('aria-label', review.name + ' Review');
   container.appendChild(name);
 
+  const workingDate = new Date(Math.max(review.createdAt, review.updatedAt));
   const date = document.createElement('div');
   date.className = 'review-date';
-  date.innerHTML = review.date;
+  date.innerHTML = workingDate.toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric'});
   container.appendChild(date);
 
   const rating = document.createElement('div');
