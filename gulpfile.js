@@ -53,6 +53,14 @@ function styles() {
 function main_scripts() {
   return browserify(
       [
+        'app/scripts/lib/assert.js',
+        'app/scripts/lib/converter.js',
+        'app/scripts/model/image.js',
+        'app/scripts/model/image-detail.js',
+        'app/scripts/model/lat-lng.js',
+        'app/scripts/model/operating-hours.js',
+        'app/scripts/model/restaurant.js',
+        'app/scripts/model/review.js',
         'app/scripts/proxy/idb-proxy.js',
         'app/scripts/proxy/server-proxy.js',
         'app/scripts/service/image-service.js',
@@ -77,6 +85,14 @@ function main_scripts() {
 function restaurant_scripts() {
   return browserify(
       [
+        'app/scripts/lib/assert.js',
+        'app/scripts/lib/converter.js',
+        'app/scripts/model/image.js',
+        'app/scripts/model/image-detail.js',
+        'app/scripts/model/lat-lng.js',
+        'app/scripts/model/operating-hours.js',
+        'app/scripts/model/restaurant.js',
+        'app/scripts/model/review.js',
         'app/scripts/proxy/idb-proxy.js',
         'app/scripts/proxy/server-proxy.js',
         'app/scripts/service/image-service.js',

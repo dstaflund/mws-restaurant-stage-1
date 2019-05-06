@@ -151,7 +151,7 @@ let createReviewHTML = async (review) => {
   const workingDate = new Date(Math.max(review.createdAt, review.updatedAt));
   const date = document.createElement('div');
   date.className = 'review-date';
-  date.innerHTML = workingDate.toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric'});
+  date.innerHTML = workingDate.toLocaleDateString('en-CA', { year: 'isNumeric', month: 'long', day: 'isNumeric'});
   container.appendChild(date);
 
   const rating = document.createElement('div');
