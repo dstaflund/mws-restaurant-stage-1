@@ -1,11 +1,11 @@
-import IdbProxy from '../proxy/idb-proxy';
+import IdbProxyAgent from '../proxy/idb-proxy-agent';
 
 
 export default class ImageService {
-    _idbProxy;
+    _idbProxyAgent;
 
     constructor(){
-      this._idbProxy = new IdbProxy();
+      this._idbProxyAgent = new IdbProxyAgent();
     }
 
     async imageUrlForRestaurant(restaurant) {
@@ -18,8 +18,8 @@ export default class ImageService {
       console.log('ImageService - srcSetForRestaurant]');
       console.log(restaurant);
         return restaurant.photographs.images
-                .map(photo => `/images/${photo.name} ${photo.width}w`)
-                .reduce((previous, current) => `${previous}, ${current}`);
+            .map(photo => `/images/${photo.name} ${photo.width}w`)
+            .reduce((previous, current) => `${previous}, ${current}`);
     }
 
     async imageDescriptionForRestaurant(restaurant) {
@@ -42,6 +42,7 @@ export default class ImageService {
       if (! ('photograph' in restaurant)) {
         restaurant.photograph = 10;
       }
-      restaurant.photographs = await this._idbProxy.getImageDetails(restaurant.photograph);
+      console.log(restaurant);
+      restaurant.photographs = await this._idbProxyAgent.getImageDetails(restaurant.photograph);
     }
 }

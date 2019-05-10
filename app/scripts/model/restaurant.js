@@ -1,8 +1,7 @@
-import Assert from '../lib/Assert';
-import Converter from '../lib/Converter';
-import ImageDetail from './ImageDetails';
-import LatLng from './LatLng';
-import OperatingHours from './OperatingHours';
+import Assert from '../lib/assert';
+import Converter from '../lib/converter';
+import LatLng from './lat-lng';
+import OperatingHours from './operating-hours';
 
 export default class Restaurant {
   _address;
@@ -10,7 +9,7 @@ export default class Restaurant {
   _cuisineType;
   _id;
   _isFavorite;
-  _imageDetails;      // Populated at runtime
+  _photographs;      // Populated at runtime
   _latLng;
   _name;
   _neighborhood;
@@ -34,12 +33,12 @@ export default class Restaurant {
     return this._id;
   }
 
-  get imageDetails(){
-    return this._imageDetails;
+  get photographs(){
+    return this._photographs;
   }
 
-  set imageDetails(imageDetails){
-    this._imageDetails = imageDetails;
+  set photographs(photographs){
+    this._photographs = photographs;
   }
 
   get isFavorite(){
@@ -73,8 +72,8 @@ export default class Restaurant {
   constructor(address, createdAt, cuisineType, id, isFavorite, latLng, name,
               neighborhood, operatingHours, photograph, updatedAt){
     Assert.isNumeric('id', id);
-    Assert.isBoolean('isFavorite', isFavorite);
-    Assert.isNumeric('photograph', photograph);
+    Assert.isBoolean('isFavorite', isFavorite, true);
+    Assert.isNumeric('photograph', photograph, true);
     Assert.isObject('latLng', latLng);
     Assert.isObject('operatingHours', operatingHours);
     Assert.isDate('createdAt', createdAt);
@@ -89,55 +88,8 @@ export default class Restaurant {
     this._name = name;
     this._neighborhood = neighborhood;
     this._operatingHours = operatingHours;
-    this._photograph = Converter.toInt(photograph);
+    this._photograph = photograph == null ? 10 : Converter.toInt(photograph);
     this._updatedAt = Converter.toDate(updatedAt);
   }
 
-  /**
-   * Converts object returned from Idb into a restaurant.
-   *
-   * @param obj
-   * @returns {*}
-   */
-  static idbConvert(obj){
-    return obj == null
-      ? null
-      : new Restaurant(
-        obj.address,
-        obj.createdAt,
-        obj.cuisine_type,
-        obj.id,
-        obj.is_favorite,
-        LatLng.idbConvert(obj.latLng),
-        obj.name,
-        obj.neighborhood,
-        OperatingHours.idbConvert(obj.operating_hours),
-        obj.photograph,
-        obj.updatedAt
-      );
-  }
-
-  /**
-   * Converts object returned from Proxy into a restaurant.
-   *
-   * @param obj
-   * @returns {*}
-   */
-  static proxyConvert(obj) {
-    return obj == null
-      ? null
-      : new Restaurant(
-        obj.address,
-        obj.createdAt,
-        obj.cuisine_type,
-        obj.id,
-        obj.is_favorite,
-        LatLng.proxyConvert(obj.latLng),
-        obj.name,
-        obj.neighborhood,
-        OperatingHours.proxyConvert(obj.operating_hours),
-        obj.photograph,
-        obj.updatedAt
-      );
-  }
 }

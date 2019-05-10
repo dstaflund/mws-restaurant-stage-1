@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 let fetchNeighborhoods = async () => {
-  console.log('[main - fetchneighborhoods]');
+  console.log('[main - fetchNeighborhoods]');
     self.neighborhoods = await self.restaurantService.fetchNeighborhoods();
     await fillNeighborhoodsHTML();
 };

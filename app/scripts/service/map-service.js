@@ -28,7 +28,7 @@ export default class MapService {
   async mapMarkerForRestaurant(restaurant) {
     console.log('[MapService - mapMarkerForRestaurant]');
     console.log(restaurant);
-      const coord = [restaurant.latlng.lat, restaurant.latlng.lng];
+      const coord = [restaurant.latLng.lat, restaurant.latLng.lng];
       const options = {
           title: restaurant.name,
           alt: restaurant.name + ' marker',

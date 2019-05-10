@@ -1,25 +1,24 @@
-import IdbProxy from '../proxy/idb-proxy';
-import ServerProxy from '../proxy/server-proxy';
-import ImageService from '../service/image-service';
+import IdbProxyAgent from '../proxy/idb-proxy-agent';
+import ServerProxyAgent from '../proxy/server-proxy-agent';
 
 
 export default class ReviewService {
-  _idbProxy;
-  _serverProxy;
+  _idbProxyAgent;
+  _serverProxyAgent;
 
   constructor(){
-    this._idbProxy = new IdbProxy();
-    this._serverProxy = new ServerProxy();
+    this._idbProxyAgent = new IdbProxyAgent();
+    this._serverProxyAgent = new ServerProxyAgent();
   }
 
   async fetchReviews() {
     console.log('[ReviewService - fetchReviews]');
-    const cachedReviews = await this._idbProxy.getReviews();
+    const cachedReviews = await this._idbProxyAgent.getReviews();
     if (cachedReviews && this.allOriginalReviewsInDb()) {
       return cachedReviews;
     }
-    const reviews = await this._serverProxy.fetchReviews();
-    await this._idbProxy.saveReviews(reviews, cachedReviews);
+    const reviews = await this._serverProxyAgent.fetchReviews();
+    await this._idbProxyAgent.saveReviews(reviews, cachedReviews);
     return reviews;
   }
 
@@ -32,7 +31,7 @@ export default class ReviewService {
   async fetchReviewsByRestaurantId(restaurantId) {
     console.log('[ReviewService - fetchReviewsByRestaurantId(' + restaurantId + ')]');
     console.log('[ReviewService - fetchReviewsByRestaurantId] ' + 1);
-    let reviews = await this._idbProxy.getReviewsByRestaurantId(restaurantId);
+    let reviews = await this._idbProxyAgent.getReviewsByRestaurantId(restaurantId);
     console.log(reviews);
     console.log('[ReviewService - fetchReviewsByRestaurantId] ' + 2);
     if (reviews && reviews.length > 0) {
@@ -40,21 +39,21 @@ export default class ReviewService {
       return reviews;
     }
     console.log('[ReviewService - fetchReviewsByRestaurantId] ' + 4);
-    reviews = await this._serverProxy.fetchReviewsByRestaurantId(restaurantId);
+    reviews = await this._serverProxyAgent.fetchReviewsByRestaurantId(restaurantId);
     console.log('[ReviewService - fetchReviewsByRestaurantId] ' + 5);
-    await this._idbProxy.saveReviews(reviews, []);
+    await this._idbProxyAgent.saveReviews(reviews, []);
     console.log('[ReviewService - fetchReviewsByRestaurantId] ' + 6);
     return reviews;
   }
 
   async fetchReviewById(reviewId) {
     console.log('[ReviewService - fetchReviewById(' + reviewId + ')]');
-    let review = await this._idbProxy.getReviewById(reviewId);
+    let review = await this._idbProxyAgent.getReviewById(reviewId);
     if (review) {
       return review;
     }
-    review = await this._serverProxy.fetchReviewById(reviewId);
-    await this._idbProxy.saveReview(review);
+    review = await this._serverProxyAgent.fetchReviewById(reviewId);
+    await this._idbProxyAgent.saveReview(review);
     return review;
   }
 
@@ -62,20 +61,20 @@ export default class ReviewService {
   async saveReview(review) {
     console.log('[ReviewService - saveReview]');
     console.log(review);
-    await this._serverProxy.saveReview(review);
+    await this._serverProxyAgent.saveReview(review);
   }
 
   // TODO
   async updateReview(review) {
     console.log('[ReviewService - updateReview]');
     console.log(review);
-    await this._serverProxy.updateReview(review);
+    await this._serverProxyAgent.updateReview(review);
   }
 
 
   // TODO
   async deleteReview(reviewId) {
     console.log('[ReviewService - deleteReview(' + reviewId + ')]');
-    await this._serverProxy.deleteReview(reviewId);
+    await this._serverProxyAgent.deleteReview(reviewId);
   }
 }

@@ -9,9 +9,6 @@ const REVIEWS_URL = `${DB_STEM}/reviews`;
  */
 export default class ServerProxy {
 
-  constructor(){
-  }
-
   async fetchRestaurants() {
     console.log('ServerProxy - fetchRestaurants]');
       const response = await fetch(RESTAURANTS_URL);
@@ -69,7 +66,7 @@ export default class ServerProxy {
   async saveReview(review){
     console.log('ServerProxy - saveReview]');
     console.log(review);
-    const response = await fetch(REVIEWS_URL, { method: 'post', body: JSON.stringify(review) });
+    const response = await fetch(REVIEWS_URL, { method: 'post', body: JSON.stringify(this._reviewConverter.toServer(review)) });
     if (response.status === 200) {
       return await response.json();
     }
@@ -79,7 +76,7 @@ export default class ServerProxy {
   async updateReview(review){
     console.log('ServerProxy - updateReview]');
     console.log(review);
-    const response = await fetch(`${REVIEWS_URL}/${review.id}`, { method: 'put', body: JSON.stringify(review) });
+    const response = await fetch(`${REVIEWS_URL}/${review.id}`, { method: 'put', body: JSON.stringify(this._reviewConverter.toServer(review)) });
     if (response.status === 200) {
       return await response.json();
     }

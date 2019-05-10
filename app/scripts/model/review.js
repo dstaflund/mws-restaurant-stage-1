@@ -1,5 +1,5 @@
-import Assert from '../lib/Assert';
-import Converter from '../lib/Converter';
+import Assert from '../lib/assert';
+import Converter from '../lib/converter';
 
 export default class Review {
     _comments;
@@ -54,27 +54,4 @@ export default class Review {
       this._updatedAt = Converter.toDate(updatedAt);
     }
 
-  /**
-   * Converts object returned from Idb into a review.
-   *
-   * @param obj
-   * @returns {*}
-   */
-  static idbConvert(obj){
-    return obj == null
-      ? null
-      : new Review(obj.comments, obj.id, obj.name, obj.rating, obj.restaurant_id, obj.updatedAt);
-  }
-
-  /**
-   * Converts object returned from Proxy into a review.
-   *
-   * @param obj
-   * @returns {*}
-   */
-  static proxyConvert(obj) {
-    return obj == null
-      ? null
-      : new Review(obj.comments, obj.id, obj.name, obj.rating, obj.restaurant_id, obj.updatedAt);
-  }
 }

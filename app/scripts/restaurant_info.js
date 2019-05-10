@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 let initMap = async () => {
   console.log('[restaurant-info - initMap]');
   const restaurant = await fetchRestaurantFromURL();
-  self.newMap = await self.mapService.initMap(restaurant.latlng.lat, restaurant.latlng.lng, 16);
+  self.newMap = await self.mapService.initMap(restaurant.latLng.lat, restaurant.latLng.lng, 16);
   await fillBreadcrumb();
   await addMarkerToMap();
 };

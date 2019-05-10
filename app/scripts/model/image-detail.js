@@ -1,6 +1,6 @@
-import Assert from '../lib/Assert';
-import Converter from '../lib/Converter';
-import Image from './Image';
+import Assert from '../lib/assert';
+import Converter from '../lib/converter';
+import Image from './image';
 
 export default class ImageDetail {
   _photograph;
@@ -20,6 +20,9 @@ export default class ImageDetail {
   }
 
   constructor(photograph, description, images){
+    console.log(photograph);
+    console.log(description);
+    console.log(images);
     Assert.isNotNull('photograph', photograph);
     Assert.isNumeric('photograph', photograph);
     Assert.isNotNull('description', description);
@@ -31,39 +34,4 @@ export default class ImageDetail {
     this._images = images;
   }
 
-  /**
-   * Converts object returned from Idb into an image detail.
-   *
-   * @param obj
-   * @returns {*}
-   */
-  static idbConvert(obj){
-    return obj == null
-      ? null
-      : new ImageDetail(
-        obj.photograph,
-        obj.description,
-        obj.images == null
-          ? null
-          : obj.images.map(image => Image.idbConvert(image))
-      );
-  }
-
-  /**
-   * Converts object returned from Proxy into an image detail.
-   *
-   * @param obj
-   * @returns {*}
-   */
-  static proxyConvert(obj) {
-    return obj == null
-      ? null
-      : new ImageDetail(
-        obj.photograph,
-        obj.description,
-        obj.images == null
-          ? null
-          : obj.images.map(image => Image.proxyConvert(image))
-      );
-  }
 }

@@ -1,5 +1,5 @@
 import Assert from '../lib/Assert';
-import Converter from '../lib/Converter';
+import Converter from '../lib/converter';
 
 export default class Image {
   _density;
@@ -30,27 +30,4 @@ export default class Image {
     this._width = Converter.toInt(width);
   }
 
-  /**
-   * Converts object returned from Idb into an image.
-   *
-   * @param obj
-   * @returns {*}
-   */
-  static idbConvert(obj){
-    return obj == null
-      ? null
-      : new Image(obj.density, obj.name, obj.width);
-  }
-
-  /**
-   * Converts object returned from Proxy into an image.
-   *
-   * @param obj
-   * @returns {*}
-   */
-  static proxyConvert(obj) {
-    return obj == null
-      ? null
-      : new Image(obj.density, obj.name, obj.width);
-  }
 }

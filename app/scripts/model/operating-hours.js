@@ -1,4 +1,4 @@
-import Assert from '../lib/Assert';
+import Assert from '../lib/assert';
 
 export default class OperatingHours {
   _sunday;
@@ -55,27 +55,4 @@ export default class OperatingHours {
     this._saturday = saturday;
   }
 
-  /**
-   * Converts object returned from Idb into operating hours.
-   *
-   * @param obj
-   * @returns {*}
-   */
-  static idbConvert(obj){
-    return obj == null
-      ? null
-      : new OperatingHours(obj.sunday, obj.monday, obj.tuesday, obj.wednesday, obj.thursday, obj.friday, obj.saturday);
-  }
-
-  /**
-   * Converts object returned from Proxy into operating hours.
-   *
-   * @param obj
-   * @returns {*}
-   */
-  static proxyConvert(obj) {
-    return obj == null
-      ? null
-      : new OperatingHours(obj.sunday, obj.monday, obj.tuesday, obj.wednesday, obj.thursday, obj.friday, obj.saturday);
-  }
 }

@@ -53,6 +53,12 @@ function styles() {
 function main_scripts() {
   return browserify(
       [
+        'app/scripts/converter/image-converter.js',
+        'app/scripts/converter/image-detail-converter.js',
+        'app/scripts/converter/lat-lng-converter.js',
+        'app/scripts/converter/operating-hours-converter.js',
+        'app/scripts/converter/restaurant-converter.js',
+        'app/scripts/converter/review-converter.js',
         'app/scripts/lib/assert.js',
         'app/scripts/lib/converter.js',
         'app/scripts/model/image.js',
@@ -62,7 +68,9 @@ function main_scripts() {
         'app/scripts/model/restaurant.js',
         'app/scripts/model/review.js',
         'app/scripts/proxy/idb-proxy.js',
+        'app/scripts/proxy/idb-proxy-agent.js',
         'app/scripts/proxy/server-proxy.js',
+        'app/scripts/proxy/server-proxy-agent.js',
         'app/scripts/service/image-service.js',
         'app/scripts/service/map-service.js',
         'app/scripts/service/restaurant-service.js',
@@ -85,6 +93,12 @@ function main_scripts() {
 function restaurant_scripts() {
   return browserify(
       [
+        'app/scripts/converter/image-converter.js',
+        'app/scripts/converter/image-detail-converter.js',
+        'app/scripts/converter/lat-lng-converter.js',
+        'app/scripts/converter/operating-hours-converter.js',
+        'app/scripts/converter/restaurant-converter.js',
+        'app/scripts/converter/review-converter.js',
         'app/scripts/lib/assert.js',
         'app/scripts/lib/converter.js',
         'app/scripts/model/image.js',
@@ -94,7 +108,9 @@ function restaurant_scripts() {
         'app/scripts/model/restaurant.js',
         'app/scripts/model/review.js',
         'app/scripts/proxy/idb-proxy.js',
+        'app/scripts/proxy/idb-proxy-agent.js',
         'app/scripts/proxy/server-proxy.js',
+        'app/scripts/proxy/server-proxy-agent.js',
         'app/scripts/service/image-service.js',
         'app/scripts/service/map-service.js',
         'app/scripts/service/restaurant-service.js',
