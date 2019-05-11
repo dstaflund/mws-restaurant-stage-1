@@ -27,12 +27,12 @@ export default class ReviewService {
   }
 
   async fetchReviewsByRestaurantId(restaurantId) {
-    let reviews = await this._idbProxyAgent.getReviewsByRestaurantId(restaurantId);
-    if (reviews && reviews.length > 0) {
-      return reviews;
+    const cachedReviews = await this._idbProxyAgent.getReviewsByRestaurantId(restaurantId);
+    if (cachedReviews && cachedReviews.length > 0) {
+      return cachedReviews;
     }
-    reviews = await this._serverProxyAgent.fetchReviewsByRestaurantId(restaurantId);
-    await this._idbProxyAgent.saveReviews(reviews, []);
+    const reviews = await this._serverProxyAgent.fetchReviewsByRestaurantId(restaurantId);
+    await this._idbProxyAgent.saveReviews(reviews, cachedReviews);
     return reviews;
   }
 

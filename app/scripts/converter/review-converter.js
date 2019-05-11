@@ -27,7 +27,7 @@ export default class ReviewConverter {
         Converter.toInt(obj.id),
         obj.name,
         Converter.toInt(obj.rating),
-        Converter.toInt(obj.restaurantId),
+        Converter.toInt(obj.restaurant_id),
         obj.updatedAt
       );
   }
