@@ -28,10 +28,12 @@ to submission to achieve Performance, PWA, and Accessibility targets.
 6.  Navigate to `localhost:8000` to view the app.
 
 
-## Leaflet.js and Mapbox:
+## Leaflet.js, Mapbox, et al.
 
 This repository uses [leafletjs](https://leafletjs.com/), [Mapbox](https://www.mapbox.com/), and
 [Idb Promise](https://github.com/jakearchibald/idb).
+
+Snackbar code is an adaptation of code from [Snackbar / Toast](https://www.w3schools.com/howto/howto_js_snackbar.asp).
 
 
 ### Note about ES6

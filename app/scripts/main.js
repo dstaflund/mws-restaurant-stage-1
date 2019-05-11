@@ -131,7 +131,41 @@ let createRestaurantHTML = async (restaurant) => {
     more.setAttribute('aria-label', 'View details on ' + restaurant.name);
     li.append(more);
 
+    const favorite = document.createElement('i');
+    favorite.id = 'favorite_' + restaurant.id;
+    favorite.innerHTML = restaurant.isFavorite ? 'favorite' : 'favorite_border';
+    favorite.className = 'material-icons';
+    favorite.onclick = async() => toggleFavorite(restaurant, favorite);
+    li.append(favorite);
+
     return li;
+};
+
+let toggleFavorite = async(restaurant, element) => {
+  const newFavoriteInd = await self.restaurantService.toggleFavoriteIndicator(restaurant.id);
+
+  const snackbar = document.getElementById('snackbar');
+  snackbar.className = 'show';
+
+  switch (newFavoriteInd) {
+    case true:
+      element.innerHTML = 'favorite';
+      element.alt = 'Favorite toggle (Currently true)'
+      snackbar.innerHTML = restaurant.name + ' is a favorite restaurant';
+      break;
+
+    case false:
+      element.innerHTML = 'favorite_border';
+      element.alt = 'Favorite toggle (Currently false)'
+      snackbar.innerHTML = restaurant.name + ' is not a favorite restaurant';
+      break;
+  }
+
+  setTimeout(() => {
+      snackbar.className = snackbar.className.replace("show", "");
+    },
+    3000
+  );
 };
 
 let addMarkersToMap = async (restaurants = self.restaurants) => {
@@ -143,6 +177,6 @@ let addMarkersToMap = async (restaurants = self.restaurants) => {
     }
 };
 
-document.getElementById('skip-link').focus();
 document.getElementById('neighborhoods-select').onchange = async() => updateRestaurants();
 document.getElementById('cuisines-select').onchange = async() => updateRestaurants();
+document.getElementById('skip-link').focus();

@@ -45,6 +45,10 @@ export default class Restaurant {
     return this._isFavorite;
   }
 
+  set isFavorite(isFavorite){
+    this._isFavorite = isFavorite;
+  }
+
   get latLng(){
     return this._latLng;
   }

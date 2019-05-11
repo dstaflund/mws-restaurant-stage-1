@@ -96,14 +96,16 @@ export default class RestaurantService {
         .filter(restaurant => restaurant.cuisineType === cuisine);
   }
 
-  //  TODO: Make sure it works offline as well
-  async favoriteRestaurant(restaurantId){
-    await this._serverProxyAgent.updateRestaurantFavoriteStatus(restaurantId, true);
+  async updateRestaurant(restaurant){
+    await this._idbProxyAgent.updateRestaurant(restaurant);
   }
 
-  // TODO: Make sure it works offline as well
-  async unfavoriteRestaurant(restaurantId){
-    await this._serverProxyAgent.updateRestaurantFavoriteStatus(restaurantId, false);
+  async toggleFavoriteIndicator(restaurantId){
+    const restaurant = await this.fetchRestaurantById(restaurantId);
+    restaurant.isFavorite = ! restaurant.isFavorite;
+    await this.updateRestaurant(restaurant);
+    await this._serverProxyAgent.updateRestaurantFavoriteStatus(restaurant.id, restaurant.isFavorite);
+    return restaurant.isFavorite;
   }
 
     async getLiveMessage(neighborhood, cuisine, resultCount){

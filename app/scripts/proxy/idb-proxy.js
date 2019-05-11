@@ -263,7 +263,7 @@ export default class IdbProxy {
       await db
         .transaction(rStore, "readwrite")
         .objectStore(rStore)
-        .update(restaurant);
+        .put(restaurant);
     }
 
     async getImageDetails(photograph){
@@ -311,7 +311,7 @@ export default class IdbProxy {
       await db
         .transaction(revStore, "readwrite")
         .objectStore(revStore)
-        .update(review);
+        .put(review);
     }
 
     async deleteReview(reviewId){
