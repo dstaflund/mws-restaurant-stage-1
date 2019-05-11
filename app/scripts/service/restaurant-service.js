@@ -30,6 +30,9 @@ export default class RestaurantService {
   async fetchRestaurantById(id) {
     console.log('[RestaurantService - fetchRestaurantById (' + id + ')]');
       let restaurant = await this._idbProxyAgent.getRestaurant(id);
+    console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+    console.log(restaurant);
+    console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
       if (restaurant) {
           await this._imageService.addImageDetail(restaurant);
           return restaurant;

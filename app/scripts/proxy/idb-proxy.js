@@ -242,6 +242,7 @@ export default class IdbProxy {
 
     async getRestaurant(restaurantId) {
       console.log('IdbProxy - getRestaurant(' + restaurantId + ')]');
+      console.log(typeof restaurantId);
       const db = await this.openDatabase();
       return await db.get(rStore, restaurantId);
     }

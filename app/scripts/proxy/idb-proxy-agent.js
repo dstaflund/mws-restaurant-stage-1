@@ -120,7 +120,7 @@ export default class IdbProxyAgent {
     console.log(reviews);
     console.log(cachedReviews);
     const cachedReviewIds = cachedReviews.map(review => review.id);
-    const convertedReviews = this._reviewConverter.toIdb(reviews);
+    const convertedReviews = reviews.map(review => this._reviewConverter.toIdb(review));
     await this._idbProxy.saveReviews(convertedReviews, cachedReviewIds);
   }
 

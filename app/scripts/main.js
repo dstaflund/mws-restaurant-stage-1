@@ -9,7 +9,7 @@ let restaurants,
 var newMap;
 var markers = [];
 
-
+fetch
 let imageService;
 let mapService;
 let restaurantService;
