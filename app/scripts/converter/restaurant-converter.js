@@ -21,11 +21,11 @@ export default class RestaurantConverter {
         obj.createdAt,
         obj.cuisineType,
         Converter.toInt(obj.id),
-        obj.is_favorite,
+        obj.isFavorite,
         this._latLngConverter.fromIdb(obj.latLng),
         obj.name,
         obj.neighborhood,
-        this._operatingHoursConverter.fromIdb(obj.operating_hours),
+        this._operatingHoursConverter.fromIdb(obj.operatingHours),
         obj.photograph,
         obj.updatedAt
       );
@@ -61,7 +61,7 @@ export default class RestaurantConverter {
           latLng: this._latLngConverter.toIdb(obj.latLng),
           name: obj.name,
           neighborhood: obj.neighborhood,
-          operatingHours: this._operatingHoursConverter.toIdb(obj.operating_hours),
+          operatingHours: this._operatingHoursConverter.toIdb(obj.operatingHours),
           photograph: Converter.toInt(obj.photograph),
           updatedAt: obj.updatedAt
         };

@@ -52,7 +52,7 @@ let fillRestaurantHTML = async (restaurant = self.restaurant) => {
   address.innerHTML = restaurant.address;
 
   const cuisine = document.getElementById('restaurant-cuisine');
-  cuisine.innerHTML = restaurant.cuisine_type;
+  cuisine.innerHTML = restaurant.cuisineType;
 
   const image = document.getElementById('restaurant-img');
   image.src = await self.imageService.imageUrlForRestaurant(restaurant);
@@ -61,14 +61,14 @@ let fillRestaurantHTML = async (restaurant = self.restaurant) => {
   image.className = 'restaurant-img';
   image.width = '320px';
 
-  if (restaurant.operating_hours) {
+  if (restaurant.operatingHours) {
     await fillRestaurantHoursHTML();
   }
 
   await fillReviewsHTML();
 };
 
-let fillRestaurantHoursHTML = async (operatingHours = self.restaurant.operating_hours) => {
+let fillRestaurantHoursHTML = async (operatingHours = self.restaurant.operatingHours) => {
   const hours = document.getElementById('restaurant-hours');
 
   const row = await createHeaderRowHTML();
@@ -78,7 +78,7 @@ let fillRestaurantHoursHTML = async (operatingHours = self.restaurant.operating_
     const row = document.createElement('tr');
 
     const day = document.createElement('td');
-    day.innerHTML = key;
+    day.innerHTML = key.substr(1, 1).toUpperCase() + key.substr(2);
     row.appendChild(day);
 
     const time = document.createElement('td');

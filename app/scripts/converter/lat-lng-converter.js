@@ -24,13 +24,4 @@ export default class LatLngConverter {
         lng: Converter.toFloat(obj.lng)
       };
   }
-
-  toServer(obj) {
-    return obj == null
-      ? null
-      : {
-          lat: Converter.toFloat(obj.lat),
-          lng: Converter.toFloat(obj.lng)
-      };
-  }
 }

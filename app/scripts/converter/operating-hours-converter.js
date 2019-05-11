@@ -19,27 +19,13 @@ export default class OperatingHoursConverter {
     return obj == null
       ? null
       : {
-          Sunday: obj.Sunday,
-          Monday: obj.Monday,
-          Tuesday: obj.Tuesday,
-          Wednesday: obj.Wednesday,
-          Thursday: obj.Thursday,
-          Friday: obj.Friday,
-          Saturday: obj.Saturday
+          Sunday: obj.sunday,
+          Monday: obj.monday,
+          Tuesday: obj.tuesday,
+          Wednesday: obj.wednesday,
+          Thursday: obj.thursday,
+          Friday: obj.friday,
+          Saturday: obj.saturday
         };
-  }
-
-  toServer(obj) {
-    return obj == null
-      ? null
-      : {
-        Sunday: obj.Sunday,
-        Monday: obj.Monday,
-        Tuesday: obj.Tuesday,
-        Wednesday: obj.Wednesday,
-        Thursday: obj.Thursday,
-        Friday: obj.Friday,
-        Saturday: obj.Saturday
-      };
   }
 }
