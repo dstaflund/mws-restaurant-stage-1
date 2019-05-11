@@ -15,7 +15,6 @@ export default class ServerProxyAgent {
   }
 
   async fetchRestaurants() {
-    console.log('ServerProxyAgent - fetchRestaurants]');
     const restaurants = await this._serverProxy.fetchRestaurants();
     return restaurants == null
         ? null
@@ -23,18 +22,15 @@ export default class ServerProxyAgent {
   }
 
   async fetchRestaurantById(restaurantId) {
-    console.log('ServerProxyAgent - fetchRestaurantById(' + restaurantId + ')]');
     const restaurant = await this._serverProxy.fetchRestaurantById(restaurantId);
     return this._restaurantConverter.fromServer(restaurant);
   }
 
   async updateRestaurantFavoriteStatus(restaurantId, favoriteInd){
-    console.log('ServerProxyAgent - updateRestaurantFavoriteStatus(' + restaurantId + ', ' + favoriteInd + ')]');
     await this._serverProxy.updateRestaurantFavoriteStatus(restaurantId, favoriteInd);
   }
 
   async fetchReviews(){
-    console.log('ServerProxyAgent - fetchReviews]');
     const reviews = await this._serverProxy.fetchReviews();
     return reviews == null
         ? null
@@ -42,7 +38,6 @@ export default class ServerProxyAgent {
   }
 
   async fetchReviewsByRestaurantId(restaurantId){
-    console.log('ServerProxyAgent - fetchReviewsByRestaurantId(' + restaurantId + ')]');
     const reviews = await this._serverProxy.fetchReviewsByRestaurantId(restaurantId);
     return reviews == null
         ? null
@@ -50,25 +45,19 @@ export default class ServerProxyAgent {
   }
 
   async fetchReviewById(reviewId){
-    console.log('ServerProxyAgent - fetchReviewById(' + reviewId + ')]');
     const review = await this._serverProxy.fetchReviewById(reviewId);
     return this._reviewConverter.fromServer(review);
   }
 
   async saveReview(review){
-    console.log('ServerProxyAgent - saveReview]');
-    console.log(review);
     await this._serverProxy.saveReview(this._reviewConverter.toServer(review));
   }
 
   async updateReview(review){
-    console.log('ServerProxyAgent - updateReview]');
-    console.log(review);
     await this._serverProxy.updateReview(this._reviewConverter.toServer(review));
   }
 
   async deleteReview(reviewId){
-    console.log('ServerProxyAgent - deleteReview(' + reviewId + ')]');
     await this._serverProxy.deleteReview(reviewId);
   }
 }

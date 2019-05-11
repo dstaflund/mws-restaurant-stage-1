@@ -5,8 +5,6 @@ import Review from '../model/review';
 export default class ReviewConverter {
 
   fromIdb(obj){
-    console.log('[ReviewConverter - fromIdb]');
-    console.log(obj);
     return obj == null
       ? null
       : new Review(
@@ -21,8 +19,6 @@ export default class ReviewConverter {
   }
 
   fromServer(obj) {
-    console.log('[ReviewConverter - fromServer]');
-    console.log(obj);
     return obj == null
       ? null
       : new Review(
@@ -37,8 +33,6 @@ export default class ReviewConverter {
   }
 
   toIdb(obj){
-    console.log('[ReviewConverter - toIdb]');
-    console.log(obj);
     return obj == null
       ? null
       : {
@@ -53,8 +47,6 @@ export default class ReviewConverter {
   }
 
   toServer(obj) {
-    console.log('[ReviewConverter - toServer]');
-    console.log(obj);
     return obj == null
       ? null
       : {

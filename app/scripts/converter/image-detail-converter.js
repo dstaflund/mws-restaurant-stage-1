@@ -11,8 +11,6 @@ export default class ImageDetailConverter {
   }
 
   fromIdb(obj){
-    console.log('[ImageDetailConverter - fromIdb]');
-    console.log(obj);
     return obj == null
       ? null
       : new ImageDetail(
@@ -25,8 +23,6 @@ export default class ImageDetailConverter {
   }
 
   fromServer(obj) {
-    console.log('[ImageDetailConverter - fromServer]');
-    console.log(obj);
     return obj == null
       ? null
       : new ImageDetail(

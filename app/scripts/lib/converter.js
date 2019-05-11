@@ -5,7 +5,6 @@
 export default class Converter {
 
   static toInt(val){
-    console.log(`[Converter - toInt] val = ${val}`);
     if (val == null) {
       return null;
     }
@@ -15,7 +14,6 @@ export default class Converter {
   }
 
   static toFloat(val){
-    console.log(`[Converter - toFloat] val = ${val}`);
     if (val == null) {
       return null;
     }
@@ -25,7 +23,6 @@ export default class Converter {
   }
 
   static toBoolean(val){
-    console.log(`[Converter - toBoolean] val = ${val}`);
     if (typeof val === 'undefined' || val == null) {
       return false;
     }
@@ -40,7 +37,6 @@ export default class Converter {
   }
 
   static toDate(val){
-    console.log(`[Converter - toDate] val = ${val}`);
     if (val == null) {
       return null;
     }

@@ -4,24 +4,18 @@ import OperatingHours from '../model/operating-hours';
 export default class OperatingHoursConverter {
 
   fromIdb(obj){
-    console.log('[OperatingHours - fromIdb]');
-    console.log(obj);
     return obj == null
       ? null
       : new OperatingHours(obj.Sunday, obj.Monday, obj.Tuesday, obj.Wednesday, obj.Thursday, obj.Friday, obj.Saturday);
   }
 
   fromServer(obj) {
-    console.log('[OperatingHours - fromServer]');
-    console.log(obj);
     return obj == null
       ? null
       : new OperatingHours(obj.Sunday, obj.Monday, obj.Tuesday, obj.Wednesday, obj.Thursday, obj.Friday, obj.Saturday);
   }
 
   toIdb(obj){
-    console.log('[OperatingHours - toIdb]');
-    console.log(obj);
     return obj == null
       ? null
       : {
@@ -36,8 +30,6 @@ export default class OperatingHoursConverter {
   }
 
   toServer(obj) {
-    console.log('[OperatingHours - toServer]');
-    console.log(obj);
     return obj == null
       ? null
       : {

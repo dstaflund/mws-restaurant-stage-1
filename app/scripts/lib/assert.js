@@ -1,7 +1,6 @@
 export default class Assert {
 
   static isNotNull(name, val, nullable = false){
-    console.log(`[Assert - isNotNull] (name, val) = (${name}, ${val})`);
     if (val == null && nullable) {
       return;
     }
@@ -11,7 +10,6 @@ export default class Assert {
   }
 
   static isNumeric(name, val, nullable = false){
-    console.log(`[Assert - isNumeric] (name, val) = (${name}, ${val})`);
     if (val == null && nullable) {
       return;
     }
@@ -21,8 +19,6 @@ export default class Assert {
   }
 
   static isArray(name, val, nullable = false){
-    console.log(`[Assert - isArray] (name, val) = (${name}, ...)`);
-    console.log(val);
     if (val == null && nullable) {
       return;
     }
@@ -32,7 +28,6 @@ export default class Assert {
   }
 
   static isBoolean(name, val, nullable = false){
-    console.log(`[Assert - isBoolean] (name, val) = (${name}, ${val})`);
     if (val == null && nullable) {
       return;
     }
@@ -45,7 +40,6 @@ export default class Assert {
   }
 
   static isDate(name, val, nullable = false){
-    console.log(`[Assert - isDate] (name, val) = (${name}, ${val})`);
     if (val == null && nullable) {
       return;
     }
@@ -68,7 +62,6 @@ export default class Assert {
   }
 
   static isObject(name, val, nullable = false){
-    console.log(`[Assert - isObject] (name, val) = (${name}, ${val})`);
     if (val == null && nullable) {
       return;
     }

@@ -14,8 +14,6 @@ export default class RestaurantConverter {
   }
 
   fromIdb(obj){
-    console.log('[RestaurantConverter - fromIdb]');
-    console.log(obj);
     return obj == null
       ? null
       : new Restaurant(
@@ -34,8 +32,6 @@ export default class RestaurantConverter {
   }
 
   fromServer(obj) {
-    console.log('[RestaurantConverter - fromServer]');
-    console.log(obj);
     return obj == null
       ? null
       : new Restaurant(
@@ -54,8 +50,6 @@ export default class RestaurantConverter {
   }
 
   toIdb(obj) {
-    console.log('[RestaurantConverter - toIdb]');
-    console.log(obj);
     return obj == null
       ? null
       : {

@@ -15,7 +15,6 @@ export default class RestaurantService {
   }
 
   async fetchRestaurants() {
-    console.log('[RestaurantService - fetchRestaurants]');
       const cachedRestaurants = await this._idbProxyAgent.getRestaurants();
       if (cachedRestaurants && cachedRestaurants.length === 10) {
           await this._imageService.addImageDetails(cachedRestaurants);
@@ -28,11 +27,7 @@ export default class RestaurantService {
   }
 
   async fetchRestaurantById(id) {
-    console.log('[RestaurantService - fetchRestaurantById (' + id + ')]');
       let restaurant = await this._idbProxyAgent.getRestaurant(id);
-    console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-    console.log(restaurant);
-    console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
       if (restaurant) {
           await this._imageService.addImageDetail(restaurant);
           return restaurant;
@@ -44,7 +39,6 @@ export default class RestaurantService {
   }
 
   async fetchNeighborhoods() {
-    console.log('[RestaurantService - fetchNeighborhoods]');
       let neighborhoods = await this._idbProxyAgent.getNeighborhoods();
       if (neighborhoods && neighborhoods.length === 3) {
         return neighborhoods;
@@ -55,21 +49,16 @@ export default class RestaurantService {
   }
 
   async fetchCuisines() {
-    console.log('[RestaurantService - fetchCuisines]');
       let cuisines = await this._idbProxyAgent.getCuisines();
       if (cuisines && cuisines.length === 4) {
           return cuisines;
       }
       const restaurants = await this.fetchRestaurants();
-      console.log('############################');
-      console.log(restaurants);
-      console.log('############################');
       cuisines = restaurants.map((v, i) => restaurants[i].cuisineType);
       return cuisines.filter((v, i) => cuisines.indexOf(v) === i);
   }
 
   async fetchRestaurantsByCuisine(cuisine) {
-    console.log('[RestaurantService - fetchRestaurantsByCuisine(' + cuisine+ ')]');
       let restaurants = await this._idbProxyAgent.getRestaurantsByCuisineType(cuisine);
       if (restaurants && restaurants.length === 10) {
           return restaurants;
@@ -79,7 +68,6 @@ export default class RestaurantService {
   }
 
   async fetchRestaurantsByNeighborhood(neighborhood) {
-    console.log('[RestaurantService - fetchRestaurantsByNeighborhood(' + neighborhood + ')]');
       let restaurants = await this._idbProxyAgent.getRestaurantsByNeighborhood(neighborhood);
       if (restaurants && restaurants.length === 10) {
           return restaurants;
@@ -89,7 +77,6 @@ export default class RestaurantService {
   }
 
   async fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood) {
-    console.log('[RestaurantService - fetchRestaurantsByCuisineAndNeighborhood(' + cuisine + ', ' + neighborhood + ')]');
       if (cuisine && cuisine === 'all' && neighborhood && neighborhood === 'all'){
         return await this.fetchRestaurants();
       }
@@ -111,18 +98,15 @@ export default class RestaurantService {
 
   //  TODO: Make sure it works offline as well
   async favoriteRestaurant(restaurantId){
-    console.log('[RestaurantService - favoriteRestaurant(' + restaurantId + ')]');
     await this._serverProxyAgent.updateRestaurantFavoriteStatus(restaurantId, true);
   }
 
   // TODO: Make sure it works offline as well
   async unfavoriteRestaurant(restaurantId){
-    console.log('[RestaurantService - unfavoriteRestaurant(' + restaurantId + ')]');
     await this._serverProxyAgent.updateRestaurantFavoriteStatus(restaurantId, false);
   }
 
     async getLiveMessage(neighborhood, cuisine, resultCount){
-      console.log('[RestaurantService - getLiveMessage]');
         let msg;
 
         switch(resultCount) {

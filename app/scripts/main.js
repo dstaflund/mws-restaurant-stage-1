@@ -16,7 +16,6 @@ let restaurantService;
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-  console.log('[main - addEventListener]');
     self.restaurantService = new RestaurantService();
     self.imageService = new ImageService();
     self.mapService = new MapService();
@@ -27,13 +26,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 let fetchNeighborhoods = async () => {
-  console.log('[main - fetchNeighborhoods]');
     self.neighborhoods = await self.restaurantService.fetchNeighborhoods();
     await fillNeighborhoodsHTML();
 };
 
 let fillNeighborhoodsHTML = async (neighborhoods = self.neighborhoods) => {
-  console.log('[main - fillNeighborhoodsHTML]');
     const select = document.getElementById('neighborhoods-select');
     neighborhoods.forEach(neighborhood => {
         const option = document.createElement('option');
@@ -44,13 +41,11 @@ let fillNeighborhoodsHTML = async (neighborhoods = self.neighborhoods) => {
 };
 
 let fetchCuisines = async () => {
-  console.log('[main - fetchCuisines]');
     self.cuisines = await self.restaurantService.fetchCuisines();
     await fillCuisinesHTML();
 };
 
 let fillCuisinesHTML = async (cuisines = self.cuisines) => {
-  console.log('[main - fillCuisinesHTML]');
     const select = document.getElementById('cuisines-select');
     cuisines.forEach(cuisine => {
         const option = document.createElement('option');
@@ -61,13 +56,11 @@ let fillCuisinesHTML = async (cuisines = self.cuisines) => {
 };
 
 let initMap = async () => {
-  console.log('[main - initMap]');
     self.newMap = await self.mapService.initMap(40.722216, -73.987501, 12);
     await updateRestaurants();
 };
 
 let updateRestaurants = async () => {
-  console.log('[main - updateRestaurants]');
     const cSelect = document.getElementById('cuisines-select');
     const nSelect = document.getElementById('neighborhoods-select');
     const lmSelect = document.getElementById('live-message');
@@ -88,7 +81,6 @@ let updateRestaurants = async () => {
 };
 
 let resetRestaurants = async (restaurants) => {
-  console.log('[main - resetRestaurants]');
     self.restaurants = [];
     const ul = document.getElementById('restaurants-list');
     ul.innerHTML = '';
@@ -103,7 +95,6 @@ let resetRestaurants = async (restaurants) => {
 };
 
 let fillRestaurantsHTML = async (restaurants = self.restaurants) => {
-  console.log('[main - fillRestaurantsHTML]');
     const ul = document.getElementById('restaurants-list');
 
     for (const restaurant of restaurants) {
@@ -113,7 +104,6 @@ let fillRestaurantsHTML = async (restaurants = self.restaurants) => {
 };
 
 let createRestaurantHTML = async (restaurant) => {
-  console.log('[main - createRestaurantHTML]');
     const li = document.createElement('li');
     const image = document.createElement('img');
 
@@ -145,7 +135,6 @@ let createRestaurantHTML = async (restaurant) => {
 };
 
 let addMarkersToMap = async (restaurants = self.restaurants) => {
-  console.log('[main - addMarkersToMap]');
     for (const restaurant of restaurants) {
       const marker = await self.mapService.mapMarkerForRestaurant(restaurant);
       marker.addTo(self.newMap);

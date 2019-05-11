@@ -20,9 +20,6 @@ export default class ImageDetail {
   }
 
   constructor(photograph, description, images){
-    console.log(photograph);
-    console.log(description);
-    console.log(images);
     Assert.isNotNull('photograph', photograph);
     Assert.isNumeric('photograph', photograph);
     Assert.isNotNull('description', description);
