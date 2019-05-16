@@ -58,15 +58,21 @@ export default class ServerProxy {
   }
 
   async saveReview(review){
-    const response = await fetch(REVIEWS_URL, { method: 'post', body: JSON.stringify(this._reviewConverter.toServer(review)) });
-    if (response.status === 200) {
-      return await response.json();
+    console.log('[server-proxy - saveReview]');
+    console.log('[server-proxy - saveReview]  review = ');
+    console.log(review);
+    const response = await fetch(REVIEWS_URL, { method: 'post', body: JSON.stringify(review) });
+    if (response.status === 200 || response.status === 201) {
+      const jsonResponse = await response.json();
+      console.log('[server-proxy - saveReview]  jsonResponse = ');
+      console.log(jsonResponse);
+      return jsonResponse;
     }
     return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
   }
 
   async updateReview(review){
-    const response = await fetch(`${REVIEWS_URL}/${review.id}`, { method: 'put', body: JSON.stringify(this._reviewConverter.toServer(review)) });
+    const response = await fetch(`${REVIEWS_URL}/${review.id}`, { method: 'put', body: JSON.stringify(review) });
     if (response.status === 200) {
       return await response.json();
     }

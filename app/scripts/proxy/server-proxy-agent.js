@@ -1,14 +1,17 @@
+import NewReviewConverter from '../converter/new-review-converter';
 import RestaurantConverter from '../converter/restaurant-converter';
 import ReviewConverter from '../converter/review-converter';
 import ServerProxy from './server-proxy';
 
 
 export default class ServerProxyAgent {
+  _newReviewConverter;
   _restaurantConverter;
   _reviewConverter;
   _serverProxy;
 
   constructor(){
+    this._newReviewConverter = new NewReviewConverter();
     this._restaurantConverter = new RestaurantConverter();
     this._reviewConverter = new ReviewConverter();
     this._serverProxy = new ServerProxy();
@@ -50,11 +53,24 @@ export default class ServerProxyAgent {
   }
 
   async saveReview(review){
-    await this._serverProxy.saveReview(this._reviewConverter.toServer(review));
+    console.log('[server-agent-proxy - saveReview]');
+    console.log('[server-agent-proxy - saveReview] review =');
+    console.log(review);
+    const convertedReview = await this._newReviewConverter.toServer(review);
+    console.log('[server-agent-proxy - saveReview] convertedReview =');
+    console.log(convertedReview);
+    const createdReview = await this._serverProxy.saveReview(convertedReview);
+    console.log('[server-agent-proxy - saveReview] createdReview =');
+    console.log(createdReview);
+    const response = await this._reviewConverter.fromServer(createdReview);
+    console.log('[server-agent-proxy - saveReview] response =');
+    console.log(response);
+    return response;
   }
 
   async updateReview(review){
-    await this._serverProxy.updateReview(this._reviewConverter.toServer(review));
+    const convertedReview = await this._reviewConverter.toServer(review);
+    await this._serverProxy.updateReview(convertedReview);
   }
 
   async deleteReview(reviewId){

@@ -102,6 +102,19 @@ export default class IdbProxyAgent {
     await this._idbProxy.saveReviews(convertedReviews, cachedReviewIds);
   }
 
+  async saveReview(review){
+    console.log('[idb-proxy-agent - saveReview]');
+    console.log('[idb-proxy-agent - saveReview]  review = ');
+    console.log(review);
+    const convertedReview = this._reviewConverter.toIdb(review);
+    console.log('[idb-proxy-agent - saveReview]  convertedReview = ');
+    console.log(convertedReview);
+    const response = this._idbProxy.saveReview(convertedReview);
+    console.log('[idb-proxy-agent - saveReview]  response = ');
+    console.log(response);
+    return response
+  }
+
   async updateReview(review){
     const convertedReview = this._reviewConverter.toIdb(review);
     await this._idbProxy.updateReview(convertedReview);

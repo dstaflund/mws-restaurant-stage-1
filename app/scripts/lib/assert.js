@@ -27,14 +27,18 @@ export default class Assert {
     }
   }
 
-  static isBoolean(name, val, nullable = false){
+  static isBoolean(name, val, nullable = false) {
     if (val == null && nullable) {
       return;
     }
-    if (val == null && nullable) {
-      return;
+    if ('string' === typeof val) {
+      if (val.toLowerCase() === 'true' || val.toLowerCase() === 'false') {
+        return;
+      }
     }
     if ('boolean' !== typeof val) {
+      console.log(val);
+      console.log(typeof val);
       throw new Error(`${name} is not boolean`);
     }
   }

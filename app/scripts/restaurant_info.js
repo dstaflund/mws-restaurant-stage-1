@@ -1,7 +1,9 @@
 import ImageService from './service/image-service';
 import MapService from './service/map-service';
+import NewReview from './model/new-review';
 import RestaurantService from './service/restaurant-service';
 import ReviewService from './service/review-service';
+import Review from './model/review';
 
 
 let restaurant;
@@ -12,6 +14,9 @@ let restaurantService;
 let imageService;
 let mapService;
 let reviewService;
+
+let customReview;
+let validationErrors = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
   self.restaurantService = new RestaurantService();
@@ -118,6 +123,9 @@ let fillReviewsHTML = async (restaurantId = self.restaurant.id) => {
   }
 
   const ul = document.getElementById('reviews-list');
+  while(ul.firstChild) {
+    ul.removeChild(ul.firstChild);
+  }
 
   for(const review of reviews) {
     ul.appendChild(await createReviewHTML(review))
@@ -180,3 +188,78 @@ let getParameterByName = async (name, url) => {
   }
   return parseInt(decodeURIComponent(results[2].replace(/\+/g, ' ')), 10);
 };
+
+
+/*
+ * The following logic drives behaviour of the modal input form.
+ * It is an adaptation of https://www.w3schools.com/howto/howto_css_modals.asp
+ */
+let initializeCustomReview = () => {
+  console.log('[initializeCustomReview]');
+  document.getElementById('review-name').value = null;
+  document.getElementById('review-rating').value = null;
+  document.getElementById('review-comments').value = null;
+  self.customReview = new NewReview(self.restaurant.id, null, null, null);
+  self.validationErrors = [];
+};
+
+let displayReviewForm = () => {
+  initializeCustomReview();
+  validateReview();
+  modal.style.display = 'block';
+};
+
+let validateReview = () => {
+  console.log('[validate-review]');
+  self.validationErrors = self.customReview.validate();
+  console.log(self.validationErrors);
+  document.getElementById('save-review-button').disabled = self.validationErrors.length > 0;
+};
+
+let displayToast = async() => {
+  const snackbar = document.getElementById('snackbar');
+  snackbar.innerHTML = 'Review has been saved';
+  snackbar.className = 'show';
+
+  setTimeout(() => {
+      snackbar.className = snackbar.className.replace("show", "");
+    },
+    3000
+  );
+};
+
+let saveReview = async() => {
+  await self.reviewService.saveReview(self.customReview);
+  await fillReviewsHTML();
+  closeReviewForm();
+  await displayToast();
+};
+
+let closeReviewForm = () => {
+  self.customReview = null;
+  modal.style.display = 'none';
+};
+
+let updateReviewName = async(e) => {
+  self.customReview.name = e.target.value;
+  validateReview();
+};
+
+let updateReviewRating = async(e) => {
+  self.customReview.rating = e.target.value;
+  validateReview();
+};
+
+let updateReviewComments = async(e) => {
+  self.customReview.comments = e.target.value;
+  validateReview();
+};
+
+const modal = document.getElementById('review-form');
+document.getElementById('add-review-button').onclick = () => displayReviewForm();
+document.getElementById('close').onclick = () => closeReviewForm();
+document.getElementById('clear-review-button').onclick = async() => initializeCustomReview();
+document.getElementById('save-review-button').onclick = async() => saveReview();
+document.getElementById('review-name').oninput = async(e) => updateReviewName(e);
+document.getElementById('review-rating').onchange = async(e) => updateReviewRating(e);
+document.getElementById('review-comments').oninput = async(e) => updateReviewComments(e);

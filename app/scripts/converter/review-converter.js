@@ -45,18 +45,4 @@ export default class ReviewConverter {
           updatedAt: obj.updatedAt
         };
   }
-
-  toServer(obj) {
-    return obj == null
-      ? null
-      : {
-          comments: obj.comments,
-          id: Converter.toInt(obj.id),
-          name: obj.name,
-          rating: Converter.toInt(obj.rating),
-          restaurant_id: Converter.toInt(obj.restaurantId),
-          createdAt: obj.createdAt,
-          updatedAt: obj.updatedAt
-        };
-  }
 }
