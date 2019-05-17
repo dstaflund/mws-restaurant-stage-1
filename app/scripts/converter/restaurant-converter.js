@@ -8,12 +8,12 @@ export default class RestaurantConverter {
   _latLngConverter;
   _operatingHoursConverter;
 
-  constructor(){
+  constructor() {
     this._latLngConverter = new LatLngConverter();
     this._operatingHoursConverter = new OperatingHoursConverter();
   }
 
-  fromIdb(obj){
+  fromIdb(obj) {
     return obj == null
       ? null
       : new Restaurant(
@@ -53,17 +53,17 @@ export default class RestaurantConverter {
     return obj == null
       ? null
       : {
-          address: obj.address,
-          createdAt: obj.createdAt,
-          cuisineType: obj.cuisineType,
-          id: Converter.toInt(obj.id),
-          isFavorite: obj.isFavorite,
-          latLng: this._latLngConverter.toIdb(obj.latLng),
-          name: obj.name,
-          neighborhood: obj.neighborhood,
-          operatingHours: this._operatingHoursConverter.toIdb(obj.operatingHours),
-          photograph: Converter.toInt(obj.photograph),
-          updatedAt: obj.updatedAt
-        };
+        address: obj.address,
+        createdAt: obj.createdAt,
+        cuisineType: obj.cuisineType,
+        id: Converter.toInt(obj.id),
+        isFavorite: obj.isFavorite,
+        latLng: this._latLngConverter.toIdb(obj.latLng),
+        name: obj.name,
+        neighborhood: obj.neighborhood,
+        operatingHours: this._operatingHoursConverter.toIdb(obj.operatingHours),
+        photograph: Converter.toInt(obj.photograph),
+        updatedAt: obj.updatedAt
+      };
   }
 }

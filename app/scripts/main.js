@@ -9,139 +9,138 @@ let restaurants,
 var newMap;
 var markers = [];
 
-fetch
 let imageService;
 let mapService;
 let restaurantService;
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-    self.restaurantService = new RestaurantService();
-    self.imageService = new ImageService();
-    self.mapService = new MapService();
+  self.restaurantService = new RestaurantService();
+  self.imageService = new ImageService();
+  self.mapService = new MapService();
 
-    await initMap();
-    await fetchNeighborhoods();
-    await fetchCuisines();
+  await initMap();
+  await fetchNeighborhoods();
+  await fetchCuisines();
 });
 
 let fetchNeighborhoods = async () => {
-    self.neighborhoods = await self.restaurantService.fetchNeighborhoods();
-    await fillNeighborhoodsHTML();
+  self.neighborhoods = await self.restaurantService.fetchNeighborhoods();
+  await fillNeighborhoodsHTML();
 };
 
 let fillNeighborhoodsHTML = async (neighborhoods = self.neighborhoods) => {
-    const select = document.getElementById('neighborhoods-select');
-    neighborhoods.forEach(neighborhood => {
-        const option = document.createElement('option');
-        option.innerHTML = neighborhood;
-        option.value = neighborhood;
-        select.append(option);
-    });
+  const select = document.getElementById('neighborhoods-select');
+  neighborhoods.forEach(neighborhood => {
+    const option = document.createElement('option');
+    option.innerHTML = neighborhood;
+    option.value = neighborhood;
+    select.append(option);
+  });
 };
 
 let fetchCuisines = async () => {
-    self.cuisines = await self.restaurantService.fetchCuisines();
-    await fillCuisinesHTML();
+  self.cuisines = await self.restaurantService.fetchCuisines();
+  await fillCuisinesHTML();
 };
 
 let fillCuisinesHTML = async (cuisines = self.cuisines) => {
-    const select = document.getElementById('cuisines-select');
-    cuisines.forEach(cuisine => {
-        const option = document.createElement('option');
-        option.innerHTML = cuisine;
-        option.value = cuisine;
-        select.append(option);
-    });
+  const select = document.getElementById('cuisines-select');
+  cuisines.forEach(cuisine => {
+    const option = document.createElement('option');
+    option.innerHTML = cuisine;
+    option.value = cuisine;
+    select.append(option);
+  });
 };
 
 let initMap = async () => {
-    self.newMap = await self.mapService.initMap(40.722216, -73.987501, 12);
-    await updateRestaurants();
+  self.newMap = await self.mapService.initMap(40.722216, -73.987501, 12);
+  await updateRestaurants();
 };
 
 let updateRestaurants = async () => {
-    const cSelect = document.getElementById('cuisines-select');
-    const nSelect = document.getElementById('neighborhoods-select');
-    const lmSelect = document.getElementById('live-message');
+  const cSelect = document.getElementById('cuisines-select');
+  const nSelect = document.getElementById('neighborhoods-select');
+  const lmSelect = document.getElementById('live-message');
 
-    const cIndex = cSelect.selectedIndex;
-    const nIndex = nSelect.selectedIndex;
+  const cIndex = cSelect.selectedIndex;
+  const nIndex = nSelect.selectedIndex;
 
-    const cuisine = cSelect[cIndex].value;
-    const neighborhood = nSelect[nIndex].value;
+  const cuisine = cSelect[cIndex].value;
+  const neighborhood = nSelect[nIndex].value;
 
-    let foundRestaurants = await self.restaurantService.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood);
+  let foundRestaurants = await self.restaurantService.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood);
 
-    await resetRestaurants(foundRestaurants);
-    await fillRestaurantsHTML();
+  await resetRestaurants(foundRestaurants);
+  await fillRestaurantsHTML();
 
-    lmSelect.innerHTML = await self.restaurantService.getLiveMessage(neighborhood, cuisine, ! foundRestaurants ? 0 : foundRestaurants.length);
-    lmSelect.className = foundRestaurants.length ? 'offscreen' : 'visible';
+  lmSelect.innerHTML = await self.restaurantService.getLiveMessage(neighborhood, cuisine, !foundRestaurants ? 0 : foundRestaurants.length);
+  lmSelect.className = foundRestaurants.length ? 'offscreen' : 'visible';
 };
 
 let resetRestaurants = async (restaurants) => {
-    self.restaurants = [];
-    const ul = document.getElementById('restaurants-list');
-    ul.innerHTML = '';
+  self.restaurants = [];
+  const ul = document.getElementById('restaurants-list');
+  ul.innerHTML = '';
 
-    if (self.markers) {
-        for (const marker of self.markers) {
-            marker.remove();
-        }
+  if (self.markers) {
+    for (const marker of self.markers) {
+      marker.remove();
     }
-    self.markers = [];
-    self.restaurants = restaurants;
+  }
+  self.markers = [];
+  self.restaurants = restaurants;
 };
 
 let fillRestaurantsHTML = async (restaurants = self.restaurants) => {
-    const ul = document.getElementById('restaurants-list');
+  const ul = document.getElementById('restaurants-list');
 
-    for (const restaurant of restaurants) {
-      ul.append(await createRestaurantHTML(restaurant));
-      await addMarkersToMap();
-    }
+  for (const restaurant of restaurants) {
+    ul.append(await createRestaurantHTML(restaurant));
+    await addMarkersToMap();
+  }
 };
 
 let createRestaurantHTML = async (restaurant) => {
-    const li = document.createElement('li');
-    const image = document.createElement('img');
+  const li = document.createElement('li');
+  const image = document.createElement('img');
 
-    image.src = await self.imageService.imageUrlForRestaurant(restaurant);
-    image.srcset = await self.imageService.srcSetForRestaurant(restaurant);
-    image.alt = await self.imageService.imageDescriptionForRestaurant(restaurant);
-    image.className = 'restaurant-img';
-    li.append(image);
+  image.src = await self.imageService.imageUrlForRestaurant(restaurant);
+  image.srcset = await self.imageService.srcSetForRestaurant(restaurant);
+  image.alt = await self.imageService.imageDescriptionForRestaurant(restaurant);
+  image.className = 'restaurant-img';
+  li.append(image);
 
-    const name = document.createElement('h3');
-    name.innerHTML = restaurant.name;
-    li.append(name);
+  const name = document.createElement('h3');
+  name.innerHTML = restaurant.name;
+  li.append(name);
 
-    const neighborhood = document.createElement('p');
-    neighborhood.innerHTML = restaurant.neighborhood;
-    li.append(neighborhood);
+  const neighborhood = document.createElement('p');
+  neighborhood.innerHTML = restaurant.neighborhood;
+  li.append(neighborhood);
 
-    const address = document.createElement('p');
-    address.innerHTML = restaurant.address;
-    li.append(address);
+  const address = document.createElement('p');
+  address.innerHTML = restaurant.address;
+  li.append(address);
 
-    const more = document.createElement('a');
-    more.innerHTML = 'View Details';
-    more.href = `/restaurant.html?id=${restaurant.id}`;
-    more.setAttribute('aria-label', 'View details on ' + restaurant.name);
-    li.append(more);
+  const more = document.createElement('a');
+  more.innerHTML = 'View Details';
+  more.href = `/restaurant.html?id=${restaurant.id}`;
+  more.setAttribute('aria-label', 'View details on ' + restaurant.name);
+  li.append(more);
 
-    const favorite = document.createElement('i');
-    favorite.id = 'favorite_' + restaurant.id;
-    favorite.innerHTML = restaurant.isFavorite ? 'favorite' : 'favorite_border';
-    favorite.className = 'material-icons';
-    favorite.onclick = async() => toggleFavorite(restaurant, favorite);
-    li.append(favorite);
+  const favorite = document.createElement('i');
+  favorite.id = 'favorite_' + restaurant.id;
+  favorite.innerHTML = restaurant.isFavorite ? 'favorite' : 'favorite_border';
+  favorite.className = 'material-icons';
+  favorite.onclick = async () => toggleFavorite(restaurant, favorite);
+  li.append(favorite);
 
-    return li;
+  return li;
 };
 
-let toggleFavorite = async(restaurant, element) => {
+let toggleFavorite = async (restaurant, element) => {
   const newFavoriteInd = await self.restaurantService.toggleFavoriteIndicator(restaurant.id);
 
   const snackbar = document.getElementById('snackbar');
@@ -169,14 +168,14 @@ let toggleFavorite = async(restaurant, element) => {
 };
 
 let addMarkersToMap = async (restaurants = self.restaurants) => {
-    for (const restaurant of restaurants) {
-      const marker = await self.mapService.mapMarkerForRestaurant(restaurant);
-      marker.addTo(self.newMap);
-      marker.on('click', () => window.location.href = marker.options.url);
-      self.markers.push(marker);
-    }
+  for (const restaurant of restaurants) {
+    const marker = await self.mapService.mapMarkerForRestaurant(restaurant);
+    marker.addTo(self.newMap);
+    marker.on('click', () => window.location.href = marker.options.url);
+    self.markers.push(marker);
+  }
 };
 
-document.getElementById('neighborhoods-select').onchange = async() => updateRestaurants();
-document.getElementById('cuisines-select').onchange = async() => updateRestaurants();
+document.getElementById('neighborhoods-select').onchange = async () => updateRestaurants();
+document.getElementById('cuisines-select').onchange = async () => updateRestaurants();
 document.getElementById('skip-link').focus();

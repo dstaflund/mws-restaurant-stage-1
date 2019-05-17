@@ -4,7 +4,7 @@ import LatLng from '../model/lat-lng';
 
 export default class LatLngConverter {
 
-  fromIdb(obj){
+  fromIdb(obj) {
     return obj == null
       ? null
       : new LatLng(Converter.toFloat(obj.lat), Converter.toFloat(obj.lng));
@@ -16,7 +16,7 @@ export default class LatLngConverter {
       : new LatLng(Converter.toFloat(obj.lat), Converter.toFloat(obj.lng));
   }
 
-  toIdb(obj){
+  toIdb(obj) {
     return obj == null
       ? null
       : {

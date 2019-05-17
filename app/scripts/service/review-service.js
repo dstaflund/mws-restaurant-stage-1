@@ -1,14 +1,17 @@
 import IdbProxyAgent from '../proxy/idb-proxy-agent';
 import ServerProxyAgent from '../proxy/server-proxy-agent';
+import NetworkMonitor from "../lib/network-monitor";
 
 
 export default class ReviewService {
   _idbProxyAgent;
   _serverProxyAgent;
+  _networkMonitor;
 
-  constructor(){
+  constructor() {
     this._idbProxyAgent = new IdbProxyAgent();
     this._serverProxyAgent = new ServerProxyAgent();
+    this._networkMonitor = new NetworkMonitor();
   }
 
   async fetchReviews() {
@@ -22,7 +25,7 @@ export default class ReviewService {
   }
 
   // TODO
-  allOriginalReviewsInDb(){
+  allOriginalReviewsInDb() {
     return false;
   }
 

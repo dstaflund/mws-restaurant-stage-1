@@ -10,11 +10,11 @@ const REVIEWS_URL = `${DB_STEM}/reviews`;
 export default class ServerProxy {
 
   async fetchRestaurants() {
-      const response = await fetch(RESTAURANTS_URL);
-      if (response.status === 200) {
-        return await response.json();
-      }
-      return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
+    const response = await fetch(RESTAURANTS_URL);
+    if (response.status === 200) {
+      return await response.json();
+    }
+    return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
   }
 
   async fetchRestaurantById(restaurantId) {
@@ -25,15 +25,15 @@ export default class ServerProxy {
     return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
   }
 
-  async updateRestaurantFavoriteStatus(restaurantId, favoriteInd){
-    const response = await fetch(`${RESTAURANTS_URL}/${restaurantId}/?is_favorite=${favoriteInd}`, { method: 'put' });
+  async updateRestaurantFavoriteStatus(restaurantId, favoriteInd) {
+    const response = await fetch(`${RESTAURANTS_URL}/${restaurantId}/?is_favorite=${favoriteInd}`, {method: 'put'});
     if (response.status === 200) {
       return await response.json();
     }
     return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
   }
 
-  async fetchReviews(){
+  async fetchReviews() {
     const response = await fetch(REVIEWS_URL);
     if (response.status === 200) {
       return await response.json();
@@ -41,7 +41,7 @@ export default class ServerProxy {
     return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
   }
 
-  async fetchReviewsByRestaurantId(restaurantId){
+  async fetchReviewsByRestaurantId(restaurantId) {
     const response = await fetch(`${REVIEWS_URL}/?restaurant_id=${restaurantId}`);
     if (response.status === 200) {
       return await response.json();
@@ -49,7 +49,7 @@ export default class ServerProxy {
     return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
   }
 
-  async fetchReviewById(reviewId){
+  async fetchReviewById(reviewId) {
     const response = await fetch(`${REVIEWS_URL}/${reviewId}`);
     if (response.status === 200) {
       return await response.json();
@@ -57,11 +57,11 @@ export default class ServerProxy {
     return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
   }
 
-  async saveReview(review){
+  async saveReview(review) {
     console.log('[server-proxy - saveReview]');
     console.log('[server-proxy - saveReview]  review = ');
     console.log(review);
-    const response = await fetch(REVIEWS_URL, { method: 'post', body: JSON.stringify(review) });
+    const response = await fetch(REVIEWS_URL, {method: 'post', body: JSON.stringify(review)});
     if (response.status === 200 || response.status === 201) {
       const jsonResponse = await response.json();
       console.log('[server-proxy - saveReview]  jsonResponse = ');
@@ -71,16 +71,16 @@ export default class ServerProxy {
     return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
   }
 
-  async updateReview(review){
-    const response = await fetch(`${REVIEWS_URL}/${review.id}`, { method: 'put', body: JSON.stringify(review) });
+  async updateReview(review) {
+    const response = await fetch(`${REVIEWS_URL}/${review.id}`, {method: 'put', body: JSON.stringify(review)});
     if (response.status === 200) {
       return await response.json();
     }
     return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
   }
 
-  async deleteReview(reviewId){
-    const response = await fetch(`${REVIEWS_URL}/${reviewId}`, { method: 'delete' });
+  async deleteReview(reviewId) {
+    const response = await fetch(`${REVIEWS_URL}/${reviewId}`, {method: 'delete'});
     if (response.status === 200) {
       return await response.json();
     }

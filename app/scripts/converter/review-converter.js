@@ -4,7 +4,7 @@ import Review from '../model/review';
 
 export default class ReviewConverter {
 
-  fromIdb(obj){
+  fromIdb(obj) {
     return obj == null
       ? null
       : new Review(
@@ -32,17 +32,17 @@ export default class ReviewConverter {
       );
   }
 
-  toIdb(obj){
+  toIdb(obj) {
     return obj == null
       ? null
       : {
-          comments: obj.comments,
-          id: Converter.toInt(obj.id),
-          name: obj.name,
-          rating: Converter.toInt(obj.rating),
-          restaurantId: Converter.toInt(obj.restaurantId),
-          createdAt: obj.createdAt,
-          updatedAt: obj.updatedAt
-        };
+        comments: obj.comments,
+        id: Converter.toInt(obj.id),
+        name: obj.name,
+        rating: Converter.toInt(obj.rating),
+        restaurantId: Converter.toInt(obj.restaurantId),
+        createdAt: obj.createdAt,
+        updatedAt: obj.updatedAt
+      };
   }
 }

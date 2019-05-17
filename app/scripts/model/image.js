@@ -6,19 +6,19 @@ export default class Image {
   _name;
   _width;
 
-  get density(){
+  get density() {
     return this._density;
   }
 
-  get name(){
+  get name() {
     return this._name;
   }
 
-  get width(){
+  get width() {
     return this._width;
   }
 
-  constructor(density, name, width){
+  constructor(density, name, width) {
     Assert.isNotNull('density', density);
     Assert.isNumeric('density', density);
     Assert.isNotNull('name', name);

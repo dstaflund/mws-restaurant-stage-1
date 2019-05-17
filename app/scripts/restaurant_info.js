@@ -115,7 +115,7 @@ let fillReviewsHTML = async (restaurantId = self.restaurant.id) => {
   const reviews = await self.reviewService.fetchReviewsByRestaurantId(restaurantId);
   const container = document.getElementById('reviews-container');
 
-  if (! reviews) {
+  if (!reviews) {
     const noReviews = document.createElement('p');
     noReviews.innerHTML = 'No reviews yet!';
     container.appendChild(noReviews);
@@ -123,11 +123,11 @@ let fillReviewsHTML = async (restaurantId = self.restaurant.id) => {
   }
 
   const ul = document.getElementById('reviews-list');
-  while(ul.firstChild) {
+  while (ul.firstChild) {
     ul.removeChild(ul.firstChild);
   }
 
-  for(const review of reviews) {
+  for (const review of reviews) {
     ul.appendChild(await createReviewHTML(review))
   }
 
@@ -150,7 +150,7 @@ let createReviewHTML = async (review) => {
   const workingDate = new Date(Math.max(review.createdAt, review.updatedAt));
   const date = document.createElement('div');
   date.className = 'review-date';
-  date.innerHTML = workingDate.toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric'});
+  date.innerHTML = workingDate.toLocaleDateString('en-CA', {year: 'numeric', month: 'long', day: 'numeric'});
   container.appendChild(date);
 
   const rating = document.createElement('div');
@@ -175,15 +175,15 @@ let fillBreadcrumb = async (restaurant = self.restaurant) => {
 };
 
 let getParameterByName = async (name, url) => {
-  url = ! url ? window.location.href : url;
+  url = !url ? window.location.href : url;
   name = name.replace(/[\[\]]/g, '\\$&');
   const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
   const results = regex.exec(url);
 
-  if (! results) {
+  if (!results) {
     return null;
   }
-  if (! results[2]) {
+  if (!results[2]) {
     return null;
   }
   return parseInt(decodeURIComponent(results[2].replace(/\+/g, ' ')), 10);
@@ -216,7 +216,7 @@ let validateReview = () => {
   document.getElementById('save-review-button').disabled = self.validationErrors.length > 0;
 };
 
-let displayToast = async() => {
+let displayToast = async () => {
   const snackbar = document.getElementById('snackbar');
   snackbar.innerHTML = 'Review has been saved';
   snackbar.className = 'show';
@@ -228,7 +228,7 @@ let displayToast = async() => {
   );
 };
 
-let saveReview = async() => {
+let saveReview = async () => {
   await self.reviewService.saveReview(self.customReview);
   await fillReviewsHTML();
   closeReviewForm();
@@ -240,17 +240,17 @@ let closeReviewForm = () => {
   modal.style.display = 'none';
 };
 
-let updateReviewName = async(e) => {
+let updateReviewName = async (e) => {
   self.customReview.name = e.target.value;
   validateReview();
 };
 
-let updateReviewRating = async(e) => {
+let updateReviewRating = async (e) => {
   self.customReview.rating = e.target.value;
   validateReview();
 };
 
-let updateReviewComments = async(e) => {
+let updateReviewComments = async (e) => {
   self.customReview.comments = e.target.value;
   validateReview();
 };
@@ -258,8 +258,8 @@ let updateReviewComments = async(e) => {
 const modal = document.getElementById('review-form');
 document.getElementById('add-review-button').onclick = () => displayReviewForm();
 document.getElementById('close').onclick = () => closeReviewForm();
-document.getElementById('clear-review-button').onclick = async() => initializeCustomReview();
-document.getElementById('save-review-button').onclick = async() => saveReview();
-document.getElementById('review-name').oninput = async(e) => updateReviewName(e);
-document.getElementById('review-rating').onchange = async(e) => updateReviewRating(e);
-document.getElementById('review-comments').oninput = async(e) => updateReviewComments(e);
+document.getElementById('clear-review-button').onclick = async () => initializeCustomReview();
+document.getElementById('save-review-button').onclick = async () => saveReview();
+document.getElementById('review-name').oninput = async (e) => updateReviewName(e);
+document.getElementById('review-rating').onchange = async (e) => updateReviewRating(e);
+document.getElementById('review-comments').oninput = async (e) => updateReviewComments(e);

@@ -9,35 +9,35 @@ export default class OperatingHours {
   _friday;
   _saturday;
 
-  get sunday(){
+  get sunday() {
     return this._sunday;
   }
 
-  get monday(){
+  get monday() {
     return this._monday;
   }
 
-  get tuesday(){
+  get tuesday() {
     return this._tuesday;
   }
 
-  get wednesday(){
+  get wednesday() {
     return this._wednesday;
   }
 
-  get thursday(){
+  get thursday() {
     return this._thursday;
   }
 
-  get friday(){
+  get friday() {
     return this._friday;
   }
 
-  get saturday(){
+  get saturday() {
     return this._saturday;
   }
 
-  constructor(sunday, monday, tuesday, wednesday, thursday, friday, saturday){
+  constructor(sunday, monday, tuesday, wednesday, thursday, friday, saturday) {
     Assert.isNotNull('sunday', sunday);
     Assert.isNotNull('monday', monday);
     Assert.isNotNull('tuesday', tuesday);

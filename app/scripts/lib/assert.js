@@ -1,6 +1,6 @@
 export default class Assert {
 
-  static isNotNull(name, val, nullable = false){
+  static isNotNull(name, val, nullable = false) {
     if (val == null && nullable) {
       return;
     }
@@ -9,7 +9,7 @@ export default class Assert {
     }
   }
 
-  static isNumeric(name, val, nullable = false){
+  static isNumeric(name, val, nullable = false) {
     if (val == null && nullable) {
       return;
     }
@@ -18,11 +18,11 @@ export default class Assert {
     }
   }
 
-  static isArray(name, val, nullable = false){
+  static isArray(name, val, nullable = false) {
     if (val == null && nullable) {
       return;
     }
-    if (! Array.isArray(val)){
+    if (!Array.isArray(val)) {
       throw new Error(`${name} is not an array`);
     }
   }
@@ -43,7 +43,7 @@ export default class Assert {
     }
   }
 
-  static isDate(name, val, nullable = false){
+  static isDate(name, val, nullable = false) {
     if (val == null && nullable) {
       return;
     }
@@ -51,25 +51,24 @@ export default class Assert {
       return true;
     }
     try {
-      if (! isNaN(val) && Object.prototype.toString.call(new Date(val)) === "[object Date]") {
+      if (!isNaN(val) && Object.prototype.toString.call(new Date(val)) === "[object Date]") {
         return true;
       }
       if (Object.prototype.toString.call(new Date(val)) === "[object Date]") {
         return true;
       }
-    }
-    catch(error){
+    } catch (error) {
       throw new Error(`${name} is not a date`);
     }
 
     throw new Error(`${name} is not a date`);
   }
 
-  static isObject(name, val, nullable = false){
+  static isObject(name, val, nullable = false) {
     if (val == null && nullable) {
       return;
     }
-    if ('object' !== typeof val){
+    if ('object' !== typeof val) {
       throw new Error(`${name} is not an object`);
     }
   }

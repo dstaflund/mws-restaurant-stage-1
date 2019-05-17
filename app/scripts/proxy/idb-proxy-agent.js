@@ -10,7 +10,7 @@ export default class IdbProxyAgent {
   _restaurantConverter;
   _reviewConverter;
 
-  constructor(){
+  constructor() {
     this._idbProxy = new IdbProxy();
     this._imageDetailConverter = new ImageDetailConverter();
     this._restaurantConverter = new RestaurantConverter();
@@ -60,11 +60,11 @@ export default class IdbProxyAgent {
     await this._idbProxy.saveRestaurant(this._restaurantConverter.toIdb(restaurant));
   }
 
-  async updateRestaurant(restaurant){
+  async updateRestaurant(restaurant) {
     await this._idbProxy.updateRestaurant(this._restaurantConverter.toIdb(restaurant));
   }
 
-  async getImageDetails(photograph){
+  async getImageDetails(photograph) {
     const imageDetails = await this._idbProxy.getImageDetails(photograph);
     return this._imageDetailConverter.fromIdb(imageDetails);
   }
@@ -77,32 +77,32 @@ export default class IdbProxyAgent {
     return await this._idbProxy.getCuisines();
   }
 
-  async getReviews(){
+  async getReviews() {
     const reviews = await this._idbProxy.getReviews();
     return reviews == null
       ? null
       : reviews.map(review => this._reviewConverter.fromIdb(review));
   }
 
-  async getReviewById(reviewId){
+  async getReviewById(reviewId) {
     const review = await this._idbProxy.getReviewById(reviewId);
     return this._reviewConverter.fromIdb(review);
   }
 
-  async getReviewsByRestaurantId(restaurantId){
+  async getReviewsByRestaurantId(restaurantId) {
     const reviews = await this._idbProxy.getReviewsByRestaurantId(restaurantId);
     return reviews == null
       ? null
       : reviews.map(review => this._reviewConverter.fromIdb(review));
   }
 
-  async saveReviews(reviews, cachedReviews){
+  async saveReviews(reviews, cachedReviews) {
     const cachedReviewIds = cachedReviews.map(review => review.id);
     const convertedReviews = reviews.map(review => this._reviewConverter.toIdb(review));
     await this._idbProxy.saveReviews(convertedReviews, cachedReviewIds);
   }
 
-  async saveReview(review){
+  async saveReview(review) {
     console.log('[idb-proxy-agent - saveReview]');
     console.log('[idb-proxy-agent - saveReview]  review = ');
     console.log(review);
@@ -115,12 +115,12 @@ export default class IdbProxyAgent {
     return response
   }
 
-  async updateReview(review){
+  async updateReview(review) {
     const convertedReview = this._reviewConverter.toIdb(review);
     await this._idbProxy.updateReview(convertedReview);
   }
 
-  async deleteReview(reviewId){
+  async deleteReview(reviewId) {
     await this._idbProxy.deleteReview(reviewId);
   }
 

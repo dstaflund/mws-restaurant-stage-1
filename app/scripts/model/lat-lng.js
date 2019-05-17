@@ -5,15 +5,15 @@ export default class LatLng {
   _lat;
   _lng;
 
-  get lat(){
+  get lat() {
     return this._lat;
   }
 
-  get lng(){
+  get lng() {
     return this._lng;
   }
 
-  constructor(lat, lng){
+  constructor(lat, lng) {
     Assert.isNotNull('lat', lat);
     Assert.isNumeric('lat', lat);
     Assert.isNotNull('lng', lng);

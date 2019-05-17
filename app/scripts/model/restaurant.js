@@ -1,7 +1,6 @@
 import Assert from '../lib/assert';
 import Converter from '../lib/converter';
-import LatLng from './lat-lng';
-import OperatingHours from './operating-hours';
+
 
 export default class Restaurant {
   _address;
@@ -17,64 +16,64 @@ export default class Restaurant {
   _photograph;
   _updatedAt;
 
-  get address(){
+  get address() {
     return this._address;
   }
 
-  get createdAt(){
+  get createdAt() {
     return this._createdAt;
   }
 
-  get cuisineType(){
+  get cuisineType() {
     return this._cuisineType;
   }
 
-  get id(){
+  get id() {
     return this._id;
   }
 
-  get photographs(){
+  get photographs() {
     return this._photographs;
   }
 
-  set photographs(photographs){
+  set photographs(photographs) {
     this._photographs = photographs;
   }
 
-  get isFavorite(){
+  get isFavorite() {
     return this._isFavorite;
   }
 
-  set isFavorite(isFavorite){
+  set isFavorite(isFavorite) {
     this._isFavorite = isFavorite;
   }
 
-  get latLng(){
+  get latLng() {
     return this._latLng;
   }
 
-  get name(){
+  get name() {
     return this._name;
   }
 
-  get neighborhood(){
+  get neighborhood() {
     return this._neighborhood;
   }
 
-  get operatingHours(){
+  get operatingHours() {
     return this._operatingHours;
   }
 
-  get photograph(){
+  get photograph() {
     return this._photograph;
   }
 
-  get updatedAt(){
+  get updatedAt() {
     return this._updatedAt;
   }
 
   constructor(address, createdAt, cuisineType, id, isFavorite, latLng, name,
-              neighborhood, operatingHours, photograph, updatedAt){
+              neighborhood, operatingHours, photograph, updatedAt) {
     Assert.isNumeric('id', id);
     Assert.isBoolean('isFavorite', isFavorite, true);
     Assert.isNumeric('photograph', photograph, true);

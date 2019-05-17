@@ -10,7 +10,7 @@ export default class ServerProxyAgent {
   _reviewConverter;
   _serverProxy;
 
-  constructor(){
+  constructor() {
     this._newReviewConverter = new NewReviewConverter();
     this._restaurantConverter = new RestaurantConverter();
     this._reviewConverter = new ReviewConverter();
@@ -20,8 +20,8 @@ export default class ServerProxyAgent {
   async fetchRestaurants() {
     const restaurants = await this._serverProxy.fetchRestaurants();
     return restaurants == null
-        ? null
-        : restaurants.map(restaurant => this._restaurantConverter.fromServer(restaurant));
+      ? null
+      : restaurants.map(restaurant => this._restaurantConverter.fromServer(restaurant));
   }
 
   async fetchRestaurantById(restaurantId) {
@@ -29,30 +29,30 @@ export default class ServerProxyAgent {
     return this._restaurantConverter.fromServer(restaurant);
   }
 
-  async updateRestaurantFavoriteStatus(restaurantId, favoriteInd){
+  async updateRestaurantFavoriteStatus(restaurantId, favoriteInd) {
     await this._serverProxy.updateRestaurantFavoriteStatus(restaurantId, favoriteInd);
   }
 
-  async fetchReviews(){
+  async fetchReviews() {
     const reviews = await this._serverProxy.fetchReviews();
     return reviews == null
-        ? null
-        : reviews.map(review => this._reviewConverter.fromServer(review));
+      ? null
+      : reviews.map(review => this._reviewConverter.fromServer(review));
   }
 
-  async fetchReviewsByRestaurantId(restaurantId){
+  async fetchReviewsByRestaurantId(restaurantId) {
     const reviews = await this._serverProxy.fetchReviewsByRestaurantId(restaurantId);
     return reviews == null
-        ? null
-        : reviews.map(review => this._reviewConverter.fromServer(review));
+      ? null
+      : reviews.map(review => this._reviewConverter.fromServer(review));
   }
 
-  async fetchReviewById(reviewId){
+  async fetchReviewById(reviewId) {
     const review = await this._serverProxy.fetchReviewById(reviewId);
     return this._reviewConverter.fromServer(review);
   }
 
-  async saveReview(review){
+  async saveReview(review) {
     console.log('[server-agent-proxy - saveReview]');
     console.log('[server-agent-proxy - saveReview] review =');
     console.log(review);
@@ -68,12 +68,12 @@ export default class ServerProxyAgent {
     return response;
   }
 
-  async updateReview(review){
+  async updateReview(review) {
     const convertedReview = await this._reviewConverter.toServer(review);
     await this._serverProxy.updateReview(convertedReview);
   }
 
-  async deleteReview(reviewId){
+  async deleteReview(reviewId) {
     await this._serverProxy.deleteReview(reviewId);
   }
 }

@@ -6,11 +6,11 @@ import ImageDetail from "../model/image-detail";
 export default class ImageDetailConverter {
   _imageConverter;
 
-  constructor(){
+  constructor() {
     this._imageConverter = new ImageConverter();
   }
 
-  fromIdb(obj){
+  fromIdb(obj) {
     return obj == null
       ? null
       : new ImageDetail(

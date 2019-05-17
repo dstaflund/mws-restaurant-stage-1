@@ -1,25 +1,25 @@
 import Assert from '../lib/assert';
 import Converter from '../lib/converter';
-import Image from './image';
+
 
 export default class ImageDetail {
   _photograph;
   _description;
   _images;
 
-  get photograph(){
+  get photograph() {
     return this._photograph;
   }
 
-  get description(){
+  get description() {
     return this._description;
   }
 
-  get images(){
+  get images() {
     return this._images;
   }
 
-  constructor(photograph, description, images){
+  constructor(photograph, description, images) {
     Assert.isNotNull('photograph', photograph);
     Assert.isNumeric('photograph', photograph);
     Assert.isNotNull('description', description);
