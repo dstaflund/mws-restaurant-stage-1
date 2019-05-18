@@ -75,7 +75,7 @@ let updateRestaurants = async () => {
   await resetRestaurants(foundRestaurants);
   await fillRestaurantsHTML();
 
-  lmSelect.innerHTML = await self.restaurantService.getLiveMessage(neighborhood, cuisine, !foundRestaurants ? 0 : foundRestaurants.length);
+  lmSelect.innerHTML = await getLiveMessage(neighborhood, cuisine, !foundRestaurants ? 0 : foundRestaurants.length);
   lmSelect.className = foundRestaurants.length ? 'offscreen' : 'visible';
 };
 
@@ -175,6 +175,29 @@ let addMarkersToMap = async (restaurants = self.restaurants) => {
     self.markers.push(marker);
   }
 };
+
+let getLiveMessage = async (neighborhood, cuisine, resultCount) => {
+  let msg;
+
+  switch (resultCount) {
+    case 0:
+      msg = 'No restaurants found ';
+      break;
+
+    case 1:
+      msg = '1 restaurant found ';
+      break;
+
+    default:
+      msg = resultCount + ' restaurants found ';
+  }
+
+  msg += cuisine === 'all' ? '' : cuisine === 'Pizza' ? 'serving pizza ' : 'serving ' + cuisine + ' cuisine ';
+  msg += neighborhood === 'all' ? '' : 'in ' + neighborhood;
+
+  return msg;
+};
+
 
 document.getElementById('neighborhoods-select').onchange = async () => updateRestaurants();
 document.getElementById('cuisines-select').onchange = async () => updateRestaurants();

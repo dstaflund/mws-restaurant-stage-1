@@ -50,16 +50,8 @@ export default class ReviewService {
   }
 
   async saveReview(review) {
-    console.log('[review-server - saveReview]');
-    console.log('[review-server - saveReview]  review = ');
-    console.log(review);
     const createdReview = await this._serverProxyAgent.saveReview(review);
-    console.log('[review-server - saveReview]  createdReview = ');
-    console.log(createdReview);
-    const response = await this._idbProxyAgent.saveReview(createdReview);
-    console.log('[review-server - saveReview]  response = ');
-    console.log(response);
-    return response;
+    return await this._idbProxyAgent.saveReview(createdReview);
   }
 
   async updateReview(review) {

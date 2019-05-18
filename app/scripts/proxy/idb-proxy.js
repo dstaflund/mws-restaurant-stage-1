@@ -306,9 +306,6 @@ export default class IdbProxy {
   }
 
   async saveReview(review) {
-    console.log('[idb-proxy - saveReview]');
-    console.log('[idb-proxy - saveReview]  review =');
-    console.log(review);
     const db = await this.openDatabase();
     await db
       .transaction(revStore, "readwrite")

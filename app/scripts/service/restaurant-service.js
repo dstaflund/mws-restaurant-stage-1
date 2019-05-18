@@ -110,26 +110,4 @@ export default class RestaurantService {
     await this._serverProxyAgent.updateRestaurantFavoriteStatus(restaurant.id, restaurant.isFavorite);
     return restaurant.isFavorite;
   }
-
-  async getLiveMessage(neighborhood, cuisine, resultCount) {
-    let msg;
-
-    switch (resultCount) {
-      case 0:
-        msg = 'No restaurants found ';
-        break;
-
-      case 1:
-        msg = '1 restaurant found ';
-        break;
-
-      default:
-        msg = resultCount + ' restaurants found ';
-    }
-
-    msg += cuisine === 'all' ? '' : cuisine === 'Pizza' ? 'serving pizza ' : 'serving ' + cuisine + ' cuisine ';
-    msg += neighborhood === 'all' ? '' : 'in ' + neighborhood;
-
-    return msg;
-  }
 }

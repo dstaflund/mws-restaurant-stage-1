@@ -23,16 +23,17 @@ export default class ReviewConverter {
       ? null
       : new Review(
         obj.comments,
-        obj.createdAt,
+        Converter.toDate(obj.createdAt),
         Converter.toInt(obj.id),
         obj.name,
         Converter.toInt(obj.rating),
         Converter.toInt(obj.restaurant_id),
-        obj.updatedAt
+        Converter.toDate(obj.updatedAt)
       );
   }
 
   toIdb(obj) {
+    console.log(obj);
     return obj == null
       ? null
       : {
