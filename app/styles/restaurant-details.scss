@@ -214,3 +214,115 @@ caption {
   line-height: 1.5em;
   font-size: 1.5em;
 }
+
+
+/**
+ * Stylize the review input form
+ */
+
+
+/*
+ * Stylize the input form.
+ * This code is an adaptation of https://www.w3schools.com/howto/howto_css_modals.asp
+ */
+
+/* The Modal (background) */
+.modal {
+  display: none;                     /* Hidden by default */
+  position: fixed;                   /* Stay in place */
+  z-index: 20;                       /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%;                       /* Full width */
+  height: 100%;                      /* Full height */
+  overflow: auto;                    /* Enable scroll if needed */
+  background-color: rgb(0,0,0);      /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 20% auto;                  /* 15% from the top and centered */
+  padding: 0;
+  border: 1px solid #888;
+  width: 80%;                        /* Could be more or less, depending on screen size */
+}
+
+.modal-header {
+  background-color: #252831;
+  padding: 20px;
+  color: #fff;
+  font-size: x-large;
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-body {
+  margin: 20px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+input,
+textarea{
+  width: 100%;
+}
+
+.modal-footer {
+  background-color: #444;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button {
+  margin: 0 10px;
+}
+
+button {
+  background: #8A4700;
+  color: #fff;
+  display: inline-block;
+  font-size: 1em;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  border-radius: 3px;
+  white-space: nowrap;
+
+  /* Following two lines adapted from https://codepen.io/sdthornton/pen/wBZdXq */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+}
+
+button:hover,
+button:focus {
+  outline: 0;
+
+  /* Following line adapted from https://codepen.io/sdthornton/pen/wBZdXq */
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  -webkit-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  -moz-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}

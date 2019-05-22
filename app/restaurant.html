@@ -57,24 +57,32 @@
       Copyright (c) 2017 <strong>Restaurant Reviews</strong> All Rights Reserved.
     </footer>
     <div id="review-form" class="modal">
-      <div class="modal-content">
-        <span id="close" class="close">&times;</span>
-        <div class="form-title">Enter your review below:</div>
-        <div class="form-input-name">
-          <label for="review-name">Name</label>
-          <input id="review-name" type="text" minlength="2" maxlength="20">
+      <form>
+        <div class="modal-content">
+          <div class="modal-header">
+            <span id="close" class="close">&times;</span>
+            <div class="form-title">Enter Review</div>
+          </div>
+          <div class="modal-body">
+            <div class="form-input-name">
+              <label for="review-name">Name</label>
+              <input id="review-name" type="text" minlength="2" maxlength="20" placeholder="Between 2 and 20 characters" required>
+            </div>
+            <div class="form-input-rating">
+              <label for="review-rating">Rating</label>
+              <input id="review-rating" type="number" min="0" max="5" placeholder="Between 0 (worst) and 5 (best)" required>
+            </div>
+            <div class="form-input-review">
+              <label for="review-comments">Comments</label>
+              <textarea id="review-comments" rows="8" cols="30" minlength="10" maxlength="1000" placeholder="Between 10 and 1000 characters" required></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="clear-review-button" type="reset" class="clear">Clear Form</button>
+            <button id="save-review-button" type="submit" class="save">Submit Review</button>
+          </div>
         </div>
-        <div class="form-input-rating">
-          <label for="review-rating">Rating</label>
-          <input id="review-rating" type="number" min="0" max="5">
-        </div>
-        <div class="form-input-review">
-          <label for="review-comments">Comments</label>
-          <textarea id="review-comments" rows="4" cols="40" minlength="10" maxlength="1000"></textarea>
-        </div>
-        <button id="clear-review-button" class="clear">Clear</button>
-        <button id="save-review-button" class="save">Save</button>
-      </div>
+      </form>
     </div>
     <div id="snackbar">Your review has been saved</div>
     <script
