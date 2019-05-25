@@ -15,6 +15,13 @@ caption {
   height: 0;
 }
 
+@media screen and (max-width: 716px) {
+
+  .reviews-list li {
+    width: calc(100% - 20px);
+  }
+}
+
 @media screen and (min-width: 717px) {
 
   .map-container {
@@ -47,6 +54,7 @@ caption {
 
   .reviews-list li {
     width: calc((100% - 60px) / 3);
+    max-width: 750px !important;
   }
 }
 
@@ -216,14 +224,14 @@ caption {
 }
 
 
-/**
- * Stylize the review input form
- */
-
-
 /*
  * Stylize the input form.
+ *
+ *
  * This code is an adaptation of https://www.w3schools.com/howto/howto_css_modals.asp
+ * Vertical centering made possible by https://github.com/react-bootstrap/react-bootstrap/issues/995#issuecomment-122005744
+ * Resolution of Chrome top input border disappearing issue resolved with help of https://stackoverflow.com/questions/42151075/input-top-border-disappears-in-windows-chrome/42151434
+ * Shadowing made possible by https://codepen.io/sdthornton/pen/wBZdXq
  */
 
 /* The Modal (background) */
@@ -238,15 +246,22 @@ caption {
   overflow: auto;                    /* Enable scroll if needed */
   background-color: rgb(0,0,0);      /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  transform-style: preserve-3d;
 }
 
 /* Modal Content/Box */
 .modal-content {
   background-color: #fefefe;
-  margin: 20% auto;                  /* 15% from the top and centered */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) perspective(1px) !important;
   padding: 0;
   border: 1px solid #888;
-  width: 80%;                        /* Could be more or less, depending on screen size */
+  width: 80%;
+  max-width: 500px;
 }
 
 .modal-header {
@@ -272,7 +287,7 @@ caption {
 }
 
 .modal-body {
-  margin: 20px;
+  margin: 25px;
 }
 
 label {
@@ -284,6 +299,7 @@ label {
 input,
 textarea{
   width: 100%;
+  resize: none;
 }
 
 .modal-footer {
@@ -309,8 +325,6 @@ button {
   text-transform: uppercase;
   border-radius: 3px;
   white-space: nowrap;
-
-  /* Following two lines adapted from https://codepen.io/sdthornton/pen/wBZdXq */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -320,8 +334,6 @@ button {
 button:hover,
 button:focus {
   outline: 0;
-
-  /* Following line adapted from https://codepen.io/sdthornton/pen/wBZdXq */
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   -webkit-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   -moz-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
