@@ -130,10 +130,10 @@ let createRestaurantHTML = async (restaurant) => {
   more.setAttribute('aria-label', 'View details on ' + restaurant.name);
   li.append(more);
 
-  const favorite = document.createElement('i');
+  const favorite = document.createElement('img');
   favorite.id = 'favorite_' + restaurant.id;
-  favorite.innerHTML = restaurant.isFavorite ? 'favorite' : 'favorite_border';
-  favorite.className = 'material-icons';
+  favorite.src = 'images/icons/baseline-favorite' + (restaurant.isFavorite ? '' : '_border') + '-24px.svg';
+  favorite.alt = 'Favorite toggle (Currently ' + (restaurant.isFavorite ? 'true' : 'false') + ')';
   favorite.onclick = async () => toggleFavorite(restaurant, favorite);
   li.append(favorite);
 
@@ -148,14 +148,14 @@ let toggleFavorite = async (restaurant, element) => {
 
   switch (newFavoriteInd) {
     case true:
-      element.innerHTML = 'favorite';
-      element.alt = 'Favorite toggle (Currently true)'
+      element.src = 'images/icons/baseline-favorite-24px.svg';
+      element.alt = 'Favorite toggle (Currently true)';
       snackbar.innerHTML = restaurant.name + ' is a favorite restaurant';
       break;
 
     case false:
-      element.innerHTML = 'favorite_border';
-      element.alt = 'Favorite toggle (Currently false)'
+      element.src = 'images/icons/baseline-favorite_border-24px.svg';
+      element.alt = 'Favorite toggle (Currently false)';
       snackbar.innerHTML = restaurant.name + ' is not a favorite restaurant';
       break;
   }
