@@ -287,12 +287,31 @@ caption {
 }
 
 .modal-body {
-  margin: 25px;
+  margin: 20px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.form-input-name {
+  width: calc(50% - 10px);
+  padding-right: 10px;
+}
+
+.form-input-rating {
+  width: calc(50% - 10px);
+  padding-left: 10px;
+}
+
+.form-input-review {
+  width: 100%;
 }
 
 label {
   display: block;
   font-weight: bold;
+}
+
+#review-comments-label {
   margin-top: 20px;
 }
 
@@ -337,6 +356,21 @@ button:focus {
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   -webkit-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   -moz-box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+@media screen and (max-height: 384px) {
+
+  .modal-header {
+    padding: 10px;
+  }
+
+  .modal-body {
+    margin: 10px;
+  }
+
+  .modal-footer {
+    padding: 10px;
+  }
 }
 
 
