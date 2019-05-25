@@ -204,6 +204,7 @@ let initializeCustomReview = () => {
 };
 
 let displayReviewForm = () => {
+  document.getElementById('add-review-button').style.display = 'none';
   initializeCustomReview();
   validateReview();
   modal.style.display = 'block';
@@ -238,6 +239,7 @@ let saveReview = async () => {
 let closeReviewForm = () => {
   self.customReview = null;
   modal.style.display = 'none';
+  document.getElementById('add-review-button').style.display = 'block';
 };
 
 let updateReviewName = async (e) => {
