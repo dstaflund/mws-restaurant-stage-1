@@ -33,7 +33,6 @@ export default class ReviewConverter {
   }
 
   toIdb(obj) {
-    console.log(obj);
     return obj == null
       ? null
       : {

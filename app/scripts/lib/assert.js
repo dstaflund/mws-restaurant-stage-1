@@ -37,8 +37,6 @@ export default class Assert {
       }
     }
     if ('boolean' !== typeof val) {
-      console.log(val);
-      console.log(typeof val);
       throw new Error(`${name} is not boolean`);
     }
   }

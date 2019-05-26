@@ -58,15 +58,9 @@ export default class ServerProxy {
   }
 
   async saveReview(review) {
-    console.log('[server-proxy - saveReview]');
-    console.log('[server-proxy - saveReview]  review = ');
-    console.log(review);
     const response = await fetch(REVIEWS_URL, {method: 'post', body: JSON.stringify(review)});
     if (response.status === 200 || response.status === 201) {
-      const jsonResponse = await response.json();
-      console.log('[server-proxy - saveReview]  jsonResponse = ');
-      console.log(jsonResponse);
-      return jsonResponse;
+      return await response.json();
     }
     return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
   }

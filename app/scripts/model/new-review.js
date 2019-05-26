@@ -43,17 +43,19 @@ export default class NewReview {
     this._comments = comments;
   }
 
-  validate() {
-    const errors = [];
-    if (!this._name || this._name.length < 2 || this._name.length > 20) {
-      errors.push('A name between 2 and 20 characters is required');
-    }
-    if (this._rating == null || this._rating < 0 || this._rating > 5) {
-      errors.push('A rating between 0 and 5 is required');
-    }
-    if (!this._comments || this._comments.length < 10 || this._comments.length > 1000) {
-      errors.push('Comments between 10 and 1000 characters is required');
-    }
-    return errors;
+  isNameValid(){
+    return this._name != null && this._name.length >= 2 && this._name.length <= 20;
+  }
+
+  isRatingValid(){
+    return this._rating != null && this._rating >= 0 && this._rating <= 5;
+  }
+
+  isCommentsValid(){
+    return this._comments != null && this._comments.length >= 10 && this._comments.length <= 1000;
+  }
+
+  isValid() {
+    return this.isNameValid() && this.isRatingValid() && this.isCommentsValid();
   }
 }

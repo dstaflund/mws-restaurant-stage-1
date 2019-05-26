@@ -16,7 +16,6 @@ let mapService;
 let reviewService;
 
 let customReview;
-let validationErrors = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
   self.restaurantService = new RestaurantService();
@@ -195,26 +194,39 @@ let getParameterByName = async (name, url) => {
  * It is an adaptation of https://www.w3schools.com/howto/howto_css_modals.asp
  */
 let initializeCustomReview = () => {
-  console.log('[initializeCustomReview]');
   document.getElementById('review-name').value = null;
   document.getElementById('review-rating').value = null;
   document.getElementById('review-comments').value = null;
   self.customReview = new NewReview(self.restaurant.id, null, null, null);
-  self.validationErrors = [];
 };
 
 let displayReviewForm = () => {
   document.getElementById('add-review-button').style.display = 'none';
   initializeCustomReview();
   validateReview();
-  modal.style.display = 'block';
+  document.getElementById('review-form').style.display = 'block';
 };
 
 let validateReview = () => {
-  console.log('[validate-review]');
-  self.validationErrors = self.customReview.validate();
-  console.log(self.validationErrors);
-  document.getElementById('save-review-button').disabled = self.validationErrors.length > 0;
+  if (self.customReview.name != null && ! self.customReview.isNameValid()){
+    document.getElementById('review-name').classList.add('bad-input');
+  } else {
+    document.getElementById('review-name').classList.remove('bad-input');
+  }
+
+  if (self.customReview.rating != null && ! self.customReview.isRatingValid()){
+    document.getElementById('review-rating').classList.add('bad-input');
+  } else {
+    document.getElementById('review-rating').classList.remove('bad-input');
+  }
+
+  if (self.customReview.comments != null && ! self.customReview.isCommentsValid()){
+    document.getElementById('review-comments').classList.add('bad-input');
+  } else {
+    document.getElementById('review-comments').classList.remove('bad-input');
+  }
+
+  document.getElementById('save-review-button').disabled = ! self.customReview.isValid();
 };
 
 let displayToast = async () => {
@@ -238,7 +250,7 @@ let saveReview = async () => {
 
 let closeReviewForm = () => {
   self.customReview = null;
-  modal.style.display = 'none';
+  document.getElementById('review-form').style.display = 'none';
   document.getElementById('add-review-button').style.display = 'block';
 };
 
@@ -257,7 +269,6 @@ let updateReviewComments = async (e) => {
   validateReview();
 };
 
-const modal = document.getElementById('review-form');
 document.getElementById('add-review-button').onclick = () => displayReviewForm();
 document.getElementById('close').onclick = () => closeReviewForm();
 document.getElementById('clear-review-button').onclick = async () => initializeCustomReview();
