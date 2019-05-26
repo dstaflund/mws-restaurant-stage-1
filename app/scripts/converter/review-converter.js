@@ -32,6 +32,20 @@ export default class ReviewConverter {
       );
   }
 
+  fromNewReview(obj){
+    return obj == null
+      ? null
+      : new Review(
+        obj.comments,
+        new Date(),
+        null,
+        obj.name,
+        Converter.toInt(obj.rating),
+        Converter.toInt(obj.restaurantId),
+        new Date()
+      );
+  }
+
   toIdb(obj) {
     return obj == null
       ? null

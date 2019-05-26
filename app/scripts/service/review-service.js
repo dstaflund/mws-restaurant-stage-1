@@ -1,6 +1,7 @@
 import IdbProxyAgent from '../proxy/idb-proxy-agent';
 import ServerProxyAgent from '../proxy/server-proxy-agent';
 import NetworkMonitor from "../lib/network-monitor";
+import SyncReview from "../model/sync-review";
 
 
 export default class ReviewService {
@@ -15,6 +16,7 @@ export default class ReviewService {
   }
 
   async fetchReviews() {
+    // TODO:  Get synched reviews
     const cachedReviews = await this._idbProxyAgent.getReviews();
     if (cachedReviews && cachedReviews.length >= 30) {
       return cachedReviews;
@@ -45,7 +47,12 @@ export default class ReviewService {
   }
 
   async saveReview(review) {
-    const createdReview = await this._serverProxyAgent.saveReview(review);
-    return await this._idbProxyAgent.saveReview(createdReview);
+    if (! this._networkMonitor.isOnline()) {
+      const syncReview = new SyncReview(review);
+      return await this._idbProxyAgent.saveSyncReview(syncReview);
+    } else {
+      const createdReview = await this._serverProxyAgent.saveReview(review);
+      return await this._idbProxyAgent.saveReview(createdReview);
+    }
   }
 }

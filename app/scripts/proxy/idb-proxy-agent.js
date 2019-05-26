@@ -2,6 +2,8 @@ import IdbProxy from './idb-proxy';
 import ImageDetailConverter from '../converter/image-detail-converter';
 import RestaurantConverter from '../converter/restaurant-converter';
 import ReviewConverter from '../converter/review-converter';
+import SyncFavoriteConverter from "../converter/sync-favorite-converter";
+import SyncReviewConverter from "../converter/sync-review-converter";
 
 
 export default class IdbProxyAgent {
@@ -9,12 +11,16 @@ export default class IdbProxyAgent {
   _imageDetailConverter;
   _restaurantConverter;
   _reviewConverter;
+  _syncFavoriteConverter;
+  _syncReviewConverter;
 
   constructor() {
     this._idbProxy = new IdbProxy();
     this._imageDetailConverter = new ImageDetailConverter();
     this._restaurantConverter = new RestaurantConverter();
     this._reviewConverter = new ReviewConverter();
+    this._syncFavoriteConverter = new SyncFavoriteConverter();
+    this._syncReviewConverter = new SyncReviewConverter();
   }
 
   async getRestaurants() {
@@ -105,5 +111,36 @@ export default class IdbProxyAgent {
   async saveReview(review) {
     const convertedReview = this._reviewConverter.toIdb(review);
     return await this._idbProxy.saveReview(convertedReview);
+  }
+
+  async getSyncFavorites(){
+    const syncFavorites = await this._idbProxy.getSyncFavorites();
+    return syncFavorites == null
+      ? null
+      : syncFavorites.map(syncFavorite => this._syncFavoriteConverter.fromIdb(syncFavorite));
+  }
+
+  async saveSyncFavorite(syncFavorite){
+    await this._idbProxy.saveSyncFavorite(this._syncFavoriteConverter.toIdb(syncFavorite));
+  }
+
+  async deleteSyncFavorite(syncFavorite){
+    await this._idbProxy.deleteSyncFavorite(syncFavorite.restaurantId);
+  }
+
+  async getSyncReviews(){
+    const syncReviews = await this._idbProxy.getSyncReviews();
+    return syncReviews == null
+      ? null
+      : syncReviews.map(syncReview => this._syncReviewConverter.fromIdb(syncReview));
+  }
+
+  async saveSyncReview(syncReview){
+    await this._idbProxy.saveSyncReview(this._syncReviewConverter.toIdb(syncReview));
+    return this._reviewConverter.fromNewReview(syncReview.newReview);
+  }
+
+  async deleteSyncReview(syncReview){
+    await this._idbProxy.deleteSyncReview(syncReview.hash);
   }
 }

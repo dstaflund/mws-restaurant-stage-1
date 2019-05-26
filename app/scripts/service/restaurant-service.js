@@ -2,6 +2,7 @@ import IdbProxyAgent from '../proxy/idb-proxy-agent';
 import ServerProxyAgent from '../proxy/server-proxy-agent';
 import ImageService from '../service/image-service';
 import NetworkMonitor from "../lib/network-monitor";
+import SyncFavorite from "../model/sync-favorite";
 
 
 export default class RestaurantService {
@@ -107,7 +108,14 @@ export default class RestaurantService {
     const restaurant = await this.fetchRestaurantById(restaurantId);
     restaurant.isFavorite = !restaurant.isFavorite;
     await this.updateRestaurant(restaurant);
-    await this._serverProxyAgent.updateRestaurantFavoriteStatus(restaurant.id, restaurant.isFavorite);
+
+    if (! this._networkMonitor.isOnline()){
+      const syncFavorite = new SyncFavorite(restaurant.id, restaurant.isFavorite);
+      await this._idbProxyAgent.saveSyncFavorite(syncFavorite);
+    } else {
+      await this._serverProxyAgent.updateRestaurantFavoriteStatus(restaurant.id, restaurant.isFavorite);
+    }
+
     return restaurant.isFavorite;
   }
 }

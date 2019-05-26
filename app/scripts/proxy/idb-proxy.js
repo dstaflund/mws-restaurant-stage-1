@@ -6,12 +6,13 @@ const dbVersion = 1;
 const rStore = 'restaurants';
 const idStore = 'image_details';
 const revStore = 'reviews';
+const syncFavoritesStore = 'sync_favorites';
+const syncReviewsStore = 'sync_reviews';
 
 const neighborhoodIndex = 'neighborhood';
 const cuisineIndex = 'cuisineType';
 const neighborhoodCuisineIndex = 'neighborhood_cuisineType';
 const restaurantIdIndex = 'restaurantId';
-
 
 /**
  * I would prefer to fetch this information from the server, but I am told we're not to
@@ -198,6 +199,10 @@ export default class IdbProxy {
         const reviewStore = db.createObjectStore(revStore, {keyPath: "id"});
         reviewStore.createIndex(restaurantIdIndex, "restaurantId", {unique: false});
         upgraded = true;
+
+        // Create the various sync stores
+        db.createObjectStore(syncFavoritesStore, {keyPath: "restaurantId"});
+        db.createObjectStore(syncReviewsStore, {keyPath: "hash"});
       }
     });
 
@@ -312,5 +317,41 @@ export default class IdbProxy {
       .objectStore(revStore)
       .add(review);
     return review;
+  }
+
+  async getSyncFavorites(){
+    const db = await this.openDatabase();
+    return await db.getAll(syncFavoritesStore);
+  }
+
+  async saveSyncFavorite(syncFavorite){
+    const db = await this.openDatabase();
+    await db
+      .transaction(syncFavoritesStore, "readwrite")
+      .objectStore(syncFavoritesStore)
+      .add(syncFavorite);
+  }
+
+  async deleteSyncFavorite(restaurantId){
+    const db = await this.openDatabase();
+    return await db.get(syncFavoritesStore, restaurantId);
+  }
+
+  async getSyncReviews(){
+    const db = await this.openDatabase();
+    return await db.getAll(syncReviewsStore);
+  }
+
+  async saveSyncReview(syncReview){
+    const db = await this.openDatabase();
+    await db
+      .transaction(syncReviewsStore, "readwrite")
+      .objectStore(syncReviewsStore)
+      .add(syncReview);
+  }
+
+  async deleteSyncReview(hash){
+    const db = await this.openDatabase();
+    return await db.get(syncReviewsStore, hash);
   }
 }
