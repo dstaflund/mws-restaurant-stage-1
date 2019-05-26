@@ -313,20 +313,4 @@ export default class IdbProxy {
       .add(review);
     return review;
   }
-
-  async updateReview(review) {
-    const db = await this.openDatabase();
-    await db
-      .transaction(revStore, "readwrite")
-      .objectStore(revStore)
-      .put(review);
-  }
-
-  async deleteReview(reviewId) {
-    const db = await this.openDatabase();
-    await db
-      .transaction(revStore, "readwrite")
-      .objectStore(revStore)
-      .delete(reviewId);
-  }
 }

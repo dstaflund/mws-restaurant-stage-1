@@ -57,13 +57,4 @@ export default class ServerProxyAgent {
     const createdReview = await this._serverProxy.saveReview(convertedReview);
     return await this._reviewConverter.fromServer(createdReview);
   }
-
-  async updateReview(review) {
-    const convertedReview = await this._reviewConverter.toServer(review);
-    await this._serverProxy.updateReview(convertedReview);
-  }
-
-  async deleteReview(reviewId) {
-    await this._serverProxy.deleteReview(reviewId);
-  }
 }

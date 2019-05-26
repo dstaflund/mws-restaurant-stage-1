@@ -16,17 +16,12 @@ export default class ReviewService {
 
   async fetchReviews() {
     const cachedReviews = await this._idbProxyAgent.getReviews();
-    if (cachedReviews && this.allOriginalReviewsInDb()) {
+    if (cachedReviews && cachedReviews.length >= 30) {
       return cachedReviews;
     }
     const reviews = await this._serverProxyAgent.fetchReviews();
     await this._idbProxyAgent.saveReviews(reviews, cachedReviews);
     return reviews;
-  }
-
-  // TODO
-  allOriginalReviewsInDb() {
-    return false;
   }
 
   async fetchReviewsByRestaurantId(restaurantId) {
@@ -52,14 +47,5 @@ export default class ReviewService {
   async saveReview(review) {
     const createdReview = await this._serverProxyAgent.saveReview(review);
     return await this._idbProxyAgent.saveReview(createdReview);
-  }
-
-  async updateReview(review) {
-    await this._serverProxyAgent.updateReview(review);
-  }
-
-
-  async deleteReview(reviewId) {
-    await this._serverProxyAgent.deleteReview(reviewId);
   }
 }

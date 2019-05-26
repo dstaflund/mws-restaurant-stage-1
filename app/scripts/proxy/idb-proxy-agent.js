@@ -106,14 +106,4 @@ export default class IdbProxyAgent {
     const convertedReview = this._reviewConverter.toIdb(review);
     return await this._idbProxy.saveReview(convertedReview);
   }
-
-  async updateReview(review) {
-    const convertedReview = this._reviewConverter.toIdb(review);
-    await this._idbProxy.updateReview(convertedReview);
-  }
-
-  async deleteReview(reviewId) {
-    await this._idbProxy.deleteReview(reviewId);
-  }
-
 }

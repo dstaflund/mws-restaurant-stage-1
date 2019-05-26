@@ -64,20 +64,4 @@ export default class ServerProxy {
     }
     return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
   }
-
-  async updateReview(review) {
-    const response = await fetch(`${REVIEWS_URL}/${review.id}`, {method: 'put', body: JSON.stringify(review)});
-    if (response.status === 200) {
-      return await response.json();
-    }
-    return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
-  }
-
-  async deleteReview(reviewId) {
-    const response = await fetch(`${REVIEWS_URL}/${reviewId}`, {method: 'delete'});
-    if (response.status === 200) {
-      return await response.json();
-    }
-    return new Error(`Request failed. Returned status of ${response.status} and message of ${response.statusText}`);
-  }
 }

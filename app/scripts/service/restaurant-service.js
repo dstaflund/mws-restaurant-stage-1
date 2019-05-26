@@ -19,7 +19,7 @@ export default class RestaurantService {
 
   async fetchRestaurants() {
     const cachedRestaurants = await this._idbProxyAgent.getRestaurants();
-    if (cachedRestaurants && cachedRestaurants.length === 10) {
+    if (cachedRestaurants && cachedRestaurants.length >= 10) {
       await this._imageService.addImageDetails(cachedRestaurants);
       return cachedRestaurants;
     }
@@ -43,7 +43,7 @@ export default class RestaurantService {
 
   async fetchNeighborhoods() {
     let neighborhoods = await this._idbProxyAgent.getNeighborhoods();
-    if (neighborhoods && neighborhoods.length === 3) {
+    if (neighborhoods && neighborhoods.length >= 3) {
       return neighborhoods;
     }
     const restaurants = await this.fetchRestaurants();
@@ -53,7 +53,7 @@ export default class RestaurantService {
 
   async fetchCuisines() {
     let cuisines = await this._idbProxyAgent.getCuisines();
-    if (cuisines && cuisines.length === 4) {
+    if (cuisines && cuisines.length >= 4) {
       return cuisines;
     }
     const restaurants = await this.fetchRestaurants();
@@ -63,7 +63,7 @@ export default class RestaurantService {
 
   async fetchRestaurantsByCuisine(cuisine) {
     let restaurants = await this._idbProxyAgent.getRestaurantsByCuisineType(cuisine);
-    if (restaurants && restaurants.length === 10) {
+    if (restaurants) {
       return restaurants;
     }
     restaurants = await this.fetchRestaurants();
@@ -72,7 +72,7 @@ export default class RestaurantService {
 
   async fetchRestaurantsByNeighborhood(neighborhood) {
     let restaurants = await this._idbProxyAgent.getRestaurantsByNeighborhood(neighborhood);
-    if (restaurants && restaurants.length === 10) {
+    if (restaurants) {
       return restaurants;
     }
     restaurants = await this.fetchRestaurants();
