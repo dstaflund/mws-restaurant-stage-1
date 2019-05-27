@@ -30,6 +30,12 @@ Stage 2.
 5.  Then start the server by running `gulp serve` from its root directory.
 6.  Navigate to `localhost:8000` to view the app.
 
+## Screenshots
+
+![Alt text](/screenshots/restaurant_list.jpg?raw=true "Restaurant List")
+![Alt text](/screenshots/restaurant_reviews.jpg?raw=true "Restaurant Reviews")
+![Alt text](/screenshots/review_dialog.jpg?raw=true "Review Entry Dialog")
+
 
 ## Leaflet.js, Mapbox, et al.
 
