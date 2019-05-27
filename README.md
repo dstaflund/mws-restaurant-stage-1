@@ -2,9 +2,9 @@
 ---
 #### _Three Stage Course Material Project - Restaurant Reviews_
 
-## Project Overview: Stage 1 and 2
+## Project Overview: Stage 1, 2, and 3
 
-This project contains Stages One and Two of Udacity's Mobile Web Specialist Nanodegree.
+This project contains Stages One, Two, and Three of Udacity's Mobile Web Specialist Nanodegree.
 
 Stage One converts a static web website into a design that's responsive on different
 sized displays and accessible for screen reader use.  It uses service workers to
@@ -14,12 +14,15 @@ Stage Two modifies the website delivered in Stage One to pull JSON from a remote
 server and cache this information using the IndexedDB API.  Lighthouse was used leading up
 to submission to achieve Performance, PWA, and Accessibility targets.
 
+Stage Three adds deferred form submission and even tighter Lighthouse Performance benchmarks than
+Stage 2.
+
 ### Getting the app up and running
 
 **Prerequisites**:  _You must have Nodejs installed on your system._
 
-1.  Clone or download the MWS Restaurant Stage 2 server component from
-    https://github.com/dstaflund/mws-restaurant-stage-2
+1.  Clone or download the MWS Restaurant Stage 3 server component from
+    https://github.com/dstaflund/mws-restaurant-stage-3
 2.  Unzip the project and start the server by running `node server` from its root directory.
 3.  Clone or download the MWS Restaurant Stage 1 client component from
     https://github.com/dstaflund/mws-restaurant-stage-1
