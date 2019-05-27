@@ -120,8 +120,19 @@ export default class IdbProxyAgent {
       : syncFavorites.map(syncFavorite => this._syncFavoriteConverter.fromIdb(syncFavorite));
   }
 
+  async getSyncFavorite(restaurantId){
+    const syncFavorite = await this._idbProxy.getSyncFavorite(restaurantId);
+    return this._syncFavoriteConverter.fromIdb(syncFavorite);
+  }
+
   async saveSyncFavorite(syncFavorite){
-    await this._idbProxy.saveSyncFavorite(this._syncFavoriteConverter.toIdb(syncFavorite));
+    const existingFavorite = await this.getSyncFavorite(syncFavorite.restaurantId);
+    if (! existingFavorite) {
+      await this._idbProxy.saveSyncFavorite(this._syncFavoriteConverter.toIdb(syncFavorite));
+    } else {
+      existingFavorite.favoriteInd = syncFavorite.favoriteInd;
+      await this._idbProxy.updateSyncFavorite(this._syncFavoriteConverter.toIdb(existingFavorite));
+    }
   }
 
   async deleteSyncFavorite(syncFavorite){
@@ -133,6 +144,13 @@ export default class IdbProxyAgent {
     return syncReviews == null
       ? null
       : syncReviews.map(syncReview => this._syncReviewConverter.fromIdb(syncReview));
+  }
+
+  async getSyncReviewsAsReviews(){
+    const syncReviews = await this.getSyncReviews();
+    let reviews = [];
+    syncReviews.forEach(syncReview => reviews.push(this._reviewConverter.fromNewReview(syncReview.newReview)));
+    return reviews;
   }
 
   async saveSyncReview(syncReview){

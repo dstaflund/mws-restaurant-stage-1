@@ -1,6 +1,8 @@
 import RestaurantService from './service/restaurant-service';
 import ImageService from './service/image-service';
 import MapService from './service/map-service';
+import ReviewService from "./service/review-service";
+import NetworkMonitor from "./service/network-monitor";
 
 
 let restaurants,
@@ -12,17 +14,39 @@ var markers = [];
 let imageService;
 let mapService;
 let restaurantService;
-
+let reviewService;
+let networkMonitor;
 
 document.addEventListener('DOMContentLoaded', async () => {
-  self.restaurantService = new RestaurantService();
+  self.restaurantService = RestaurantService.getInstance();
+  self.reviewService = ReviewService.getInstance();
   self.imageService = new ImageService();
   self.mapService = new MapService();
+  self.networkMonitor = NetworkMonitor.getInstance();
+
+  self.networkMonitor.registerRestaurantService(self.restaurantService);
+  self.networkMonitor.registerReviewService(self.reviewService);
+  self.networkMonitor.addEventListeners();
+  self.networkMonitor.registerOnlineCallback(onlineCallback);
+  self.networkMonitor.registerOfflineCallback(offlineCallback);
+
+  if (self.networkMonitor.isOnline()) {
+    await self.restaurantService.syncFavorites();
+    await self.reviewService.syncReviews();
+  }
 
   await initMap();
   await fetchNeighborhoods();
   await fetchCuisines();
 });
+
+let onlineCallback = async() => {
+  alert('You are now back online.  Favorites and reviews you created while offline will now be sent to the server.');
+};
+
+let offlineCallback = async() => {
+  alert('You are now offline.  Favorites and reviews you create while offline will be sent to the server once you are back online.');
+};
 
 let fetchNeighborhoods = async () => {
   self.neighborhoods = await self.restaurantService.fetchNeighborhoods();
@@ -132,7 +156,7 @@ let createRestaurantHTML = async (restaurant) => {
 
   const favorite = document.createElement('img');
   favorite.id = 'favorite_' + restaurant.id;
-  favorite.src = 'images/icons/baseline-favorite' + (restaurant.isFavorite ? '' : '_border') + '-24px.svg';
+  favorite.src = 'images/icons/baseline-favorite' + (restaurant.isFavorite ? '-24px.svg' : '_border-24px.svg');
   favorite.alt = 'Favorite toggle (Currently ' + (restaurant.isFavorite ? 'true' : 'false') + ')';
   favorite.onclick = async () => toggleFavorite(restaurant, favorite);
   li.append(favorite);
@@ -197,7 +221,6 @@ let getLiveMessage = async (neighborhood, cuisine, resultCount) => {
 
   return msg;
 };
-
 
 document.getElementById('neighborhoods-select').onchange = async () => updateRestaurants();
 document.getElementById('cuisines-select').onchange = async () => updateRestaurants();

@@ -31,9 +31,11 @@ export default class Converter {
       return val;
     }
 
-    return 'number' === typeof val
-      ? val === 0
-      : 'false' === val.toLowerCase().trim();
+    if ('number' === typeof val) {
+      return val !== 0;
+    }
+
+    return 'true' === val.toLowerCase().trim();
   }
 
   static toDate(val) {

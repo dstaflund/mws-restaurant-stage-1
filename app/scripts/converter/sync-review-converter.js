@@ -1,5 +1,5 @@
 import Converter from "../lib/converter";
-import NewReviewConverter from "../lib/converter";
+import NewReviewConverter from "../converter/new-review-converter";
 import SyncReview from "../model/sync-review";
 
 export default class SyncReviewConverter {
@@ -12,10 +12,7 @@ export default class SyncReviewConverter {
   fromIdb(obj) {
     return obj == null
       ? null
-      : new SyncReview(
-        obj.hash = Converter.toInt(obj.hash),
-        obj.newReview = this._newReviewConverter.fromIdb(obj.newReview)
-      );
+      : new SyncReview(this._newReviewConverter.fromIdb(obj.newReview));
   }
 
   toIdb(obj) {

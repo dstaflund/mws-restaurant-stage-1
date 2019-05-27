@@ -12,6 +12,10 @@ export default class SyncFavorite {
     return this._favoriteInd;
   }
 
+  set favoriteInd(favoriteInd){
+    this._favoriteInd = favoriteInd;
+  }
+
   constructor(restaurantId, favoriteInd){
     Assert.isNotNull('restaurantId', restaurantId);
     Assert.isNumeric('restaurantId', restaurantId);

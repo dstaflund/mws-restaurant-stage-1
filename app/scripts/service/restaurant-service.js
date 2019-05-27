@@ -1,11 +1,20 @@
 import IdbProxyAgent from '../proxy/idb-proxy-agent';
 import ServerProxyAgent from '../proxy/server-proxy-agent';
 import ImageService from '../service/image-service';
-import NetworkMonitor from "../lib/network-monitor";
+import NetworkMonitor from "../service/network-monitor";
 import SyncFavorite from "../model/sync-favorite";
 
 
 export default class RestaurantService {
+  static _instance;
+
+  static getInstance(){
+    if (RestaurantService._instance == null){
+      RestaurantService._instance = new RestaurantService();
+    }
+    return RestaurantService._instance;
+  }
+
   _idbProxyAgent;
   _serverProxyAgent;
   _imageService;
@@ -15,7 +24,7 @@ export default class RestaurantService {
     this._idbProxyAgent = new IdbProxyAgent();
     this._serverProxyAgent = new ServerProxyAgent();
     this._imageService = new ImageService();
-    this._networkMonitor = new NetworkMonitor();
+    this._networkMonitor = NetworkMonitor.getInstance();
   }
 
   async fetchRestaurants() {
@@ -117,5 +126,18 @@ export default class RestaurantService {
     }
 
     return restaurant.isFavorite;
+  }
+
+  async syncFavorites(){
+    const syncFavorites = await this._idbProxyAgent.getSyncFavorites();
+    if (syncFavorites == null) {
+      return;
+    }
+    syncFavorites.forEach(async syncFavorite => {
+      if (this._networkMonitor.isOnline()) {
+        await this._serverProxyAgent.updateRestaurantFavoriteStatus(syncFavorite.restaurantId, syncFavorite.favoriteInd);
+        await this._idbProxyAgent.deleteSyncFavorite(syncFavorite);
+      }
+    });
   }
 }

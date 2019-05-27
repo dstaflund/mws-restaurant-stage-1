@@ -4,6 +4,7 @@ import NewReview from './model/new-review';
 import RestaurantService from './service/restaurant-service';
 import ReviewService from './service/review-service';
 import Review from './model/review';
+import NetworkMonitor from "./service/network-monitor";
 
 
 let restaurant;
@@ -14,16 +15,38 @@ let restaurantService;
 let imageService;
 let mapService;
 let reviewService;
+let networkMonitor;
 
 let customReview;
 
 document.addEventListener('DOMContentLoaded', async () => {
-  self.restaurantService = new RestaurantService();
+  self.restaurantService = RestaurantService.getInstance();
   self.imageService = new ImageService();
   self.mapService = new MapService();
-  self.reviewService = new ReviewService();
+  self.reviewService = ReviewService.getInstance();
+  self.networkMonitor = NetworkMonitor.getInstance();
+
+  self.networkMonitor.registerRestaurantService(self.restaurantService);
+  self.networkMonitor.registerReviewService(self.reviewService);
+  self.networkMonitor.addEventListeners();
+  self.networkMonitor.registerOnlineCallback(onlineCallback);
+  self.networkMonitor.registerOfflineCallback(offlineCallback);
+
+  if (self.networkMonitor.isOnline()) {
+    await self.restaurantService.syncFavorites();
+    await self.reviewService.syncReviews();
+  }
+
   await initMap();
 });
+
+let onlineCallback = async() => {
+  alert('You are now back online.  Favorites and reviews you created while offline will now be sent to the server');
+};
+
+let offlineCallback = async() => {
+  alert('You are now offline.  Favorites and reviews you create while offline will be sent to the server once you are back online.');
+};
 
 let initMap = async () => {
   const restaurant = await fetchRestaurantFromURL();

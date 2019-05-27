@@ -324,6 +324,11 @@ export default class IdbProxy {
     return await db.getAll(syncFavoritesStore);
   }
 
+  async getSyncFavorite(restaurantId){
+    const db = await this.openDatabase();
+    return await db.get(syncFavoritesStore, restaurantId);
+  }
+
   async saveSyncFavorite(syncFavorite){
     const db = await this.openDatabase();
     await db
@@ -332,9 +337,17 @@ export default class IdbProxy {
       .add(syncFavorite);
   }
 
+  async updateSyncFavorite(syncFavorite){
+    const db = await this.openDatabase();
+    await db
+      .transaction(syncFavoritesStore, "readwrite")
+      .objectStore(syncFavoritesStore)
+      .put(syncFavorite);
+  }
+
   async deleteSyncFavorite(restaurantId){
     const db = await this.openDatabase();
-    return await db.get(syncFavoritesStore, restaurantId);
+    return await db.delete(syncFavoritesStore, restaurantId);
   }
 
   async getSyncReviews(){
@@ -352,6 +365,6 @@ export default class IdbProxy {
 
   async deleteSyncReview(hash){
     const db = await this.openDatabase();
-    return await db.get(syncReviewsStore, hash);
+    return await db.delete(syncReviewsStore, hash);
   }
 }
