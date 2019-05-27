@@ -30,6 +30,23 @@ Stage 2.
 5.  Then start the server by running `gulp serve` from its root directory.
 6.  Navigate to `localhost:8000` to view the app.
 
+## Screenshots
+
+The following is a screenshot of the homepage, which shows the restaurants you can
+find reviews on, their locations on a map, and whether or not they're a favorite of yours.
+
+![Alt text](/screenshots/restaurant_list.jpg?raw=true "Restaurant List")
+
+The following is a screenshot of the reviews page, which shows reviews for a given
+restaurant, and lets you enter your own review.
+
+![Alt text](/screenshots/restaurant_reviews.jpg?raw=true "Restaurant Reviews")
+
+The following is a screenshot of the dialog you'll see when entering a review for
+a restaurant.
+
+![Alt text](/screenshots/review_dialog.jpg?raw=true "Review Entry Dialog")
+
 
 ## Leaflet.js, Mapbox, et al.
 
