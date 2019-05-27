@@ -92,7 +92,7 @@ function main_scripts() {
     .pipe(buffer())
     .pipe(plumber())                                        // Prevent pipe breaking
     .pipe(sourcemaps.init())                                // Initialize our sourcemaps
-//    .pipe(terser())                                         // Minify our javascript
+    .pipe(terser())                                         // Minify our javascript
     .pipe(sourcemaps.write('.'))                            // Update our sourcemaps
     .pipe(dest('dist/scripts'));                             // Save results to dist directory
 }
@@ -141,7 +141,7 @@ function restaurant_scripts() {
     .pipe(buffer())
     .pipe(plumber())                                        // Prevent pipe breaking
     .pipe(sourcemaps.init())                                // Initialize our sourcemaps
-//    .pipe(terser())                                         // Minify our javascript
+    .pipe(terser())                                         // Minify our javascript
     .pipe(sourcemaps.write('.'))                            // Update our sourcemaps
     .pipe(dest('dist/scripts'));                            // Save results to dist directory
 }
@@ -153,16 +153,16 @@ scripts = series(main_scripts, restaurant_scripts);
  */
 function html() {
   return src('app/*.html')                            // Specify file locations
-    // .pipe(htmlmin({                           // Minify the HTML
-    //   collapseWhitespace: true,
-    //   minifyCSS: true,
-    //   minifyJS: {compress: {drop_console: true}},
-    //   processConditionalComments: true,
-    //   removeComments: true,
-    //   removeEmptyAttributes: true,
-    //   removeScriptTypeAttributes: true,
-    //   removeStyleLinkTypeAttributes: true             // Save resulting files in the dist directory
-    // }))
+    .pipe(htmlmin({                           // Minify the HTML
+      collapseWhitespace: true,
+      minifyCSS: true,
+      minifyJS: {compress: {drop_console: true}},
+      processConditionalComments: true,
+      removeComments: true,
+      removeEmptyAttributes: true,
+      removeScriptTypeAttributes: true,
+      removeStyleLinkTypeAttributes: true             // Save resulting files in the dist directory
+    }))
     .pipe(dest('dist'));
 }
 
