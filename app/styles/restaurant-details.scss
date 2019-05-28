@@ -280,7 +280,9 @@ caption {
 }
 
 .close:hover,
-.close:focus {
+.close:focus,
+.cancel:hover,
+.cancel:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
@@ -393,13 +395,14 @@ button:disabled {
   height: 70px;
   background-color: #f00;
   border-radius: 50%;
+  border-width: 0;
   box-shadow: 0 6px 10px 0 #666;
   transition: all 0.1s ease-in-out;
 
   font-size: 50px;
   color: white;
   text-align: center;
-  line-height: 70px;
+  line-height: 0;
 
   position: fixed;
   right: 20px;

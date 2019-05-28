@@ -60,12 +60,11 @@
     <footer role="contentinfo">
       Copyright (c) 2017 <strong>Restaurant Reviews</strong> All Rights Reserved.
     </footer>
-    <div id="add-review-button" class="fab"> + </div>
+    <button id="add-review-button" class="fab" aria-label="Add Review"> + </button>
     <div id="review-form" class="modal">
       <form>
         <div class="modal-content">
           <div class="modal-header">
-            <span id="close" class="close">&times;</span>
             <div class="form-title">Enter Review</div>
           </div>
           <div class="modal-body">
@@ -85,6 +84,7 @@
           <div class="modal-footer">
             <button id="clear-review-button" type="button" class="clear">Clear Form</button>
             <button id="save-review-button" type="button" class="save">Submit Review</button>
+            <button id="cancel-review-button" type="button" class="close-button">Cancel</button>
           </div>
         </div>
       </form>

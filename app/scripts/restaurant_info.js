@@ -228,6 +228,7 @@ let displayReviewForm = () => {
   initializeCustomReview();
   validateReview();
   document.getElementById('review-form').style.display = 'block';
+  document.getElementById('review-name').focus( );
 };
 
 let validateReview = () => {
@@ -275,6 +276,7 @@ let closeReviewForm = () => {
   self.customReview = null;
   document.getElementById('review-form').style.display = 'none';
   document.getElementById('add-review-button').style.display = 'block';
+  document.getElementById('add-review-button').focus();
 };
 
 let updateReviewName = async (e) => {
@@ -293,9 +295,30 @@ let updateReviewComments = async (e) => {
 };
 
 document.getElementById('add-review-button').onclick = () => displayReviewForm();
-document.getElementById('close').onclick = () => closeReviewForm();
 document.getElementById('clear-review-button').onclick = async () => initializeCustomReview();
 document.getElementById('save-review-button').onclick = async () => saveReview();
+document.getElementById('cancel-review-button').onclick = () => closeReviewForm();
 document.getElementById('review-name').oninput = async (e) => updateReviewName(e);
 document.getElementById('review-rating').onchange = async (e) => updateReviewRating(e);
 document.getElementById('review-comments').oninput = async (e) => updateReviewComments(e);
+
+
+/*
+ * Focus trap for review dialog
+ * Adaptation of https://hiddedevries.nl/en/blog/2017-01-29-using-javascript-to-trap-focus-in-an-element
+ */
+const KEYCODE_TAB = 9;
+
+document.getElementById('review-name').addEventListener('keydown', (e) => {
+  if (e.key === 'Tab'  && e.shiftKey) {
+    document.getElementById('cancel-review-button').focus();
+    e.preventDefault();
+  }
+});
+
+document.getElementById('cancel-review-button').addEventListener('keydown', (e) => {
+  if (e.key === 'Tab' && ! e.shiftKey) {
+    document.getElementById('review-name').focus();
+    e.preventDefault();
+  }
+});
