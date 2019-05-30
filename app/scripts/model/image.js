@@ -1,4 +1,4 @@
-import Assert from '../lib/Assert';
+import Assert from '../lib/assert';
 import Converter from '../lib/converter';
 
 export default class Image {

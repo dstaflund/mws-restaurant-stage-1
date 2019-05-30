@@ -160,7 +160,7 @@ let createRestaurantHTML = async (restaurant) => {
   favorite.alt = 'Favorite toggle (Currently ' + (restaurant.isFavorite ? 'true' : 'false') + ')';
   favorite.src = 'images/icons/baseline-favorite' + (restaurant.isFavorite ? '-24px.svg' : '_border-24px.svg');
   favorite.setAttribute('role', 'button');
-  favorite.setAttribute('aria-label', 'Is Favorite');
+  favorite.setAttribute('aria-label', restaurant.name + 'is Favorite');
   favorite.setAttribute('aria-pressed', (restaurant.isFavorite === true ? 'true' : 'false'));
   favorite.onclick = async () => toggleFavorite(restaurant, favorite);
   li.append(favorite);
