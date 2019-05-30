@@ -1,5 +1,5 @@
 const port = 1337;
-const DB_STEM = `http://100.115.92.194:${port}`;
+const DB_STEM = `http://localhost:${port}`;
 const RESTAURANTS_URL = `${DB_STEM}/restaurants`;
 const REVIEWS_URL = `${DB_STEM}/reviews`;
 
