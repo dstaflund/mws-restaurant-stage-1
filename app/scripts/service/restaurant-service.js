@@ -52,28 +52,21 @@ export default class RestaurantService {
   }
 
   async fetchNeighborhoods() {
-    let neighborhoods = await this._idbProxyAgent.getNeighborhoods();
-    if (neighborhoods && neighborhoods.length >= 3) {
-      return neighborhoods;
-    }
     const restaurants = await this.fetchRestaurants();
-    neighborhoods = restaurants.map((v, i) => restaurants[i].neighborhood);
+    const neighborhoods = restaurants.map((v, i) => restaurants[i].neighborhood);
     return neighborhoods.filter((v, i) => neighborhoods.indexOf(v) === i);
   }
 
   async fetchCuisines() {
-    let cuisines = await this._idbProxyAgent.getCuisines();
-    if (cuisines && cuisines.length >= 4) {
-      return cuisines;
-    }
     const restaurants = await this.fetchRestaurants();
-    cuisines = restaurants.map((v, i) => restaurants[i].cuisineType);
+    const cuisines = restaurants.map((v, i) => restaurants[i].cuisineType);
     return cuisines.filter((v, i) => cuisines.indexOf(v) === i);
   }
 
   async fetchRestaurantsByCuisine(cuisine) {
     let restaurants = await this._idbProxyAgent.getRestaurantsByCuisineType(cuisine);
     if (restaurants) {
+      await this._imageService.addImageDetails(restaurants);
       return restaurants;
     }
     restaurants = await this.fetchRestaurants();
@@ -83,6 +76,7 @@ export default class RestaurantService {
   async fetchRestaurantsByNeighborhood(neighborhood) {
     let restaurants = await this._idbProxyAgent.getRestaurantsByNeighborhood(neighborhood);
     if (restaurants) {
+      await this._imageService.addImageDetails(restaurants);
       return restaurants;
     }
     restaurants = await this.fetchRestaurants();
@@ -101,12 +95,15 @@ export default class RestaurantService {
     }
     let restaurants = await this._idbProxyAgent.getRestaurantsByCuisineTypeAndNeighborhood(cuisine, neighborhood);
     if (restaurants && restaurants.length === 10) {
+      await this._imageService.addImageDetails(restaurants);
       return restaurants;
     }
     restaurants = await this.fetchRestaurants();
-    return restaurants
+    restaurants = restaurants
       .filter(restaurant => restaurant.neighborhood === neighborhood)
       .filter(restaurant => restaurant.cuisineType === cuisine);
+    await this._imageService.addImageDetails(restaurants);
+    return restaurants;
   }
 
   async updateRestaurant(restaurant) {

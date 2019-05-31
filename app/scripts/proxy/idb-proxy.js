@@ -188,7 +188,7 @@ export default class IdbProxy {
         imageStore.createIndex(cuisineIndex, "cuisineType", {unique: false});
         imageStore.createIndex(
           neighborhoodCuisineIndex,
-          "neighborhood.cuisine_type",
+          "neighborhood.cuisineType",
           {unique: false, multiEntry: true}
         );
 
@@ -273,16 +273,6 @@ export default class IdbProxy {
   async getImageDetails(photograph) {
     const db = await this.openDatabase();
     return await db.get(idStore, photograph);
-  }
-
-  async getNeighborhoods() {
-    const db = await this.openDatabase();
-    return await db.getAllKeysFromIndex(rStore, neighborhoodIndex);
-  }
-
-  async getCuisines() {
-    const db = await this.openDatabase();
-    return await db.getAllKeysFromIndex(rStore, cuisineIndex);
   }
 
   async getReviews() {

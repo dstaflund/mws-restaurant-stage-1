@@ -75,14 +75,6 @@ export default class IdbProxyAgent {
     return this._imageDetailConverter.fromIdb(imageDetails);
   }
 
-  async getNeighborhoods() {
-    return await this._idbProxy.getNeighborhoods();
-  }
-
-  async getCuisines() {
-    return await this._idbProxy.getCuisines();
-  }
-
   async getReviews() {
     const reviews = await this._idbProxy.getReviews();
     return reviews == null
